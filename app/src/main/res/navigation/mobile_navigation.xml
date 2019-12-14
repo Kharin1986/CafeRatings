@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.gb.rating.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_map"
+        android:name="com.gb.rating.ui.map.MapFragment"
+        android:label="@string/menu_by_map"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/nav_list"
+        android:name="com.gb.rating.ui.list.ListFragment"
+        android:label="@string/menu_list"
+        tools:layout="@layout/fragment_list" />
+
+    <fragment
+        android:id="@+id/nav_search"
+        android:name="com.gb.rating.ui.search.SearchFragment"
+        android:label="@string/menu_search"
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/nav_save_list"
+        android:name="com.gb.rating.ui.save.SaveListFragment"
+        android:label="@string/menu_save_list"
+        tools:layout="@layout/fragment_save_list" />
+
+    <fragment
+        android:id="@+id/nav_offline_mode"
+        android:name="com.gb.rating.ui.offline.ToOfflineFragment"
+        android:label="@string/menu_offline"
+        tools:layout="@layout/fragment_offline" />
+    <fragment
+        android:id="@+id/nav_response"
+        android:name="com.gb.rating.ui.response.ResponseFragment"
+        android:label="@string/menu_response"
+        tools:layout="@layout/fragment_response" />
+</navigation>

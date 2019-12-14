@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Rating</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Выбор по типу</string>
+    <string name="menu_by_map">Показать на карте</string>
+    <string name="menu_list">Показать списком</string>
+    <string name="menu_search">Поиск</string>
+    <string name="menu_response">Оценить кафе</string>
+    <string name="menu_save_list">Сохранить список</string>
+    <string name="menu_offline">Оффлайн-список</string>
+
+    <string name="open_map">Показать на карте</string>
+    <string name="choice_by_type">Выбор по типу</string>
+
+    <string name="choice_by_list">Показать списком</string>
+    <string name="search">Поиск</string>
+    <string name="registration">Регистрация</string>
+    <string name="offline">Оффлайн</string>
+    <string name="save_list">Сохранить список</string>
+    <string name="offline_mode">Оффлайн-список</string>
+
+</resources>
