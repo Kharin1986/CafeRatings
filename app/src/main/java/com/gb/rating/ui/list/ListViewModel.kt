@@ -1,13 +1,17 @@
 package com.gb.rating.ui.list
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gb.rating.models.CafeItem
 
 class ListViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is list Fragment"
+    var cafeList : MutableLiveData<List<CafeItem>> = MutableLiveData()
+
+    //инициализация списка с кафешками
+    init {
+        cafeList.value = TempCafeList.getCafeList()
     }
-    val text: LiveData<String> = _text
+
+    fun getListCafe() = cafeList
 }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageList_FragmentItem"
+                android:layout_width="wrap_content"
+                android:layout_height="140dp"
+                android:layout_margin="4dp"
+                android:src="@drawable/cafe"/>
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/nameCafe_FragmentList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Название Заведения"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/descriptionCafe_FragmentList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Описание заведения, оказываемые услуги и т.п. Описание оказываемых услуг"
+                app:layout_constraintTop_toBottomOf="@id/nameCafe_FragmentList"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/typeCafe_FragmentList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="фастфуд"
+                app:layout_constraintLeft_toLeftOf="@id/ratingBar_FragmentList"
+                app:layout_constraintBottom_toTopOf="@id/ratingBar_FragmentList"/>
+
+            <TextView
+                android:id="@+id/distanceToCafe_FragmentList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3.5 км"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/ratingBar_FragmentList"/>
+
+            <RatingBar
+                android:id="@+id/ratingBar_FragmentList"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:stepSize="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="4dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
