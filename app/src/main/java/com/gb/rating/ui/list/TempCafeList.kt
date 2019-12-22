@@ -1,5 +1,4 @@
 package com.gb.rating.ui.list
-
 import com.gb.rating.R
 import com.gb.rating.models.CafeItem
 

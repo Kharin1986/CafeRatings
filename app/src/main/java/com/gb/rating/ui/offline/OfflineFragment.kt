@@ -1,4 +1,4 @@
-package com.gb.rating.ui.map
+package com.gb.rating.ui.offline
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,21 +9,23 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gb.rating.R
+import com.gb.rating.ui.offline.OfflineViewModel
 
-class MapFragment : Fragment() {
 
-    private lateinit var mapViewModel: MapViewModel
+class OfflineFragment : Fragment() {
+
+    private lateinit var offlineViewModel: OfflineViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mapViewModel =
-            ViewModelProviders.of(this).get(MapViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_map, container, false)
-        val textView: TextView = root.findViewById(R.id.text_map)
-        mapViewModel.text.observe(this, Observer {
+        offlineViewModel =
+            ViewModelProviders.of(this).get(OfflineViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_offline, container, false)
+        val textView: TextView = root.findViewById(R.id.text_offline)
+        offlineViewModel.text.observe(this, Observer {
             textView.text = it
         })
         return root

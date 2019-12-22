@@ -1,3 +1,4 @@
+
 package com.gb.rating.models
 
 class CafeItem(
@@ -6,4 +7,4 @@ class CafeItem(
     var desc: String = "",
     var rating: Int,
     var distance: Double
-    )
+)
