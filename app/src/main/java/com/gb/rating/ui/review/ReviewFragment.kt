@@ -1,4 +1,4 @@
-package com.gb.rating.ui.offline
+package com.gb.rating.ui.review
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gb.rating.R
 
-class ToOfflineFragment : Fragment() {
+class ReviewFragment : Fragment() {
 
-    private lateinit var toOfflineViewModel: ToOfflineViewModel
+    private lateinit var reviewViewModel: ReviewViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        toOfflineViewModel =
-            ViewModelProviders.of(this).get(ToOfflineViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_offline, container, false)
-        val textView: TextView = root.findViewById(R.id.text_offline)
-        toOfflineViewModel.text.observe(this, Observer {
+        reviewViewModel =
+            ViewModelProviders.of(this).get(ReviewViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_review, container, false)
+        val textView: TextView = root.findViewById(R.id.text_review)
+        reviewViewModel.text.observe(this, Observer {
             textView.text = it
         })
         return root

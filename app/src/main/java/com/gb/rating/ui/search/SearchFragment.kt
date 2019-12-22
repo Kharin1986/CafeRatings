@@ -22,7 +22,7 @@ class SearchFragment : Fragment() {
         searchViewModel =
             ViewModelProviders.of(this).get(SearchViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_search, container, false)
-        val textView: TextView = root.findViewById(R.id.text_tools)
+        val textView: TextView = root.findViewById(R.id.text_notifications)
         searchViewModel.text.observe(this, Observer {
             textView.text = it
         })
