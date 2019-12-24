@@ -29,7 +29,7 @@
         tools:layout="@layout/fragment_offline" />
     <fragment
         android:id="@+id/navigation_review"
-        android:name="com.gb.rating.ui.review.ReviewFragment"
+        android:name="com.gb.rating.ui.review.ReviewFragment1"
         android:label="@string/title_review"
-        tools:layout="@layout/fragment_review" />
+        tools:layout="@layout/fragment_review1" />
 </navigation>
