@@ -10,6 +10,8 @@ class ListViewModel : ViewModel() {
 
     //инициализация списка с кафешками
     init {
+        //val dbHelper : CafeDataSource = CafeDataSource()
+        //dbHelper.openR()
         cafeList.value = TempCafeList.getCafeList()
     }
 

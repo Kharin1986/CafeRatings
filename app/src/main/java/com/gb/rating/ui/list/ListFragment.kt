@@ -32,5 +32,6 @@ class ListFragment : Fragment() {
         listViewModel.getListCafe().observe(this, Observer {
             it?.let { adapter.refreshList(it) }
         })
+
     }
 }
