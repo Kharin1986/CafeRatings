@@ -36,14 +36,11 @@ public class CafeDataSource implements Closeable {
         database.insert(CafeTable.NAME, null, cv);
     }
 
-    public List<CafeItem> readAllCafe(String cafeName) {
+    public List<CafeItem> readAllCafe() {
         List<CafeItem> listCafe = new ArrayList<>();
         Cursor cursor = database.query(CafeTable.NAME,
-                null,
-                CafeTable.Cols.CAFE_NAME + "=?",
-                null, null, null, null);
-        if (cursor.getCount() != 0) {
-            cursor.moveToFirst();
+                null,null,null, null, null, null);
+        if (cursor.moveToFirst()) {
             while (cursor.moveToNext()) {
                 CafeItem item = new CafeItem();
                 item.setName(cursor.getString(1));

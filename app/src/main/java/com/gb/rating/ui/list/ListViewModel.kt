@@ -8,12 +8,16 @@ class ListViewModel : ViewModel() {
 
     var cafeList : MutableLiveData<List<CafeItem>> = MutableLiveData()
 
-    //инициализация списка с кафешками
-    init {
-        //val dbHelper : CafeDataSource = CafeDataSource()
-        //dbHelper.openR()
-        cafeList.value = TempCafeList.getCafeList()
+    fun setList(list: List<CafeItem>) {
+        cafeList.value = list
     }
+
+    //инициализация списка с кафешками
+//    init {
+//        val dbHelper = CafeDataSource(ctx)
+//        dbHelper.openR()
+//        cafeList.value = dbHelper.readAllCafe()
+//    }
 
     fun getListCafe() = cafeList
 }
