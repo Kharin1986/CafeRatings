@@ -8,10 +8,8 @@ class ListViewModel : ViewModel() {
 
     var cafeList : MutableLiveData<List<CafeItem>> = MutableLiveData()
 
-    //инициализация списка с кафешками
-    init {
-        cafeList.value = TempCafeList.getCafeList()
+    fun setList(list: List<CafeItem>) {
+        cafeList.value = list
     }
-
     fun getListCafe() = cafeList
 }
