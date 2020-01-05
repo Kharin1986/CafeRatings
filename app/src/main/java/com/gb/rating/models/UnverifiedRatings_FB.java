@@ -10,8 +10,11 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class UnverifiedRatings_FB {
 
-    //ID's & service properties
-    public String cafeKey = ""; //ID, ref Key to Cafe_FB
+    //ID's
+    public String cafeKey = ""; // ID, ref Key to Cafe_FB
+    public String fiscalId = ""; //ID to Unferified, fiscalDriveNumber (ФН) + "_" + fiscalDocumentNumber (ФД)
+
+    //SERVICE ATTRIBUTES
     public boolean verified = false;
     public boolean cafeFound = false;
     public boolean processed = false; // backend must process thees raw data of Ratings,
@@ -20,8 +23,7 @@ public class UnverifiedRatings_FB {
     public List<String> warningsOfProcessing;
 
 
-    //fiscal
-    public String fiscalId = ""; // fiscalDriveNumber (ФН) + "_" + fiscalDocumentNumber (ФД)
+    //FISCAL ATTRIBUTES
     public Date fiscalDate; // Date&Time in QR code
     public String retailPlaceAddress = ""; //from QR code
     public Map<String,String> fiscalAttrOthersMap = new HashMap<>();
@@ -33,8 +35,14 @@ public class UnverifiedRatings_FB {
         //    String user; //Name of the company in QR code
         //    String kktRegId; //Number of the KKM when IFNS it registered
 
-    //Valued part of the class
+    //MAIN ATTRIBUTES
+    public float rating = 0;
     public RatingsBase_FB ratingsBaseMap = new RatingsBase_FB();
     public String comment = "";
-    public UnverifiedRatings_FB unverifiedRatings_FB = new UnverifiedRatings_FB();
+
+
+    //CONSTRUCTOR FOR getValue()
+    public UnverifiedRatings_FB unverifiedRatings_FB = new UnverifiedRatings_FB(){
+
+    };
 }
