@@ -1,7 +1,6 @@
-package com.gb.rating.models;
+package com.gb.rating.fireBase.models_FireBase;
 
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.google.firebase.database.PropertyName;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +18,7 @@ public class Cafe_FB {
     public float latitude = 0;
     public float longitude = 0;
 
-    //ADDITIONAL ATTRIBUTES
+    //ADDITIONAL ATTRIBUTES (later, others SQL tables)
     public Map<String,String> addressAttrMap = new HashMap<>();
     public List<String> addressOthersList;
     public List<String> innList;

@@ -1,7 +1,6 @@
-package com.gb.rating.models;
+package com.gb.rating.fireBase.models_FireBase;
 
 import com.google.firebase.database.IgnoreExtraProperties;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +18,7 @@ public class UnverifiedRatings_FB {
     public boolean cafeFound = false;
     public boolean processed = false; // backend must process thees raw data of Ratings,
     public String resultOfProcessing = ""; //the result of receipt processing
-    public List<String> errorsOfProcessing;
+    public List<String> errorsOfProcessing ;
     public List<String> warningsOfProcessing;
 
 
@@ -42,7 +41,7 @@ public class UnverifiedRatings_FB {
 
 
     //CONSTRUCTOR FOR getValue()
-    public UnverifiedRatings_FB unverifiedRatings_FB = new UnverifiedRatings_FB(){
 
-    };
+    public UnverifiedRatings_FB() {
+    }
 }

@@ -1,11 +1,7 @@
-package com.gb.rating.models;
+package com.gb.rating.fireBase.models_FireBase;
 
 import com.google.firebase.database.IgnoreExtraProperties;
-
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @IgnoreExtraProperties
 public class VerifiedRatings_FB {
