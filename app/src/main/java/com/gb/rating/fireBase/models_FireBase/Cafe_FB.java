@@ -1,5 +1,7 @@
 package com.gb.rating.fireBase.models_FireBase;
 
+import com.gb.rating.models.CafeItem;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.HashMap;
@@ -13,7 +15,9 @@ public class Cafe_FB {
     public String name = "";
     public String type = "";
     public String descr = "";
-    public float rating = 3;
+    public double rating = 3;
+    public String country  = "Russian Federations";
+    public String city  = "";
     public String addressMain;
     public float latitude = 0;
     public float longitude = 0;
@@ -28,5 +32,20 @@ public class Cafe_FB {
 
     //CONSTRUCTOR FOR getValue()
     public Cafe_FB() {
+    }
+
+    @Exclude
+    public static CafeItem convertModelEntity(Cafe_FB c){
+        return  new CafeItem(0, c.name, c.type, c.descr, (int) c.rating, c.country, c.city, "", "", "", "", 0 );
+    }
+
+    public Cafe_FB(String name, String type, String descr, double rating, String country, String city, String addressMain) {
+        this.name = name;
+        this.type = type;
+        this.descr = descr;
+        this.rating = rating;
+        this.country = country;
+        this.city = city;
+        this.addressMain = addressMain;
     }
 }

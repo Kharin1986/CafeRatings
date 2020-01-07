@@ -15,4 +15,7 @@ class CafeItem(
     var wTime: String = "",
 
     var distance: Double = 1.0 // оставил
+
+
+
 )
