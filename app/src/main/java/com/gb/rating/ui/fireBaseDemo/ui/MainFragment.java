@@ -6,11 +6,16 @@ import com.gb.rating.models.CafeItem;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +44,7 @@ public class MainFragment extends Fragment {
 
     private void initViewModel() {
         mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        if (!setIMEI()) ; //return
         getLifecycle().addObserver(mViewModel);
         mViewModel.getCafeList().observe(this, new Observer<List<CafeItem>>() {
             @Override
@@ -46,6 +52,33 @@ public class MainFragment extends Fragment {
                 Log.d("Fragment", "Cafe's list changed");
             }
         });
+    }
+
+    private boolean setIMEI() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (getActivity().checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    Activity#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for Activity#requestPermissions for more details.
+                Log.d("MainActityDemo", "No permission Manifest.permission.READ_PHONE_STATE");
+                return false;
+            }
+        }
+
+        TelephonyManager tm = (TelephonyManager)
+                getActivity().getSystemService(getActivity().TELEPHONY_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mViewModel.iMEI = tm.getImei();
+        } else {
+            mViewModel.iMEI = tm.getDeviceId();
+        }
+        return true;
     }
 
 }

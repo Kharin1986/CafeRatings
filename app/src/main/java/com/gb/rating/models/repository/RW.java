@@ -8,7 +8,7 @@ import io.reactivex.Maybe;
 
 public interface RW {
 
-    public io.reactivex.Completable writeRating(Object value);
+    public io.reactivex.Completable writeRating(Object value, String iMEI);
     public io.reactivex.Completable writeCafe(Object value);
     public Maybe<List<CafeItem>> retrieveCafeList(String country, String city);
 

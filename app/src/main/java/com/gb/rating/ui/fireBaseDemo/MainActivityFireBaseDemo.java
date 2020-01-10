@@ -1,11 +1,18 @@
 package com.gb.rating.ui.fireBaseDemo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.gb.rating.R;
 import com.gb.rating.ui.fireBaseDemo.ui.MainFragment;
+import com.gb.rating.ui.fireBaseDemo.ui.MainViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +38,8 @@ public class MainActivityFireBaseDemo extends AppCompatActivity {
         }
 
     }
+
+
 
     //TEST FUNCTIONS
     private void TestGreetings(DatabaseReference myRef) {

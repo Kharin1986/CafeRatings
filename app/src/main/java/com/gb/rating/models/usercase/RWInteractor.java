@@ -16,8 +16,8 @@ public class RWInteractor {
         this.repository = repository;
     }
 
-    public Completable writeRating(Object value) {
-        return repository.writeRating(value);
+    public Completable writeRating(Object value, String iMEI) {
+        return repository.writeRating(value, iMEI);
     }
 
     public Completable writeCafe(Object value) {

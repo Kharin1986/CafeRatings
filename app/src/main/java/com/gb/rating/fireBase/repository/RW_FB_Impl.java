@@ -1,5 +1,8 @@
 package com.gb.rating.fireBase.repository;
 
+import android.content.Context;
+import android.telephony.TelephonyManager;
+
 import com.gb.rating.fireBase.dataStore.FrangSierraPlus;
 import com.gb.rating.fireBase.models_FireBase.Cafe_FB;
 import com.gb.rating.models.CafeItem;
@@ -23,8 +26,9 @@ public class RW_FB_Impl implements RW {
     }
 
     @Override
-    public Completable writeRating(Object value) {
-        return RxFirebaseDatabase.setValue(db.getReference().child("UnverifiedRatingsList").push(), value);
+    public Completable writeRating(Object value, String iMEI) {
+        String imei = iMEI.equals("")? "NO_IMEI" : iMEI;
+        return RxFirebaseDatabase.setValue(db.getReference().child("UnverifiedRatingsList").child(imei).push(), value);
     }
 
     @Override

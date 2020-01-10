@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.MaybeObserver;
@@ -35,6 +36,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     private RWInteractor interactor; //текущий Интерактор для работы с репозиторием
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private MutableLiveData<List<CafeItem>> cafeList = new MutableLiveData<List<CafeItem>>();
+    public String iMEI="";
 
 
     //______________________________________________________________________________________________________________________________________________________________________
@@ -93,7 +95,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     // BASIC ACTIONS
 
     public void writeRating(Object value){
-            interactor.writeRating(value)
+            interactor.writeRating(value, iMEI)
                     .subscribe(new DisposableCompletableObserver() {
                         @Override
                         public void onStart() {}
@@ -103,7 +105,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
 
                         @Override
                         public void onComplete() {
-                            System.out.println("Done!");
+                            System.out.println("Rating written!");
                         }
                     });
 
@@ -122,7 +124,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
 
                     @Override
                     public void onComplete() {
-                        System.out.println("Done!");
+                        System.out.println("Cafe written!");
                     }
                 });
     }
@@ -146,6 +148,8 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
 
                     @Override
                     public void onComplete() {
+                        //empty result
+                        cafeList.setValue(new ArrayList<CafeItem>());
                     }
                 });
     }
