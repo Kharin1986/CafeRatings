@@ -1,10 +1,11 @@
 package com.gb.rating.fireBase.models_FireBase;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.Date;
 
 @IgnoreExtraProperties
-public class VerifiedRatings_FB {
+public class VerifiedRatings_FB implements ConvertableEntity {
 
     //ID's
     public String cafeKey = ""; // ID, ref Key to Cafe_FB
@@ -19,5 +20,11 @@ public class VerifiedRatings_FB {
 
     //CONSTRUCTOR FOR getValue()
     public VerifiedRatings_FB() {
+    }
+
+    @Exclude
+    @Override
+    public  VerifiedRatings_FB convertToModelEntity() {
+        return this;
     }
 }

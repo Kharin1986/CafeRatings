@@ -5,6 +5,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.gb.rating.fireBase.models_FireBase.Cafe_FB;
+import com.gb.rating.fireBase.models_FireBase.UnverifiedRatings_FB;
+import com.gb.rating.fireBase.models_FireBase.VerifiedRatings_FB;
 import com.gb.rating.models.CafeItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,7 +34,7 @@ public class FrangSierraPlus {
      * the given {@link DataSnapshot} exists onComplete will only called when the data doesn't exist.
      */
     @NonNull
-    public static Maybe<List<CafeItem>> observeSingleValueEvent(@NonNull final Query query) {
+    public static Maybe<List<CafeItem>> observeSingleValueEvent_CafeItemList(@NonNull final Query query) {
         return Maybe.create(new MaybeOnSubscribe<List<CafeItem>>() {
             @Override
             public void subscribe(final MaybeEmitter<List<CafeItem>> emitter) throws Exception {
@@ -45,7 +47,7 @@ public class FrangSierraPlus {
 
                             for (DataSnapshot CafeSnapshot: dataSnapshot.getChildren()) {
                                 Cafe_FB curCafe=CafeSnapshot.getValue(Cafe_FB.class);
-                                cafeList.add(Cafe_FB.convertModelEntity(curCafe));
+                                cafeList.add(curCafe.convertToModelEntity());
                             }
 
                             emitter.onSuccess(cafeList);
@@ -64,6 +66,72 @@ public class FrangSierraPlus {
         });
     }
 
+    @NonNull
+    public static Maybe<List<UnverifiedRatings_FB>> observeSingleValueEvent_UnverifiedRatingsList(@NonNull final Query query) {
+        return Maybe.create(new MaybeOnSubscribe<List<UnverifiedRatings_FB>>() {
+            @Override
+            public void subscribe(final MaybeEmitter<List<UnverifiedRatings_FB>> emitter) throws Exception {
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.exists()) {
+                            List<UnverifiedRatings_FB> ratingsList= new ArrayList();
+
+                            for (DataSnapshot curSnapshot: dataSnapshot.getChildren()) {
+                                UnverifiedRatings_FB curRating=curSnapshot.getValue(UnverifiedRatings_FB.class);
+                                ratingsList.add(curRating.convertToModelEntity());
+                            }
+
+                            emitter.onSuccess(ratingsList);
+                        } else {
+                            emitter.onComplete();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        if (!emitter.isDisposed())
+                            emitter.onError(new RxFirebaseDataException(error));
+                    }
+                });
+            }
+        });
+    }
+
+
+    @NonNull
+    public static Maybe<List<VerifiedRatings_FB>> observeSingleValueEvent_VerifiedRatingsList(@NonNull final Query query) {
+        return Maybe.create(new MaybeOnSubscribe<List<VerifiedRatings_FB>>() {
+            @Override
+            public void subscribe(final MaybeEmitter<List<VerifiedRatings_FB>> emitter) throws Exception {
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.exists()) {
+                            List<VerifiedRatings_FB> ratingsList= new ArrayList();
+
+                            for (DataSnapshot curSnapshot: dataSnapshot.getChildren()) {
+                                VerifiedRatings_FB curRating=curSnapshot.getValue(VerifiedRatings_FB.class);
+                                ratingsList.add(curRating.convertToModelEntity());
+                            }
+
+                            emitter.onSuccess(ratingsList);
+                        } else {
+                            emitter.onComplete();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        if (!emitter.isDisposed())
+                            emitter.onError(new RxFirebaseDataException(error));
+                    }
+                });
+            }
+        });
+    }
 
 
 }

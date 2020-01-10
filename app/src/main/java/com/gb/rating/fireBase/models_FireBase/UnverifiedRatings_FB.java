@@ -1,5 +1,6 @@
 package com.gb.rating.fireBase.models_FireBase;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class UnverifiedRatings_FB {
+public class UnverifiedRatings_FB implements ConvertableEntity{
 
     //ID's
     public String cafeKey = ""; // ID, ref Key to Cafe_FB
@@ -43,5 +44,11 @@ public class UnverifiedRatings_FB {
     //CONSTRUCTOR FOR getValue()
 
     public UnverifiedRatings_FB() {
+    }
+
+    @Exclude
+    @Override
+    public  UnverifiedRatings_FB convertToModelEntity() {
+        return this;
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class Cafe_FB {
+public class Cafe_FB implements ConvertableEntity{
     //MAIN ATTRIBUTES
     // public int imgDir = 0;  imgDir будет равно ref.key в отдельном каталоге (или FireBase Cloudbase)- сначала создаем кафе, затем - размещаем фото
     public String name = "";
@@ -34,10 +34,13 @@ public class Cafe_FB {
     public Cafe_FB() {
     }
 
+
     @Exclude
-    public static CafeItem convertModelEntity(Cafe_FB c){
-        return  new CafeItem(0, c.name, c.type, c.descr, (int) c.rating, c.country, c.city, "", "", "", "", 0 );
+    @Override
+    public CafeItem convertToModelEntity(){
+        return  new CafeItem(0, name, type, descr, (int) rating, country, city, "", "", "", "", 0 );
     }
+
 
     public Cafe_FB(String name, String type, String descr, double rating, String country, String city, String addressMain) {
         this.name = name;
