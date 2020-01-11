@@ -65,6 +65,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     private void TestWriting() {
         //список Кафе
         Cafe_FB curCafe=new Cafe_FB();
+        curCafe.type = "фастфуд";
 
         curCafe.city="Новосибирск";
         writeCafe(curCafe);
@@ -72,7 +73,12 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
         curCafe.city="Ревда";
         writeCafe(curCafe);
 
+        curCafe.rating = -4;
+        writeCafe(curCafe);
+
+
         retrieveCafeList("Russian Federations", "Ревда");
+        retrieveCafeListByType("Russian Federations", "Ревда", "фастфуд");
 
         //список неверифицированных отзывов
         UnverifiedRatings_FB Unverifiedratings_fb = new UnverifiedRatings_FB();
@@ -190,6 +196,32 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
                     }
                 });
     }
+
+    public void retrieveCafeListByType(String country, String city, String type) {
+
+        cafeInteractor.retrieveCafeListByType(country, city, type)
+                .subscribe(new MaybeObserver<List<CafeItem>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onSuccess(List<CafeItem> cafeItems) {
+                        cafeList.setValue(cafeItems);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        //empty result
+                        cafeList.setValue(new ArrayList<>());
+                    }
+                });
+    }
+
 
     public void retrieveUnverifiedRatingsList() {
 

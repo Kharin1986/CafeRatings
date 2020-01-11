@@ -35,6 +35,10 @@ public class CafeInteractor {
         return repository.retrieveCafeList(country, city);
     }
 
+    public Maybe<List<CafeItem>> retrieveCafeListByType(String country, String city, String type) {
+        return repository.retrieveCafeListByType(country, city, type);
+    }
+
 
 
 }

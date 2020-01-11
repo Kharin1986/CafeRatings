@@ -41,7 +41,7 @@ public class UnverifiedRatings_FB implements ConvertableEntity{
     public String comment = "";
 
 
-    //CONSTRUCTOR FOR getValue()
+    //METHODS For interface ConvertableEntity
 
     public UnverifiedRatings_FB() {
     }
@@ -50,5 +50,14 @@ public class UnverifiedRatings_FB implements ConvertableEntity{
     @Override
     public  UnverifiedRatings_FB convertToModelEntity() {
         return this;
+    }
+
+
+    @Exclude
+    public static UnverifiedRatings_FB convertFromModelEntity(UnverifiedRatings_FB rating) {
+
+        if (rating == null) {return new UnverifiedRatings_FB();}
+
+        return rating;
     }
 }

@@ -15,7 +15,7 @@ public class Cafe_FB implements ConvertableEntity{
     public String name = "";
     public String type = "";
     public String descr = "";
-    public double rating = 3;
+    public double rating = -3; //отрицательное значение, для сортировки
     public String country  = "Russian Federations";
     public String city  = "";
     public String addressMain;
@@ -34,14 +34,6 @@ public class Cafe_FB implements ConvertableEntity{
     public Cafe_FB() {
     }
 
-
-    @Exclude
-    @Override
-    public CafeItem convertToModelEntity(){
-        return  new CafeItem(0, name, type, descr, (int) rating, country, city, "", "", "", "", 0 );
-    }
-
-
     public Cafe_FB(String name, String type, String descr, double rating, String country, String city, String addressMain) {
         this.name = name;
         this.type = type;
@@ -51,4 +43,31 @@ public class Cafe_FB implements ConvertableEntity{
         this.city = city;
         this.addressMain = addressMain;
     }
+
+    //METHODS For interface ConvertableEntity
+
+    @Exclude
+    @Override
+    public CafeItem convertToModelEntity(){
+        return  new CafeItem(0, name, type, descr, (int) -rating, country, city, "", "", "", "", 0 );
+    }
+
+    @Exclude
+    public static Cafe_FB convertFromModelEntity(CafeItem cafe) {
+
+        Cafe_FB curCafe = new Cafe_FB();
+
+        if (cafe == null) {return curCafe;}
+
+        curCafe.name = cafe.getName();
+        curCafe.type = cafe.getType();
+        curCafe.descr = cafe.getDesc();
+        curCafe.rating = -cafe.getRating();
+        curCafe.country = cafe.getCountry();
+        curCafe.city = cafe.getCity();
+        curCafe.addressMain = cafe.getStreet()+" "+cafe.getHome();
+
+        return curCafe;
+    }
+
 }

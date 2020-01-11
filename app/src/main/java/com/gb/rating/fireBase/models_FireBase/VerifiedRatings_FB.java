@@ -17,14 +17,23 @@ public class VerifiedRatings_FB implements ConvertableEntity {
     public RatingsBase_FB ratingsBaseMap = new RatingsBase_FB();
     public String comment = "";
 
-
-    //CONSTRUCTOR FOR getValue()
     public VerifiedRatings_FB() {
     }
 
+    //METHODS For interface ConvertableEntity
     @Exclude
     @Override
     public  VerifiedRatings_FB convertToModelEntity() {
         return this;
     }
+
+    @Exclude
+    public static VerifiedRatings_FB convertFromModelEntity(VerifiedRatings_FB rating) {
+
+        if (rating == null) {return new VerifiedRatings_FB();}
+
+        return rating;
+    }
+
+
 }

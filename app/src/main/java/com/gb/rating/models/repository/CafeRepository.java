@@ -15,5 +15,6 @@ public interface CafeRepository {
 
 
     @NonNull Maybe<List<CafeItem>> retrieveCafeList(@NonNull String country, @NonNull String city);
+    @NonNull Maybe<List<CafeItem>> retrieveCafeListByType(@NonNull String country, @NonNull String city, String type);
 }
 
