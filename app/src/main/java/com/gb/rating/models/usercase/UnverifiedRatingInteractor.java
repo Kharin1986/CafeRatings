@@ -1,8 +1,6 @@
 package com.gb.rating.models.usercase;
 
-import com.gb.rating.fireBase.models_FireBase.UnverifiedRatings_FB;
-import com.gb.rating.models.CafeItem;
-import com.gb.rating.models.repository.CafeRepository;
+import com.gb.rating.fireBase.models_FireBase.UnverifiedRating_FB;
 import com.gb.rating.models.repository.UnverifiedRatingRepository;
 
 import java.util.List;
@@ -23,7 +21,7 @@ public class UnverifiedRatingInteractor {
         return repository.writeUnverifiedRating(value, imei);
     }
 
-    public Maybe<List<UnverifiedRatings_FB>> retrieveUnverifiedRatingsList(String iMEI) {
+    public Maybe<List<UnverifiedRating_FB>> retrieveUnverifiedRatingsList(String iMEI) {
         return repository.retrieveUnverifiedRatingList(iMEI);
     }
 

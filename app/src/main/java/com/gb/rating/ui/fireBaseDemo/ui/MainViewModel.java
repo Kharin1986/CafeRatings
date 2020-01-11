@@ -1,7 +1,7 @@
 package com.gb.rating.ui.fireBaseDemo.ui;
 
 import com.gb.rating.fireBase.models_FireBase.Cafe_FB;
-import com.gb.rating.fireBase.models_FireBase.VerifiedRatings_FB;
+import com.gb.rating.fireBase.models_FireBase.VerifiedRating_FB;
 import com.gb.rating.fireBase.repository.UnverifiedRating_FB_Impl;
 import com.gb.rating.fireBase.repository.VerifiedRating_FB_Impl;
 import com.gb.rating.models.CafeItem;
@@ -17,7 +17,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
-import com.gb.rating.fireBase.models_FireBase.UnverifiedRatings_FB;
+import com.gb.rating.fireBase.models_FireBase.UnverifiedRating_FB;
 import com.gb.rating.fireBase.repository.Cafe_FB_Impl;
 import com.gb.rating.models.usercase.UnverifiedRatingInteractor;
 import com.gb.rating.models.usercase.VerifiedRatingInteractor;
@@ -38,8 +38,8 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     private VerifiedRatingInteractor verifiedRatingInteractor; //текущий Интерактор для работы с репозиторием
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private MutableLiveData<List<CafeItem>> cafeList = new MutableLiveData<List<CafeItem>>();
-    private MutableLiveData<List<UnverifiedRatings_FB>> unverifiedRatingsList = new MutableLiveData<List<UnverifiedRatings_FB>>();
-    private MutableLiveData<List<VerifiedRatings_FB>> verifiedRatingsList = new MutableLiveData<>();
+    private MutableLiveData<List<UnverifiedRating_FB>> unverifiedRatingsList = new MutableLiveData<List<UnverifiedRating_FB>>();
+    private MutableLiveData<List<VerifiedRating_FB>> verifiedRatingsList = new MutableLiveData<>();
     public String iMEI="";
 
 
@@ -81,14 +81,14 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
         retrieveCafeListByType("Russian Federations", "Ревда", "фастфуд");
 
         //список неверифицированных отзывов
-        UnverifiedRatings_FB Unverifiedratings_fb = new UnverifiedRatings_FB();
+        UnverifiedRating_FB Unverifiedratings_fb = new UnverifiedRating_FB();
         Unverifiedratings_fb.comment="Неверифицированный отзыв";
         writeUnverifiedRating(Unverifiedratings_fb);
 
         retrieveUnverifiedRatingsList();
 
         //список верифицированных отзывов
-        UnverifiedRatings_FB Verifiedratings_fb = new UnverifiedRatings_FB();
+        UnverifiedRating_FB Verifiedratings_fb = new UnverifiedRating_FB();
         Verifiedratings_fb.comment="Верифицированный отзыв";
         writeVerifiedRating(Verifiedratings_fb);
 
@@ -226,13 +226,13 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     public void retrieveUnverifiedRatingsList() {
 
         unverifiedRatingInteractor.retrieveUnverifiedRatingsList(iMEI)
-                .subscribe(new MaybeObserver<List<UnverifiedRatings_FB>>() {
+                .subscribe(new MaybeObserver<List<UnverifiedRating_FB>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onSuccess(List<UnverifiedRatings_FB> ratingList) {
+                    public void onSuccess(List<UnverifiedRating_FB> ratingList) {
                         unverifiedRatingsList.setValue(ratingList);
                     }
 
@@ -251,13 +251,13 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     public void retrieveVerifiedRatingsList() {
 
         verifiedRatingInteractor.retrieveVerifiedRatingsList(iMEI)
-                .subscribe(new MaybeObserver<List<VerifiedRatings_FB>>() {
+                .subscribe(new MaybeObserver<List<VerifiedRating_FB>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onSuccess(List<VerifiedRatings_FB> ratingList) {
+                    public void onSuccess(List<VerifiedRating_FB> ratingList) {
                         verifiedRatingsList.setValue(ratingList);
                     }
 

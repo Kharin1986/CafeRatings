@@ -1,6 +1,6 @@
 package com.gb.rating.models.usercase;
 
-import com.gb.rating.fireBase.models_FireBase.VerifiedRatings_FB;
+import com.gb.rating.fireBase.models_FireBase.VerifiedRating_FB;
 import com.gb.rating.models.repository.VerifiedRatingRepository;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class VerifiedRatingInteractor {
         return repository.writeVerifiedRating(value, imei);
     }
 
-    public Maybe<List<VerifiedRatings_FB>> retrieveVerifiedRatingsList(String iMEI) {
+    public Maybe<List<VerifiedRating_FB>> retrieveVerifiedRatingsList(String iMEI) {
         return repository.retrieveVerifiedRatingList(iMEI);
     }
 

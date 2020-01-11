@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class UnverifiedRatings_FB implements ConvertableEntity{
+public class UnverifiedRating_FB implements ConvertableEntity{
 
     //ID's
     public String cafeKey = ""; // ID, ref Key to Cafe_FB
@@ -43,20 +43,20 @@ public class UnverifiedRatings_FB implements ConvertableEntity{
 
     //METHODS For interface ConvertableEntity
 
-    public UnverifiedRatings_FB() {
+    public UnverifiedRating_FB() {
     }
 
     @Exclude
     @Override
-    public  UnverifiedRatings_FB convertToModelEntity() {
+    public UnverifiedRating_FB convertToModelEntity() {
         return this;
     }
 
 
     @Exclude
-    public static UnverifiedRatings_FB convertFromModelEntity(UnverifiedRatings_FB rating) {
+    public static UnverifiedRating_FB convertFromModelEntity(UnverifiedRating_FB rating) {
 
-        if (rating == null) {return new UnverifiedRatings_FB();}
+        if (rating == null) {return new UnverifiedRating_FB();}
 
         return rating;
     }

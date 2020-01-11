@@ -5,7 +5,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.Date;
 
 @IgnoreExtraProperties
-public class VerifiedRatings_FB implements ConvertableEntity {
+public class VerifiedRating_FB implements ConvertableEntity {
 
     //ID's
     public String cafeKey = ""; // ID, ref Key to Cafe_FB
@@ -17,20 +17,20 @@ public class VerifiedRatings_FB implements ConvertableEntity {
     public RatingsBase_FB ratingsBaseMap = new RatingsBase_FB();
     public String comment = "";
 
-    public VerifiedRatings_FB() {
+    public VerifiedRating_FB() {
     }
 
     //METHODS For interface ConvertableEntity
     @Exclude
     @Override
-    public  VerifiedRatings_FB convertToModelEntity() {
+    public VerifiedRating_FB convertToModelEntity() {
         return this;
     }
 
     @Exclude
-    public static VerifiedRatings_FB convertFromModelEntity(VerifiedRatings_FB rating) {
+    public static VerifiedRating_FB convertFromModelEntity(VerifiedRating_FB rating) {
 
-        if (rating == null) {return new VerifiedRatings_FB();}
+        if (rating == null) {return new VerifiedRating_FB();}
 
         return rating;
     }
