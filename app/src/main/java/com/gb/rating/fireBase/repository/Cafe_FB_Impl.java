@@ -1,22 +1,43 @@
 package com.gb.rating.fireBase.repository;
 
-import com.gb.rating.fireBase.dataStore.FrangSierraPlus;
+import android.app.Activity;
+import android.os.Handler;
+
+import com.gb.rating.R;
+import com.gb.rating.fireBase.CommonFunctions;
 import com.gb.rating.fireBase.models_FireBase.Cafe_FB;
+import com.gb.rating.firebase_storage.StorageStaticFunctions;
 import com.gb.rating.models.CafeItem;
 import com.gb.rating.models.repository.CafeRepository;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
 
 import durdinapps.rxfirebase2.RxFirebaseDatabase;
+import durdinapps.rxfirebase2.RxFirebaseStorage;
 import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
+import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.Maybe;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 
 public class Cafe_FB_Impl implements CafeRepository {
@@ -37,6 +58,7 @@ public class Cafe_FB_Impl implements CafeRepository {
 
             for (DataSnapshot CafeSnapshot: dataSnapshot.getChildren()) {
                 Cafe_FB curCafe=CafeSnapshot.getValue(Cafe_FB.class);
+                curCafe.cafeId=CafeSnapshot.getKey();
                 cafeList.add(curCafe.convertToModelEntity());
             }
             return cafeList;
@@ -50,10 +72,41 @@ public class Cafe_FB_Impl implements CafeRepository {
     }
 
 
+
     //----------------------------------------------------------------------------------------------------------------------------------
     //MAIN METHODS
+
+    private Task<Void> writeCafe_prepareTask(Cafe_FB cafe_fb){
+        //подготовка переменных
+        DatabaseReference newRef = db.getReference().child("CafeList").child(cafe_fb.country).child(cafe_fb.city).push();
+        String keySaved = newRef.getKey();
+        String fileText = "This is root directory for Cafe: "+cafe_fb.toString();
+        byte[] data = fileText.getBytes();
+
+        //первый Task (запись в Cloud Storage)
+        UploadTask firstTask = StorageStaticFunctions.getReftoImageCatalog().child(""+keySaved+"/cafeProperties.txt").putBytes(data);
+        //второй Task (запись в Realtime Database)
+        Task<Void> twoTasks = firstTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Void>>(){
+            @Override
+            public Task<Void> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                return newRef.setValue(cafe_fb);
+            }
+        });
+
+        return twoTasks;
+    }
+
+
     public Completable writeCafe(Cafe_FB cafe_fb) {
-        return RxFirebaseDatabase.setValue(db.getReference().child("CafeList").child(cafe_fb.country).child(cafe_fb.city).push(), cafe_fb);
+
+        Callable<Task<Void>> c = new Callable<Task<Void>>() {
+            @Override
+            public Task<Void> call() throws Exception {
+                return writeCafe_prepareTask(cafe_fb);
+            }
+        };
+
+        return CommonFunctions.compleatableFromCallable(c);
     }
 
     @Override

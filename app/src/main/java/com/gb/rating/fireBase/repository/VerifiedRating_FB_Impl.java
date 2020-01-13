@@ -2,7 +2,6 @@ package com.gb.rating.fireBase.repository;
 
 import androidx.annotation.NonNull;
 
-import com.gb.rating.fireBase.dataStore.FrangSierraPlus;
 import com.gb.rating.fireBase.models_FireBase.VerifiedRating_FB;
 import com.gb.rating.models.repository.VerifiedRatingRepository;
 import com.google.firebase.database.DataSnapshot;

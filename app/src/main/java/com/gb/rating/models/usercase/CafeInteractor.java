@@ -22,7 +22,7 @@ public class CafeInteractor {
             return repository.writeCafe((CafeItem) value);
         }
         else if (value instanceof Cafe_FB){
-            return repository.writeCafe((Cafe_FB) value);
+            return repository.writeCafe((Cafe_FB) value); //временно, этого быть не должно - Cafe_FB неизмвестна в домене
         }
         else {
             throw new IllegalArgumentException();

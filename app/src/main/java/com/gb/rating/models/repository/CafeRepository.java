@@ -11,7 +11,7 @@ import io.reactivex.annotations.NonNull;
 public interface CafeRepository {
 
     @NonNull io.reactivex.Completable writeCafe(@NonNull CafeItem value);
-    @NonNull io.reactivex.Completable writeCafe(@NonNull Cafe_FB value);
+    @NonNull io.reactivex.Completable writeCafe(@NonNull Cafe_FB value); //временно, этого быть не должно - Cafe_FB неизмвестна в домене
 
 
     @NonNull Maybe<List<CafeItem>> retrieveCafeList(@NonNull String country, @NonNull String city);

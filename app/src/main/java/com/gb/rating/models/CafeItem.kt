@@ -14,8 +14,6 @@ class CafeItem(
     var loc: String = "",
     var wTime: String = "",
 
-    var distance: Double = 1.0 // оставил
-
-
-
+    var distance: Double = 1.0, // оставил
+    var cafeId: String = ""
 )

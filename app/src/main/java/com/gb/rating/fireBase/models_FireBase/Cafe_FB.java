@@ -11,7 +11,7 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class Cafe_FB implements ConvertableEntity{
     //MAIN ATTRIBUTES
-    // public int imgDir = 0;  imgDir будет равно ref.key в отдельном каталоге (или FireBase Cloudbase)- сначала создаем кафе, затем - размещаем фото
+
     public String name = "";
     public String type = "";
     public String descr = "";
@@ -21,6 +21,9 @@ public class Cafe_FB implements ConvertableEntity{
     public String addressMain;
     public float latitude = 0;
     public float longitude = 0;
+
+    @Exclude
+    public String cafeId = ""; //imgDir будет равно ref.key в отдельном каталоге (в CloudStorage/cafeImages)- сначала создаем кафе, затем - размещаем фото
 
     //ADDITIONAL ATTRIBUTES (later, others SQL tables)
     public Map<String,String> addressAttrMap = new HashMap<>();
@@ -49,7 +52,7 @@ public class Cafe_FB implements ConvertableEntity{
     @Exclude
     @Override
     public CafeItem convertToModelEntity(){
-        return  new CafeItem(0, name, type, descr, (int) -rating, country, city, "", "", "", "", 0 );
+        return  new CafeItem(0, name, type, descr, (int) -rating, country, city, "", "", "", "", 0, cafeId );
     }
 
     @Exclude
@@ -66,8 +69,24 @@ public class Cafe_FB implements ConvertableEntity{
         curCafe.country = cafe.getCountry();
         curCafe.city = cafe.getCity();
         curCafe.addressMain = cafe.getStreet()+" "+cafe.getHome();
+        //cafeId не нужно
 
         return curCafe;
     }
 
+    @Exclude
+    @Override
+    public String toString() {
+        return "Cafe_FB{" +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", descr='" + descr + '\'' +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", addressMain='" + addressMain + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", cafeId='" + cafeId + '\'' +
+                '}';
+    }
 }
