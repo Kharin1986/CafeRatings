@@ -37,4 +37,8 @@ class ListFragment : Fragment() {
         dbHelper.openR()
         cafeList.value = dbHelper.readAllCafe()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 }
