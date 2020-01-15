@@ -3,6 +3,7 @@ package com.gb.rating.fireBase_RealTime.repository;
 //package
 import com.gb.rating.fireBase_RealTime.CommonFunctions;
 import com.gb.rating.fireBase_RealTime.models_FireBase.Cafe_FB;
+import com.gb.rating.fireBase_RealTime.models_FireBase.Mapper;
 import com.gb.rating.firebase_storage.StorageStaticFunctions;
 import com.gb.rating.models.CafeItem;
 import com.gb.rating.models.repository.CafeRepository;
@@ -33,6 +34,10 @@ import durdinapps.rxfirebase2.RxFirebaseDatabase;
 
 
 public class Cafe_FB_Impl implements CafeRepository {
+    public static final String CAFELIST_CATALOG = "CafeList";
+    public static final String TYPE_PROPERTY = "type";
+    public static final String RATING_PROPERTY = "rating";
+    public static final String CAFE_PROPERTIES_FILE_NAME = "cafeProperties.txt";
     private Object anyapi=null;
     private FirebaseDatabase db;
 
@@ -51,7 +56,7 @@ public class Cafe_FB_Impl implements CafeRepository {
             for (DataSnapshot CafeSnapshot: dataSnapshot.getChildren()) {
                 Cafe_FB curCafe=CafeSnapshot.getValue(Cafe_FB.class);
                 curCafe.cafeId=CafeSnapshot.getKey();
-                cafeList.add(curCafe.convertToModelEntity());
+                cafeList.add(Mapper.convert(curCafe));
             }
             return cafeList;
         }
@@ -69,7 +74,7 @@ public class Cafe_FB_Impl implements CafeRepository {
 
     private Task<Void> writeCafe_prepareTask(@NonNull Cafe_FB cafe_fb){
         //подготовка переменных
-        DatabaseReference refToCityCafeList = db.getReference().child("CafeList").child(cafe_fb.country).child(cafe_fb.city);
+        DatabaseReference refToCityCafeList = db.getReference().child(CAFELIST_CATALOG).child(cafe_fb.country).child(cafe_fb.city);
 
         //cafeID - добавляем новое кафе через .push()
         DatabaseReference newRef = ("".equals(cafe_fb.cafeId)) ?  refToCityCafeList.push() :  refToCityCafeList.child(cafe_fb.cafeId);
@@ -79,7 +84,7 @@ public class Cafe_FB_Impl implements CafeRepository {
         byte[] data = fileText.getBytes();
 
         //первый Task (запись в Cloud Storage)
-        UploadTask firstTask = StorageStaticFunctions.getReftoImageCatalog().child(""+cafeId+"/cafeProperties.txt").putBytes(data);
+        UploadTask firstTask = StorageStaticFunctions.getReftoImageCatalog().child(""+cafeId+"/"+ CAFE_PROPERTIES_FILE_NAME).putBytes(data);
         //второй Task (запись в Realtime Database)
         Task<Void> twoTasks = firstTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Void>>(){
             @Override
@@ -106,13 +111,13 @@ public class Cafe_FB_Impl implements CafeRepository {
 
     @Override
     public Completable writeCafe(@NonNull CafeItem cafe) {
-        Cafe_FB cafe_fb = Cafe_FB.convertFromModelEntity(cafe);
+        Cafe_FB cafe_fb = Mapper.convert(cafe);
         return writeCafe(cafe_fb);
     }
 
     @Override
     public @NonNull Maybe<List<CafeItem>> retrieveCafeList(@NonNull String country, @NonNull String city) {
-        Query query = db.getReference().child("CafeList").child(country).child(city).orderByChild("rating");
+        Query query = db.getReference().child(CAFELIST_CATALOG).child(country).child(city).orderByChild(RATING_PROPERTY);
         return observeSingleValueEvent_CafeItemList(query);
     }
 
@@ -134,7 +139,7 @@ public class Cafe_FB_Impl implements CafeRepository {
             return retrieveCafeList(country, city);
         }
 
-        Query query = db.getReference().child("CafeList").child(country).child(city).orderByChild("type").equalTo(type);
+        Query query = db.getReference().child(CAFELIST_CATALOG).child(country).child(city).orderByChild(TYPE_PROPERTY).equalTo(type);
 
         return observeSingleValueEvent_CafeItemList(query).map(new Function<List<CafeItem>, List<CafeItem>>() {
             @Override

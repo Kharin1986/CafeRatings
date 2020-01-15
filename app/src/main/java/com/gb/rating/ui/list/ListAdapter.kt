@@ -39,7 +39,12 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
             ratingBar_FragmentList.progress = item.rating
 
             // установка картинки с Firebase Storage через реквизит cafeItem.cafeId
-            if (item.cafeId != ""){
+            setImage(item)
+       }
+
+        // установка картинки с Firebase Storage через реквизит cafeItem.cafeId
+        private fun View.setImage(item: CafeItem) {
+            if (item.cafeId != "") {
                 try {
                     val storageReference = FirebaseStorage.getInstance().getReference()
                         .child("cafeImages/" + item.cafeId + "/main.jpg")
@@ -49,18 +54,18 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
                     }.addOnFailureListener {
                         // Handle any errors
                     }
-                } catch (s : StorageException){}
+                } catch (s: StorageException) {
+                }
+
+                // можно использовать все это с помощью GlideApp в Kotlin (в Java - просто через Glide.load(storageReference).into(imageList_FragmentItem)), но мне ... не удалось ... GlideApp не появился.
+                // https://medium.com/@egemenhamutcu/displaying-images-from-firebase-storage-using-glide-for-kotlin-projects-3e4950f6c103
+
+                //val storage = FirebaseStorage.getInstance()
+                //val gsReference = storage.getReferenceFromUrl("gs://fir-test-81397.appspot.com/cafeImages/cloud.jpg")
+                //GlideApp.with(context)
+                //.load(gsReference)
+                //.into(imageList_FragmentItem)
             }
-
-            // можно использовать все это с помощью GlideApp в Kotlin (в Java - просто через Glide.load(storageReference).into(imageList_FragmentItem)), но мне ... не удалось ... GlideApp не появился.
-            // https://medium.com/@egemenhamutcu/displaying-images-from-firebase-storage-using-glide-for-kotlin-projects-3e4950f6c103
-
-            //val storage = FirebaseStorage.getInstance()
-            //val gsReference = storage.getReferenceFromUrl("gs://fir-test-81397.appspot.com/cafeImages/cloud.jpg")
-            //GlideApp.with(context)
-            //.load(gsReference)
-            //.into(imageList_FragmentItem)
-
         }
     }
 

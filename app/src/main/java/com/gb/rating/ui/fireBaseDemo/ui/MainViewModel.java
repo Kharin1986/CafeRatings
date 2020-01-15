@@ -1,7 +1,8 @@
 package com.gb.rating.ui.fireBaseDemo.ui;
 
 import com.gb.rating.fireBase_RealTime.models_FireBase.Cafe_FB;
-import com.gb.rating.fireBase_RealTime.models_FireBase.VerifiedRating_FB;
+import com.gb.rating.fireBase_RealTime.models_FireBase.Mapper;
+import com.gb.rating.models.VerifiedRating;
 import com.gb.rating.fireBase_RealTime.repository.UnverifiedRating_FB_Impl;
 import com.gb.rating.fireBase_RealTime.repository.VerifiedRating_FB_Impl;
 import com.gb.rating.models.CafeItem;
@@ -17,7 +18,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
-import com.gb.rating.fireBase_RealTime.models_FireBase.UnverifiedRating_FB;
+import com.gb.rating.models.UnverifiedRating;
 import com.gb.rating.fireBase_RealTime.repository.Cafe_FB_Impl;
 import com.gb.rating.models.usercase.UnverifiedRatingInteractor;
 import com.gb.rating.models.usercase.VerifiedRatingInteractor;
@@ -39,8 +40,8 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     private VerifiedRatingInteractor verifiedRatingInteractor; //текущий Интерактор для работы с репозиторием
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private MutableLiveData<List<CafeItem>> cafeList = new MutableLiveData<List<CafeItem>>();
-    private MutableLiveData<List<UnverifiedRating_FB>> unverifiedRatingsList = new MutableLiveData<List<UnverifiedRating_FB>>();
-    private MutableLiveData<List<VerifiedRating_FB>> verifiedRatingsList = new MutableLiveData<>();
+    private MutableLiveData<List<UnverifiedRating>> unverifiedRatingsList = new MutableLiveData<List<UnverifiedRating>>();
+    private MutableLiveData<List<VerifiedRating>> verifiedRatingsList = new MutableLiveData<>();
     public String iMEI="";
 
 
@@ -60,6 +61,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     public void onCreate() {
         initInteractors();
         //TestWriting();
+        testRetrieveFirebaseRealtime();
     }
 
 
@@ -95,19 +97,27 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
         retrieveCafeListByType("Россия", "Москва", "фастфуд");
 
         //список неверифицированных отзывов
-        UnverifiedRating_FB Unverifiedratings_fb = new UnverifiedRating_FB();
-        Unverifiedratings_fb.comment="Неверифицированный отзыв";
-        writeUnverifiedRating(Unverifiedratings_fb);
+        UnverifiedRating unverifiedRating = new UnverifiedRating();
+        unverifiedRating.comment="Неверифицированный отзыв";
+        writeUnverifiedRating(unverifiedRating);
 
         retrieveUnverifiedRatingsList();
 
         //список верифицированных отзывов
-        VerifiedRating_FB Verifiedratings_fb = new VerifiedRating_FB();
-        Verifiedratings_fb.comment="Верифицированный отзыв";
-        writeVerifiedRating(Verifiedratings_fb);
+        VerifiedRating verifiedRating = new VerifiedRating();
+        verifiedRating.comment="Верифицированный отзыв";
+        writeVerifiedRating(verifiedRating);
 
         retrieveVerifiedRatingsList();
 
+    }
+
+    public void testRetrieveFirebaseRealtime() {
+
+        retrieveCafeList("Россия", "Москва");
+        retrieveCafeListByType("Россия", "Москва", "фастфуд");
+        retrieveUnverifiedRatingsList();
+        retrieveVerifiedRatingsList();
 
     }
 
@@ -118,29 +128,29 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
         curCafe.type = "фастфуд";
 
         curCafe.city="Новосибирск";
-        writeCafe(curCafe);
+        writeCafe(Mapper.convert(curCafe));
 
         curCafe.city="Ревда";
-        writeCafe(curCafe);
+        writeCafe(Mapper.convert(curCafe));
 
         curCafe.rating = -4;
-        writeCafe(curCafe);
+        writeCafe(Mapper.convert(curCafe));
 
 
         retrieveCafeList("Russian Federations", "Ревда");
         retrieveCafeListByType("Russian Federations", "Ревда", "фастфуд");
 
         //список неверифицированных отзывов
-        UnverifiedRating_FB Unverifiedratings_fb = new UnverifiedRating_FB();
-        Unverifiedratings_fb.comment="Неверифицированный отзыв";
-        writeUnverifiedRating(Unverifiedratings_fb);
+        UnverifiedRating unverifiedRating = new UnverifiedRating();
+        unverifiedRating.comment="Неверифицированный отзыв";
+        writeUnverifiedRating(unverifiedRating);
 
         retrieveUnverifiedRatingsList();
 
         //список верифицированных отзывов
-        UnverifiedRating_FB Verifiedratings_fb = new UnverifiedRating_FB();
-        Verifiedratings_fb.comment="Верифицированный отзыв";
-        writeVerifiedRating(Verifiedratings_fb);
+        VerifiedRating verifiedRating = new VerifiedRating();
+        verifiedRating.comment="Верифицированный отзыв";
+        writeVerifiedRating(verifiedRating);
 
         retrieveVerifiedRatingsList();
 
@@ -150,7 +160,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     //______________________________________________________________________________________________________________________________________________________________________
     // BASIC ACTIONS
 
-    public void writeUnverifiedRating(Object value){
+    public void writeUnverifiedRating(UnverifiedRating value){
             unverifiedRatingInteractor.writeRating(value, iMEI)
                     .subscribe(new DisposableCompletableObserver() {
                         @Override
@@ -167,7 +177,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
 
     }
 
-    public void writeVerifiedRating(Object value){
+    public void writeVerifiedRating(VerifiedRating value){
         verifiedRatingInteractor.writeRating(value, iMEI)
                 .subscribe(new DisposableCompletableObserver() {
                     @Override
@@ -184,7 +194,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
 
     }
 
-    public void writeCafe(Object value){
+    public void writeCafe(CafeItem value){
         cafeInteractor.writeCafe(value)
                 .subscribe(new DisposableCompletableObserver() {
                     @Override
@@ -256,13 +266,13 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     public void retrieveUnverifiedRatingsList() {
 
         unverifiedRatingInteractor.retrieveUnverifiedRatingsList(iMEI)
-                .subscribe(new MaybeObserver<List<UnverifiedRating_FB>>() {
+                .subscribe(new MaybeObserver<List<UnverifiedRating>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onSuccess(List<UnverifiedRating_FB> ratingList) {
+                    public void onSuccess(List<UnverifiedRating> ratingList) {
                         unverifiedRatingsList.setValue(ratingList);
                     }
 
@@ -281,13 +291,13 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     public void retrieveVerifiedRatingsList() {
 
         verifiedRatingInteractor.retrieveVerifiedRatingsList(iMEI)
-                .subscribe(new MaybeObserver<List<VerifiedRating_FB>>() {
+                .subscribe(new MaybeObserver<List<VerifiedRating>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onSuccess(List<VerifiedRating_FB> ratingList) {
+                    public void onSuccess(List<VerifiedRating> ratingList) {
                         verifiedRatingsList.setValue(ratingList);
                     }
 

@@ -1,6 +1,7 @@
 package com.gb.rating.fireBase_RealTime.models_FireBase;
 
 import com.gb.rating.models.CafeItem;
+import com.gb.rating.models.RatingsBase;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class Cafe_FB implements ConvertableEntity{
+public class Cafe_FB{
 
     //MAIN ATTRIBUTES
 public String name = "";
@@ -29,7 +30,7 @@ public String name = "";
     public Map<String,String> addressAttrMap = new HashMap<>();
     public List<String> addressOthersList;
     public List<String> innList;
-    public RatingsBase_FB ratingsBaseMap = new RatingsBase_FB();
+    public RatingsBase ratingsBaseMap = new RatingsBase();
     public Map<String,String> propertiesMap = new HashMap<>();
 
 
@@ -47,32 +48,6 @@ public String name = "";
         this.addressMain = addressMain;
     }
 
-    //METHODS For interface ConvertableEntity
-
-    @Exclude
-    @Override
-    public CafeItem convertToModelEntity(){
-        return  new CafeItem(0, name, type, descr, (int) -rating, country, city, "", "", "", "", 0, cafeId );
-    }
-
-    @Exclude
-    public static Cafe_FB convertFromModelEntity(CafeItem cafe) {
-
-        Cafe_FB curCafe = new Cafe_FB();
-
-        if (cafe == null) {return curCafe;}
-
-        curCafe.name = cafe.getName();
-        curCafe.type = cafe.getType();
-        curCafe.descr = cafe.getDesc();
-        curCafe.rating = -cafe.getRating();
-        curCafe.country = cafe.getCountry();
-        curCafe.city = cafe.getCity();
-        curCafe.addressMain = cafe.getStreet()+" "+cafe.getHome();
-        //cafeId не нужно
-
-        return curCafe;
-    }
 
     @Exclude
     @Override

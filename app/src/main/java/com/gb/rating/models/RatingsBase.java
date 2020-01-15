@@ -1,9 +1,9 @@
-package com.gb.rating.fireBase_RealTime.models_FireBase;
+package com.gb.rating.models;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class RatingsBase_FB {
+public class RatingsBase {
     public float rateKitchen = 0;
     public float rateService = 0;
     public float rateComfort = 0;
