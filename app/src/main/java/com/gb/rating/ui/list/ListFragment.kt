@@ -5,25 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gb.rating.R
 import com.gb.rating.dataBase.CafeDataSource
 import com.gb.rating.models.CafeItem
 import kotlinx.android.synthetic.main.fragment_list.*
+import android.R
+
+
 
 class ListFragment : Fragment() {
 
-    var cafeList : MutableLiveData<List<CafeItem>> = MutableLiveData() //лист с кафешками
+    //var cafeList : MutableLiveData<List<CafeItem>> = MutableLiveData() //лист с кафешками
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
+        return inflater.inflate(com.gb.rating.R.layout.fragment_list, container, false)
     }
 
     override fun onStart() {
@@ -32,10 +33,14 @@ class ListFragment : Fragment() {
         val adapter = ListAdapter()
         cafeListRecycler_FragmentList?.layoutManager = LinearLayoutManager(activity)
         cafeListRecycler_FragmentList?.adapter = adapter
-        cafeList.observe(this, Observer {it?.let { adapter.refreshList(it) }}) //подписка на обновление листа
+
+        var mViewModel : ListViewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
+        mViewModel.cafeList.observe(this, Observer {it?.let { adapter.refreshList(it) }}) //подписка на обновление листа
         val dbHelper = CafeDataSource(context)
         dbHelper.openR()
-        cafeList.value = dbHelper.readAllCafe()
+
+        //mViewModel.cafeList.value = dbHelper.readAllCafe()
+        mViewModel.retrieveCafeListByType("Россия", "Москва", "");
     }
 
     override fun onDestroyView() {

@@ -1,16 +1,18 @@
-package com.gb.rating.fireBase.repository;
+package com.gb.rating.fireBase_RealTime.repository;
 
-import androidx.annotation.NonNull;
-
-import com.gb.rating.fireBase.models_FireBase.UnverifiedRating_FB;
+//package
+import com.gb.rating.fireBase_RealTime.models_FireBase.UnverifiedRating_FB;
 import com.gb.rating.models.repository.UnverifiedRatingRepository;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+//common
 import java.util.ArrayList;
 import java.util.List;
+import androidx.annotation.NonNull;
 
+//rxJava
 import durdinapps.rxfirebase2.RxFirebaseDatabase;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;

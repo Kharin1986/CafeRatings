@@ -1,4 +1,4 @@
-package com.gb.rating.fireBase.models_FireBase;
+package com.gb.rating.fireBase_RealTime.models_FireBase;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -12,7 +12,8 @@ public class UnverifiedRating_FB implements ConvertableEntity{
 
     //ID's
     public String cafeKey = ""; // ID, ref Key to Cafe_FB
-    public String fiscalId = ""; //ID to Unferified, fiscalDriveNumber (ФН) + "_" + fiscalDocumentNumber (ФД)
+    public String fiscalId = ""; //ID to Unverified, fiscalDriveNumber (ФН) + "_" + fiscalDocumentNumber (ФД)
+    public String uid = ""; //if authorized, as well as unonymously
 
     //SERVICE ATTRIBUTES
     public boolean verified = false;

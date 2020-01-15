@@ -1,6 +1,6 @@
 package com.gb.rating.models.repository;
 
-import com.gb.rating.fireBase.models_FireBase.UnverifiedRating_FB;
+import com.gb.rating.fireBase_RealTime.models_FireBase.UnverifiedRating_FB;
 
 import java.util.List;
 

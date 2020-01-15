@@ -1,4 +1,4 @@
-package com.gb.rating.fireBase.models_FireBase;
+package com.gb.rating.fireBase_RealTime.models_FireBase;
 
 import com.gb.rating.models.CafeItem;
 import com.google.firebase.database.Exclude;
@@ -10,9 +10,9 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class Cafe_FB implements ConvertableEntity{
-    //MAIN ATTRIBUTES
 
-    public String name = "";
+    //MAIN ATTRIBUTES
+public String name = "";
     public String type = "";
     public String descr = "";
     public double rating = -3; //отрицательное значение, для сортировки

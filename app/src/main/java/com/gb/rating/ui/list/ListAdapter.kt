@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.gb.rating.models.CafeItem
 import kotlinx.android.synthetic.main.fragment_list_item.view.*
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageException
 
 class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
 
@@ -39,13 +40,16 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
 
             // установка картинки с Firebase Storage через реквизит cafeItem.cafeId
             if (item.cafeId != ""){
-                val storageReference = FirebaseStorage.getInstance().getReference().child("cafeImages/"+item.cafeId+"/main.jpg")
-                storageReference.downloadUrl.addOnSuccessListener { uri ->
-                    var imageURL = uri.toString()
-                    Glide.with(this).load(imageURL).into(imageList_FragmentItem)
-                }.addOnFailureListener {
-                    // Handle any errors
-                }
+                try {
+                    val storageReference = FirebaseStorage.getInstance().getReference()
+                        .child("cafeImages/" + item.cafeId + "/main.jpg")
+                    storageReference.downloadUrl.addOnSuccessListener { uri ->
+                        var imageURL = uri.toString()
+                        Glide.with(this).load(imageURL).into(imageList_FragmentItem)
+                    }.addOnFailureListener {
+                        // Handle any errors
+                    }
+                } catch (s : StorageException){}
             }
 
             // можно использовать все это с помощью GlideApp в Kotlin (в Java - просто через Glide.load(storageReference).into(imageList_FragmentItem)), но мне ... не удалось ... GlideApp не появился.

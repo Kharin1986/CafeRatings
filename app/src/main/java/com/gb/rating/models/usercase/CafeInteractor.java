@@ -1,6 +1,6 @@
 package com.gb.rating.models.usercase;
 
-import com.gb.rating.fireBase.models_FireBase.Cafe_FB;
+import com.gb.rating.fireBase_RealTime.models_FireBase.Cafe_FB;
 import com.gb.rating.models.CafeItem;
 import com.gb.rating.models.repository.CafeRepository;
 

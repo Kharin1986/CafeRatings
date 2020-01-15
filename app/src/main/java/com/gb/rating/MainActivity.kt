@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.gb.rating.models.Firebase_Auth.CommonAuthFunctions
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,5 +27,10 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    override fun onStart() {
+        super.onStart();
+        CommonAuthFunctions.checkAuth();
     }
 }

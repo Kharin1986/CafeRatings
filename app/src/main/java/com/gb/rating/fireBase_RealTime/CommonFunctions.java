@@ -1,4 +1,4 @@
-package com.gb.rating.fireBase;
+package com.gb.rating.fireBase_RealTime;
 
 import androidx.annotation.NonNull;
 
