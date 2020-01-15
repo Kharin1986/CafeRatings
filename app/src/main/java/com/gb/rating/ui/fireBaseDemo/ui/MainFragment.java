@@ -33,6 +33,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.main_fragment, container, false);
     }
 
@@ -40,6 +41,8 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initViewModel();
+
+        getActivity().findViewById(R.id.buttonTest).setOnClickListener(v -> mViewModel.testUpdateFirebaseRealtime());
     }
 
     private void initViewModel() {
@@ -80,5 +83,6 @@ public class MainFragment extends Fragment {
         }
         return true;
     }
+
 
 }

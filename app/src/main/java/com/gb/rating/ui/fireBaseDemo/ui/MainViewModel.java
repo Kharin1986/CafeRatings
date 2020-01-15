@@ -1,9 +1,9 @@
 package com.gb.rating.ui.fireBaseDemo.ui;
 
-import com.gb.rating.fireBase.models_FireBase.Cafe_FB;
-import com.gb.rating.fireBase.models_FireBase.VerifiedRating_FB;
-import com.gb.rating.fireBase.repository.UnverifiedRating_FB_Impl;
-import com.gb.rating.fireBase.repository.VerifiedRating_FB_Impl;
+import com.gb.rating.fireBase_RealTime.models_FireBase.Cafe_FB;
+import com.gb.rating.fireBase_RealTime.models_FireBase.VerifiedRating_FB;
+import com.gb.rating.fireBase_RealTime.repository.UnverifiedRating_FB_Impl;
+import com.gb.rating.fireBase_RealTime.repository.VerifiedRating_FB_Impl;
 import com.gb.rating.models.CafeItem;
 import com.gb.rating.models.repository.CafeRepository;
 import com.gb.rating.models.repository.UnverifiedRatingRepository;
@@ -17,10 +17,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
-import com.gb.rating.fireBase.models_FireBase.UnverifiedRating_FB;
-import com.gb.rating.fireBase.repository.Cafe_FB_Impl;
+import com.gb.rating.fireBase_RealTime.models_FireBase.UnverifiedRating_FB;
+import com.gb.rating.fireBase_RealTime.repository.Cafe_FB_Impl;
 import com.gb.rating.models.usercase.UnverifiedRatingInteractor;
 import com.gb.rating.models.usercase.VerifiedRatingInteractor;
+import com.gb.rating.ui.list.TempCafeList;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -58,7 +59,56 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
         initInteractors();
-        TestWriting();
+        //TestWriting();
+    }
+
+
+
+    private void initInteractors() {
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+
+        CafeRepository repository = new Cafe_FB_Impl(db, null);
+        cafeInteractor = new CafeInteractor(repository);
+
+        UnverifiedRatingRepository unverifiedRatingRepository = new UnverifiedRating_FB_Impl(db, null);
+        unverifiedRatingInteractor = new UnverifiedRatingInteractor(unverifiedRatingRepository);
+
+        VerifiedRatingRepository verifiedRatingRepository = new VerifiedRating_FB_Impl(db, null);
+        verifiedRatingInteractor = new VerifiedRatingInteractor(verifiedRatingRepository);
+    }
+
+    @Override
+    protected void onCleared() {
+        compositeDisposable.clear();
+        super.onCleared();
+    }
+
+    //______________________________________________________________________________________________________________________________________________________________________
+    // TEST ACTIONS
+
+    public void testUpdateFirebaseRealtime() {
+        List<CafeItem> cafeList = TempCafeList.INSTANCE.getCafeList();
+        for (CafeItem curCafe : cafeList)
+        writeCafe(curCafe);
+
+        retrieveCafeList("Россия", "Москва");
+        retrieveCafeListByType("Россия", "Москва", "фастфуд");
+
+        //список неверифицированных отзывов
+        UnverifiedRating_FB Unverifiedratings_fb = new UnverifiedRating_FB();
+        Unverifiedratings_fb.comment="Неверифицированный отзыв";
+        writeUnverifiedRating(Unverifiedratings_fb);
+
+        retrieveUnverifiedRatingsList();
+
+        //список верифицированных отзывов
+        VerifiedRating_FB Verifiedratings_fb = new VerifiedRating_FB();
+        Verifiedratings_fb.comment="Верифицированный отзыв";
+        writeVerifiedRating(Verifiedratings_fb);
+
+        retrieveVerifiedRatingsList();
+
+
     }
 
     //TEST
@@ -96,26 +146,6 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
 
 
     }
-
-    private void initInteractors() {
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-
-        CafeRepository repository = new Cafe_FB_Impl(db, null);
-        cafeInteractor = new CafeInteractor(repository);
-
-        UnverifiedRatingRepository unverifiedRatingRepository = new UnverifiedRating_FB_Impl(db, null);
-        unverifiedRatingInteractor = new UnverifiedRatingInteractor(unverifiedRatingRepository);
-
-        VerifiedRatingRepository verifiedRatingRepository = new VerifiedRating_FB_Impl(db, null);
-        verifiedRatingInteractor = new VerifiedRatingInteractor(verifiedRatingRepository);
-    }
-
-    @Override
-    protected void onCleared() {
-        compositeDisposable.clear();
-        super.onCleared();
-    }
-
 
     //______________________________________________________________________________________________________________________________________________________________________
     // BASIC ACTIONS

@@ -1,4 +1,4 @@
-package com.gb.rating.fireBase.models_FireBase;
+package com.gb.rating.fireBase_RealTime.models_FireBase;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -9,7 +9,8 @@ public class VerifiedRating_FB implements ConvertableEntity {
 
     //ID's
     public String cafeKey = ""; // ID, ref Key to Cafe_FB
-    public String fiscalId = ""; //ID to Unferified, fiscalDriveNumber (ФН) + "_" + fiscalDocumentNumber (ФД)
+    public String fiscalId = ""; //ID to Verified, fiscalDriveNumber (ФН) + "_" + fiscalDocumentNumber (ФД)
+    public String uid = ""; //if authorized, as well as unonymously
 
     //MAIN ATTRIBUTES()
     public Date fiscalDate; // Date&Time in QR code

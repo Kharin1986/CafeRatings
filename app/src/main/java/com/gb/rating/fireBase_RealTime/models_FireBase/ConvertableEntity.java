@@ -1,4 +1,4 @@
-package com.gb.rating.fireBase.models_FireBase;
+package com.gb.rating.fireBase_RealTime.models_FireBase;
 
 public interface  ConvertableEntity <Entity, FB_Entity>{
 

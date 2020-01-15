@@ -1,4 +1,4 @@
-package com.gb.rating.fireBase.models_FireBase;
+package com.gb.rating.fireBase_RealTime.models_FireBase;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -2,27 +2,20 @@ package com.gb.rating.ui.fireBaseDemo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.ImageViewCompat;
-import androidx.lifecycle.ViewModelProviders;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.gb.rating.models.Firebase_Auth.CommonAuthFunctions;
 import com.gb.rating.R;
 import com.gb.rating.ui.fireBaseDemo.ui.MainFragment;
-import com.gb.rating.ui.fireBaseDemo.ui.MainViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
@@ -37,7 +30,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 
 public class MainActivityFireBaseDemo extends AppCompatActivity {
 
@@ -68,7 +60,7 @@ public class MainActivityFireBaseDemo extends AppCompatActivity {
         super.onStart();
 
         if (mAuth.getCurrentUser() == null){
-            signInAnonymously();
+            CommonAuthFunctions.signInAnonymously();
         }
 
         Log.d(TAG,"CURRENT USER CURRENT USER CURRENT USER CURRENT USER CURRENT USER CURRENT USER CURRENT USER :"+mAuth.getCurrentUser());
@@ -82,6 +74,8 @@ public class MainActivityFireBaseDemo extends AppCompatActivity {
         testDownloadingFileToFilysystem();
 
     }
+
+
 
     private void TestGlid() {
         // Reference to an image file in Cloud Storage
@@ -136,27 +130,7 @@ public class MainActivityFireBaseDemo extends AppCompatActivity {
     }
 
 
-    private void signInAnonymously() {
-        // Sign in anonymously. Authentication is required to read or write from Firebase Storage.
-        //showProgressBar(getString(R.string.progress_auth));
-        mAuth.signInAnonymously()
-                .addOnSuccessListener(this, new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                        Log.d(TAG, "signInAnonymously:SUCCESS");
-                        //hideProgressBar();
-                        //updateUI(authResult.getUser());
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Log.e(TAG, "signInAnonymously:FAILURE", exception);
-                        //hideProgressBar();
-                        //updateUI(null);
-                    }
-                });
-    }
+
 
     private void testToken() {
         try {
