@@ -1,7 +1,8 @@
 package com.gb.rating.fireBase_RealTime.repository;
 
 //package
-import com.gb.rating.fireBase_RealTime.models_FireBase.VerifiedRating_FB;
+import com.gb.rating.fireBase_RealTime.models_FireBase.Mapper;
+import com.gb.rating.models.VerifiedRating;
 import com.gb.rating.models.repository.VerifiedRatingRepository;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,6 +20,8 @@ import io.reactivex.Maybe;
 import io.reactivex.functions.Function;
 
 public class VerifiedRating_FB_Impl implements VerifiedRatingRepository {
+    public static final String VERIFIED_RATINGS_LIST_CATALOG = "VerifiedRatingsList";
+    public static final String FISCAL_DATE_PROPERTY = "fiscalDate";
     private Object anyapi=null;
     private FirebaseDatabase db;
 
@@ -29,16 +32,14 @@ public class VerifiedRating_FB_Impl implements VerifiedRatingRepository {
         this.anyapi = api;
     }
 
-    public static Function FromSnapshotToVerifiedRating_FBFunction = new Function<DataSnapshot, List<VerifiedRating_FB>>() {
+    public static Function FromSnapshotToVerifiedRating_FBFunction = new Function<DataSnapshot, List<VerifiedRating>>() {
         @Override
-        public List<VerifiedRating_FB> apply(DataSnapshot dataSnapshot) throws Exception {
-            List<VerifiedRating_FB> ratingList= new ArrayList();
+        public List<VerifiedRating> apply(DataSnapshot dataSnapshot) throws Exception {
+            List<VerifiedRating> ratingList= new ArrayList();
 
-            for (DataSnapshot iMEISnapshot: dataSnapshot.getChildren()) {
-                for (DataSnapshot ratingSnapshot: iMEISnapshot.getChildren()) {
-                    VerifiedRating_FB curRating=ratingSnapshot.getValue(VerifiedRating_FB.class);
-                    ratingList.add(curRating.convertToModelEntity());
-                }
+            for (DataSnapshot ratingSnapshot: dataSnapshot.getChildren()) {
+                VerifiedRating curRating=ratingSnapshot.getValue(VerifiedRating.class);
+                ratingList.add(Mapper.convert(curRating));
             }
             return ratingList;
         }
@@ -46,7 +47,7 @@ public class VerifiedRating_FB_Impl implements VerifiedRatingRepository {
 
 
     @io.reactivex.annotations.NonNull
-    public static  Maybe<List<VerifiedRating_FB>> observeSingleValueEvent_VerifiedRating_FBList(@NonNull Query query) {
+    public static  Maybe<List<VerifiedRating>> observeSingleValueEvent_VerifiedRating_FBList(@NonNull Query query) {
         return RxFirebaseDatabase.observeSingleValueEvent(query).map(FromSnapshotToVerifiedRating_FBFunction);
     }
 
@@ -54,14 +55,14 @@ public class VerifiedRating_FB_Impl implements VerifiedRatingRepository {
     //----------------------------------------------------------------------------------------------------------------------------------
     //MAIN METHODS
     @Override
-    public Completable writeVerifiedRating(Object value, String iMEI) {
-        return RxFirebaseDatabase.setValue(db.getReference().child("VerifiedRatingsList").child(iMEI).push(), value);
+    public Completable writeVerifiedRating(VerifiedRating rating, String iMEI) {
+        return RxFirebaseDatabase.setValue(db.getReference().child(VERIFIED_RATINGS_LIST_CATALOG).child(iMEI).push(), rating);
     }
 
     @Override
-    public Maybe<List<VerifiedRating_FB>> retrieveVerifiedRatingList(String iMEI) {
-        Query query = db.getReference().child("VerifiedRatingsList").child(iMEI)
-                .orderByChild("fiscalDate");
+    public Maybe<List<VerifiedRating>> retrieveVerifiedRatingList(String iMEI) {
+        Query query = db.getReference().child(VERIFIED_RATINGS_LIST_CATALOG).child(iMEI)
+                .orderByChild(FISCAL_DATE_PROPERTY);
         return observeSingleValueEvent_VerifiedRating_FBList(query);
     }
 

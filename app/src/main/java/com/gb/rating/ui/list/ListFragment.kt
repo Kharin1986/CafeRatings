@@ -17,8 +17,6 @@ import android.R
 
 class ListFragment : Fragment() {
 
-    //var cafeList : MutableLiveData<List<CafeItem>> = MutableLiveData() //лист с кафешками
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -17,16 +17,8 @@ public class CafeInteractor {
         this.repository = repository;
     }
 
-    public Completable writeCafe(Object value) throws IllegalArgumentException {
-        if (value instanceof CafeItem){
-            return repository.writeCafe((CafeItem) value);
-        }
-        else if (value instanceof Cafe_FB){
-            return repository.writeCafe((Cafe_FB) value); //временно, этого быть не должно - Cafe_FB неизмвестна в домене
-        }
-        else {
-            throw new IllegalArgumentException();
-        }
+    public Completable writeCafe(CafeItem value) throws IllegalArgumentException {
+        return repository.writeCafe((CafeItem) value);
     }
 
 
