@@ -1,13 +1,13 @@
-package com.gb.rating.ui.offline
+package com.gb.rating.ui.settings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class OfflineViewModel : ViewModel() {
+class SettingsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is offline Fragment"
+        value = "This is settings Fragment"
     }
     val text: LiveData<String> = _text
 }

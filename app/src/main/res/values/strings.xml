@@ -3,9 +3,8 @@
     <string name="title_home">Home</string>
     <string name="title_list">Список</string>
     <string name="title_search">Поиск</string>
-    <string name="title_offline">Оффлайн</string>
     <string name="title_review">Отзыв</string>
-    <string name="title_menu">Меню</string>
+    <string name="title_settings">Настройки</string>
 
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -32,4 +31,10 @@
     <string name="offline">Оффлайн</string>
     <string name="save_list">Сохранить список</string>
     <string name="offline_mode">Оффлайн-список</string>
+    <string name="restaurant">Ресторан</string>
+    <string name="Bar">Бар</string>
+    <string name="TOP">ТОП</string>
+    <string name="FAV">Избранное</string>
+    <string name="Cafe">Кафе</string>
+    <string name="fastfood">Фастфуд</string>
 </resources>

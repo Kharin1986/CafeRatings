@@ -22,7 +22,7 @@
     <item
         android:id="@+id/navigation_offline"
         android:icon="@drawable/ic_menu"
-        android:title="@string/title_menu" />
+        android:title="@string/title_settings" />
 
 
 </menu>
