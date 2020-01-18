@@ -25,8 +25,8 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_list, R.id.navigation_search,
-                R.id.navigation_offline,R.id.navigation_review
+                R.id.navigation_home, R.id.navigation_review, R.id.navigation_list, R.id.navigation_search,
+                R.id.navigation_settings
             )
         )
         setupActionBarWithNavController(navController!!, appBarConfiguration)
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        super.onStart();
-        CommonAuthFunctions.checkAuth();
+        super.onStart()
+        CommonAuthFunctions.checkAuth()
     }
 }
