@@ -35,29 +35,33 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 CafeTable.Cols.STREET + ", " +
                 CafeTable.Cols.HOME + ", " +
                 CafeTable.Cols.LOCATION + ", " +
-                CafeTable.Cols.WORK_TIME +
+                CafeTable.Cols.WORK_TIME + ", " +
+                CafeTable.Cols.CAFE_ID +
                 ");"
         );
+        db.execSQL("CREATE INDEX "+CafeTable.NAME+"_"+CafeTable.Cols.RATING+"_idx ON "+CafeTable.NAME+"("+CafeTable.Cols.RATING+")");
 
         //временный код для наполнения БД из класса TempCafeList
 
-        List<CafeItem> list = TempCafeList.INSTANCE.getCafeList();
-        ContentValues cv = new ContentValues();
-        CafeItem item;
-        for (int i = 0; i < list.size(); i++) {
-            item = list.get(i);
-            cv.put(CafeTable.Cols.CAFE_NAME, item.getName());
-            cv.put(CafeTable.Cols.TYPE, item.getType());
-            cv.put(CafeTable.Cols.DESCRIPTION, item.getDesc());
-            cv.put(CafeTable.Cols.RATING, item.getRating());
-            cv.put(CafeTable.Cols.COUNTRY, item.getCountry());
-            cv.put(CafeTable.Cols.CITY, item.getCity());
-            cv.put(CafeTable.Cols.STREET, item.getStreet());
-            cv.put(CafeTable.Cols.HOME, item.getHome());
-            cv.put(CafeTable.Cols.LOCATION, item.getLoc());
-            cv.put(CafeTable.Cols.WORK_TIME, item.getWTime());
-            db.insert(CafeTable.NAME, null, cv);
-        }
+//        List<CafeItem> list = TempCafeList.INSTANCE.getCafeList();
+//        ContentValues cv = new ContentValues();
+//        CafeItem item;
+//        for (int i = 0; i < list.size(); i++) {
+//            item = list.get(i);
+//            cv.put(CafeTable.Cols.CAFE_NAME, item.getName());
+//            cv.put(CafeTable.Cols.TYPE, item.getType());
+//            cv.put(CafeTable.Cols.DESCRIPTION, item.getDesc());
+//            cv.put(CafeTable.Cols.RATING, item.getRating());
+//            cv.put(CafeTable.Cols.COUNTRY, item.getCountry());
+//            cv.put(CafeTable.Cols.CITY, item.getCity());
+//            cv.put(CafeTable.Cols.STREET, item.getStreet());
+//            cv.put(CafeTable.Cols.HOME, item.getHome());
+//            cv.put(CafeTable.Cols.LOCATION, item.getLoc());
+//            cv.put(CafeTable.Cols.WORK_TIME, item.getWTime());
+//            cv.put(CafeTable.Cols.WORK_TIME, item.getWTime());
+//            cv.put(CafeTable.Cols.CAFE_ID, item.getCafeId());
+//            db.insert(CafeTable.NAME, null, cv);
+//        }
     }
 
     @Override
