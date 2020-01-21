@@ -1,6 +1,7 @@
 package com.gb.rating
 
 import android.os.Bundle
+import android.view.ActionMode
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -11,15 +12,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.gb.rating.dataBase.CafeDataSource
-import com.gb.rating.fireBase_RealTime.repository.Cafe_FB_Impl
-import com.gb.rating.models.CafeItem
 import com.gb.rating.models.Firebase_Auth.CommonAuthFunctions
-import com.gb.rating.models.usercase.CafeInteractor
 import com.gb.rating.ui.ViewModelMain
-import com.google.firebase.database.FirebaseDatabase
-import io.reactivex.MaybeObserver
-import io.reactivex.disposables.Disposable
+import com.gb.rating.ui.settings.BASE_UPDATED_ACTION
+import com.gb.rating.ui.settings.INITIATION_ACTION
 
 class MainActivity : AppCompatActivity() {
     var navController: NavController? = null
@@ -28,23 +24,38 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val model = ViewModelProviders.of(this)[ViewModelMain::class.java]
-        model.ourProperties.observe(this, Observer {it?.let {model.refreshCafeList()}})
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
+        initViewModel()
+        initNavControllerAndActionBar()
+    }
+
+    private fun initViewModel() {
+        val viewModelMain = ViewModelProviders.of(this)[ViewModelMain::class.java]
+        viewModelMain.ourSearchProperties.observe(this, Observer { it?.let {
+            if (it.action != INITIATION_ACTION && it.action != BASE_UPDATED_ACTION)
+                viewModelMain.refreshCafeList()
+        } }) //TODO: как перенести обозреватель LiveData в ViewModel (может, использовать coorutines)?
+    }
+
+    private fun initNavControllerAndActionBar() {
+        val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_review, R.id.navigation_list, R.id.navigation_search,
+                R.id.navigation_home,
+                R.id.navigation_review,
+                R.id.navigation_list,
+                R.id.navigation_search,
                 R.id.navigation_settings
             )
         )
         setupActionBarWithNavController(navController!!, appBarConfiguration)
         navView.setupWithNavController(navController!!)
     }
-// Кнопки домашней страницы)
+
+    // Кнопки домашней страницы)
     fun onRestClick(view: View) {
         bundle.putString("arg1", "rest")
         navController!!.navigate(R.id.navigation_list,bundle)
@@ -73,12 +84,6 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         CommonAuthFunctions.checkAuth()
-    }
-
-    fun initViewModel(country: String? = "", city: String?= "") {
-        val db = FirebaseDatabase.getInstance()
-        val repository = Cafe_FB_Impl(db, null)
-        val cafeInteractor = CafeInteractor(repository)
     }
 
 }
