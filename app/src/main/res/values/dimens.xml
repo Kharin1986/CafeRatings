@@ -6,4 +6,12 @@
     <dimen name="card_elevation">4dp</dimen>
     <dimen name="cv_corner_radius">15dp</dimen>
     <dimen name="cv_margin">7dp</dimen>
+    <!--for card's sources-->
+    <dimen name="rest_width">158dp</dimen>
+    <dimen name="rest_height">226dp</dimen>
+    <dimen name="cafe_height">142dp</dimen>
+    <dimen name="bar_height">111dp</dimen>
+    <dimen name="fastfood_height">194dp</dimen>
+    <dimen name="top_height">71dp</dimen>
+    <dimen name="fav_height">71dp</dimen>
 </resources>

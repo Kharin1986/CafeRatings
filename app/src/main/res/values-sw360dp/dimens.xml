@@ -1,0 +1,15 @@
+<resources>
+	<dimen name="cafe_height">159.8dp</dimen>
+	<dimen name="cv_margin">7.9dp</dimen>
+	<dimen name="cv_corner_radius">16.9dp</dimen>
+	<dimen name="bar_height">124.9dp</dimen>
+	<dimen name="rest_height">254.2dp</dimen>
+	<dimen name="top_height">79.9dp</dimen>
+	<dimen name="fav_height">79.9dp</dimen>
+	<dimen name="divider_space">22.5dp</dimen>
+	<dimen name="activity_vertical_margin">18dp</dimen>
+	<dimen name="rest_width">177.8dp</dimen>
+	<dimen name="card_elevation">4dp</dimen>
+	<dimen name="activity_horizontal_margin">18dp</dimen>
+	<dimen name="fastfood_height">218.2dp</dimen>
+</resources>
