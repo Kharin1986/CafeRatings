@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.gb.rating.models.CafeItem;
 import com.gb.rating.ui.list.TempCafeList;
-
 import java.util.List;
 
 import static com.gb.rating.dataBase.CafeDbScheme.CafeTable;
@@ -36,7 +35,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 CafeTable.Cols.HOME + ", " +
                 CafeTable.Cols.LOCATION + ", " +
                 CafeTable.Cols.WORK_TIME + ", " +
-                CafeTable.Cols.CAFE_ID +
+                CafeTable.Cols.CAFE_ID + ", " +
+                CafeTable.Cols.LATITUDE + " INTEGER, " +
+                CafeTable.Cols.LONGITUDE + " INTEGER, " +
+                CafeTable.Cols.DELETED + " BOOLEAN " +
                 ");"
         );
         db.execSQL("CREATE INDEX "+CafeTable.NAME+"_"+CafeTable.Cols.RATING+"_idx ON "+CafeTable.NAME+"("+CafeTable.Cols.RATING+")");

@@ -17,6 +17,9 @@ public class CafeDbScheme {
             public static final String LOCATION = "location";
             public static final String WORK_TIME = "worktime";
             public static final String CAFE_ID = "cafeId";
+            public static final String LATITUDE = "latitude";
+            public static final String LONGITUDE = "longitude";
+            public static final String DELETED = "deleted";
         }
     }
 

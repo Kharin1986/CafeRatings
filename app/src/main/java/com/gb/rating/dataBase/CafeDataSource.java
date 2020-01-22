@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gb.rating.models.CafeItem;
+import com.gb.rating.ui.settings.OurSearchPropertiesValue;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,13 +39,28 @@ public class CafeDataSource implements Closeable {
         database.insert(CafeTable.NAME, null, cv);
     }
 
-    public List<CafeItem> readAllCafe() {
+    public List<CafeItem> readAllCafe(OurSearchPropertiesValue ourSearchPropertiesValue) {
         List<CafeItem> listCafe = new ArrayList<>();
+        String selection ="";
+        List<String> argList= new ArrayList<>();
+
+        if (! ourSearchPropertiesValue.getType().equals("")){
+            selection = selection + (("".equals(selection))? "" : " AND ") + CafeTable.Cols.TYPE + "=?";
+            argList.add(ourSearchPropertiesValue.getType());
+        }
+        String[] args = new String[argList.size()];
+        int i = 0;
+        for (String arg : argList){
+            args[i] = arg;
+        }
+
         Cursor cursor = database.query(CafeTable.NAME,
-                null,null,null, null, null, CafeTable.Cols.RATING+" DESC");
+                null, selection, args, null, null, CafeTable.Cols.RATING+" DESC");
         if (cursor.moveToFirst()) {
+            CafeItem item = convertToCafeItem(cursor);
+            listCafe.add(item);
             while (cursor.moveToNext()) {
-                CafeItem item = convertToCafeItem(cursor);
+                item = convertToCafeItem(cursor);
                 listCafe.add(item);
             }
             cursor.close();
@@ -52,13 +68,17 @@ public class CafeDataSource implements Closeable {
         return listCafe;
     }
 
+
+
     public List<CafeItem> readAllCafe_Withquery() {
         List<CafeItem> listCafe = new ArrayList<>();
         String query = "SELECT * FROM "+CafeTable.NAME+" order by "+CafeTable.Cols.RATING+"  DESC;";
         Cursor cursor = database.rawQuery(query, null);
         if (cursor.moveToFirst()) {
+            CafeItem item = convertToCafeItem(cursor);
+            listCafe.add(item);
             while (cursor.moveToNext()) {
-                CafeItem item = convertToCafeItem(cursor);
+                item = convertToCafeItem(cursor);
                 listCafe.add(item);
             }
             cursor.close();
@@ -82,7 +102,27 @@ public class CafeDataSource implements Closeable {
         item.setLoc(cursor.getString(9));
         item.setWTime(cursor.getString(10));
         item.setCafeId(cursor.getString(11));
+        item.setLatitude(cursor.getInt(12));
+        item.setLongitude(cursor.getInt(13));
+        item.setDeleted(cursor.getInt(14) == 1);
         return item;
+    }
+
+    private void convertFromCafeItem(ContentValues cv, CafeItem item) {
+        cv.put(CafeTable.Cols.CAFE_NAME, item.getName());
+        cv.put(CafeTable.Cols.TYPE, item.getType());
+        cv.put(CafeTable.Cols.DESCRIPTION, item.getDesc());
+        cv.put(CafeTable.Cols.RATING, item.getRating());
+        cv.put(CafeTable.Cols.COUNTRY, item.getCountry());
+        cv.put(CafeTable.Cols.CITY, item.getCity());
+        cv.put(CafeTable.Cols.STREET, item.getStreet());
+        cv.put(CafeTable.Cols.HOME, item.getHome());
+        cv.put(CafeTable.Cols.LOCATION, item.getLoc());
+        cv.put(CafeTable.Cols.WORK_TIME, item.getWTime());
+        cv.put(CafeTable.Cols.CAFE_ID, item.getCafeId());
+        cv.put(CafeTable.Cols.LATITUDE, item.getLatitude());
+        cv.put(CafeTable.Cols.LONGITUDE, item.getLongitude());
+        cv.put(CafeTable.Cols.DELETED, item.getDeleted());
     }
 
     public CafeItem readCafeByName(String cafeName) {
@@ -121,19 +161,10 @@ public class CafeDataSource implements Closeable {
         CafeItem item;
         for (int i = 0; i < list.size(); i++) {
             item = list.get(i);
-            cv.put(CafeTable.Cols.CAFE_NAME, item.getName());
-            cv.put(CafeTable.Cols.TYPE, item.getType());
-            cv.put(CafeTable.Cols.DESCRIPTION, item.getDesc());
-            cv.put(CafeTable.Cols.RATING, item.getRating());
-            cv.put(CafeTable.Cols.COUNTRY, item.getCountry());
-            cv.put(CafeTable.Cols.CITY, item.getCity());
-            cv.put(CafeTable.Cols.STREET, item.getStreet());
-            cv.put(CafeTable.Cols.HOME, item.getHome());
-            cv.put(CafeTable.Cols.LOCATION, item.getLoc());
-            cv.put(CafeTable.Cols.WORK_TIME, item.getWTime());
-            cv.put(CafeTable.Cols.CAFE_ID, item.getCafeId());
+            convertFromCafeItem(cv, item);
             updateCafeByCafeId(cv,item.getCafeId());
         }
 
     }
+
 }

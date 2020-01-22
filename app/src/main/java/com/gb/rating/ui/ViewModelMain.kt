@@ -7,6 +7,7 @@ import com.gb.rating.models.CafeItem
 import com.gb.rating.models.usercase.CafeInteractor
 import com.gb.rating.models.utils.MainApplication
 import com.gb.rating.ui.settings.BASE_UPDATED_ACTION
+import com.gb.rating.ui.settings.INITIATION_ACTION
 import com.gb.rating.ui.settings.OurSearchPropertiesValue
 import com.gb.rating.ui.settings.initialSearchProperties
 import com.google.firebase.database.FirebaseDatabase
@@ -25,10 +26,10 @@ class ViewModelMain : ViewModel() {
     var cafeInteractor  = CafeInteractor(repository)
 
     init {
-        val ourSearchPropertiesValue: OurSearchPropertiesValue = initialSearchProperties()
+        val ourSearchPropertiesValue: OurSearchPropertiesValue = initialSearchProperties().updateAction(INITIATION_ACTION) //не тратим время на старт Активити, помечаем ourSearchPropertiesValue INITIATION_ACTION
         ourSearchProperties.value = ourSearchPropertiesValue
-        refreshCafeList() //ассинхронно, IO
-        initDatabaseUpdater(ourSearchPropertiesValue.country, ourSearchPropertiesValue.city) //ассинхронно
+        refreshCafeList() //ассинхронно, IO,
+        initDatabaseUpdater(ourSearchPropertiesValue.country, ourSearchPropertiesValue.city) //ассинхронно, IO
     }
 
     private fun initDatabaseUpdater(country: String, city: String) {
@@ -41,10 +42,12 @@ class ViewModelMain : ViewModel() {
 
     private fun updateInternalDatabase(country: String = "", city: String= "") {
         cafeInteractor?.retrieveCafeList(country, city)
-            ?.subscribe(object : MaybeObserver<List<CafeItem>> {
+            ?.doOnSuccess { cafeItems -> writeRetrievedCafeListToLocalDatabase(cafeItems)}  //TODO проверить, в какой среде выполняется doOnSuccess
+                ?.subscribe(object : MaybeObserver<List<CafeItem>> {
                 override fun onSubscribe(d: Disposable) {}
                 override fun onSuccess(cafeItems: List<CafeItem>) {
-                    writeRetrievedCafeListToLocalDatabase(cafeItems) //ассинхронно TODO: разобраться с потоками
+                    ourSearchProperties.value = ourSearchProperties.value?.updateAction(
+                        BASE_UPDATED_ACTION)
                 }
                 override fun onError(e: Throwable) {}
                 override fun onComplete() {
@@ -54,22 +57,22 @@ class ViewModelMain : ViewModel() {
     }
 
     private fun writeRetrievedCafeListToLocalDatabase(cafeItems: List<CafeItem>) {
-        viewModelScope.launch{ //TODO: разобраться с потоками
-            val dbHelperW = CafeDataSource(MainApplication.applicationContext())
-            dbHelperW.openW()
-            dbHelperW.writeCafeList(cafeItems)
-            ourSearchProperties.value = ourSearchProperties.value?.updateAction(
-                BASE_UPDATED_ACTION)
-        }
+        val dbHelperW = CafeDataSource(MainApplication.applicationContext())
+        dbHelperW.openW()
+        dbHelperW.writeCafeList(cafeItems)
     }
 
     fun refreshCafeList() {
-        viewModelScope.launch{
+        var ourSearchPropertiesValue = ourSearchProperties.value;
+        viewModelScope.launch {
+            cafeList.value = withContext(Dispatchers.IO) { readAllCafeWithContext(ourSearchPropertiesValue) }
+        }
+    }
+
+    fun readAllCafeWithContext(ourSearchPropertiesValue: OurSearchPropertiesValue?): List<CafeItem>{
         val dbHelperR = CafeDataSource(MainApplication.applicationContext())
         dbHelperR.openR()
-        cafeList.value = dbHelperR.readAllCafe()
-
-        }
+        return dbHelperR.readAllCafe(ourSearchPropertiesValue) //TODO проверить, прямая работа с SQLLite не ведется ли уже в среде IO
     }
 
 }

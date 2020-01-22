@@ -14,12 +14,12 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.gb.rating.models.Firebase_Auth.CommonAuthFunctions
 import com.gb.rating.ui.ViewModelMain
-import com.gb.rating.ui.settings.BASE_UPDATED_ACTION
-import com.gb.rating.ui.settings.INITIATION_ACTION
+import com.gb.rating.ui.settings.*
 
 class MainActivity : AppCompatActivity() {
     var navController: NavController? = null
     var bundle = Bundle()
+    var viewModelMain : ViewModelMain? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +30,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        val viewModelMain = ViewModelProviders.of(this)[ViewModelMain::class.java]
-        viewModelMain.ourSearchProperties.observe(this, Observer { it?.let {
-            if (it.action != INITIATION_ACTION && it.action != BASE_UPDATED_ACTION)
-                viewModelMain.refreshCafeList()
-        } }) //TODO: как перенести обозреватель LiveData в ViewModel (может, использовать coorutines)?
+        viewModelMain = ViewModelProviders.of(this)[ViewModelMain::class.java]
+        viewModelMain?.ourSearchProperties?.observe(this, Observer { it?.let {
+            if (it.action != INITIATION_ACTION)
+                viewModelMain?.refreshCafeList()
+        } }) //TODO: как перенести обозреватель LiveData в ViewModel ?
     }
 
     private fun initNavControllerAndActionBar() {
@@ -57,10 +57,12 @@ class MainActivity : AppCompatActivity() {
 
     // Кнопки домашней страницы)
     fun onRestClick(view: View) {
+        viewModelMain?.ourSearchProperties?.value = initialSearchProperties().updateType(RESTAURANT_TYPE)
         bundle.putString("arg1", "rest")
         navController!!.navigate(R.id.navigation_list,bundle)
     }
     fun onBarClick(view: View) {
+        viewModelMain?.ourSearchProperties?.value = initialSearchProperties().updateType(BAR_TYPE)
         bundle.putString("arg1", "bar")
         navController!!.navigate(R.id.navigation_list,bundle)
     }
@@ -73,10 +75,12 @@ class MainActivity : AppCompatActivity() {
         navController!!.navigate(R.id.navigation_list,bundle)
     }
     fun onCafeClick(view: View) {
+        viewModelMain?.ourSearchProperties?.value = initialSearchProperties().updateType(CAFE_TYPE)
         bundle.putString("arg1", "cafe")
         navController!!.navigate(R.id.navigation_list,bundle)
     }
     fun onFastClick(view: View) {
+        viewModelMain?.ourSearchProperties?.value = initialSearchProperties().updateType(FASTFOOD_TYPE)
         bundle.putString("arg1", "fast")
         navController!!.navigate(R.id.navigation_list,bundle)
     }
