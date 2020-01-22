@@ -117,7 +117,9 @@ public class Cafe_FB_Impl implements CafeRepository {
 
     @Override
     public @NonNull Maybe<List<CafeItem>> retrieveCafeList(@NonNull String country, @NonNull String city) {
-        Query query = db.getReference().child(CAFELIST_CATALOG).child(country).child(city).orderByChild(RATING_PROPERTY);
+        Query query = db.getReference().child(CAFELIST_CATALOG).child(country).child(city)
+                .orderByChild(RATING_PROPERTY)
+                ;
         return observeSingleValueEvent_CafeItemList(query);
     }
 
@@ -141,13 +143,15 @@ public class Cafe_FB_Impl implements CafeRepository {
 
         Query query = db.getReference().child(CAFELIST_CATALOG).child(country).child(city).orderByChild(TYPE_PROPERTY).equalTo(type);
 
-        return observeSingleValueEvent_CafeItemList(query).map(new Function<List<CafeItem>, List<CafeItem>>() {
-            @Override
-            public List<CafeItem> apply(List<CafeItem> cafeItems) throws Exception {
-                Collections.sort(cafeItems, comparatorByRatingDescending);
-                return cafeItems;
-            }
-        });
+        return observeSingleValueEvent_CafeItemList(query)
+                .map(new Function<List<CafeItem>, List<CafeItem>>() {
+                    @Override
+                    public List<CafeItem> apply(List<CafeItem> cafeItems) throws Exception {
+                        Collections.sort(cafeItems, comparatorByRatingDescending);
+                        return cafeItems;
+                    }
+        })
+                ;
 
     }
 }

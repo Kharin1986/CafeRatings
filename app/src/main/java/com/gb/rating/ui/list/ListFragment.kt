@@ -8,14 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gb.rating.dataBase.CafeDataSource
-import com.gb.rating.models.CafeItem
 import kotlinx.android.synthetic.main.fragment_list.*
 import android.R
-
+import com.gb.rating.ui.ViewModelMain
 
 
 class ListFragment : Fragment() {
+    var activityViewModel : ViewModelMain? = null
+    var mViewModel : ListViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,13 +32,11 @@ class ListFragment : Fragment() {
         cafeListRecycler_FragmentList?.layoutManager = LinearLayoutManager(activity)
         cafeListRecycler_FragmentList?.adapter = adapter
 
-        var mViewModel : ListViewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
-        mViewModel.cafeList.observe(this, Observer {it?.let { adapter.refreshList(it) }}) //подписка на обновление листа
-        val dbHelper = CafeDataSource(context)
-        dbHelper.openR()
-
-        //mViewModel.cafeList.value = dbHelper.readAllCafe()
-        mViewModel.retrieveCafeListByType("Россия", "Москва", "");
+        mViewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
+        activity?.let { fragmentActivity ->  activityViewModel = ViewModelProviders.of(fragmentActivity).get(ViewModelMain::class.java)}
+        activityViewModel?.cafeList?.observe(this, Observer {it?.let {
+            adapter.refreshList(it)
+        }}) //подписка на обновление листа
     }
 
     override fun onDestroyView() {

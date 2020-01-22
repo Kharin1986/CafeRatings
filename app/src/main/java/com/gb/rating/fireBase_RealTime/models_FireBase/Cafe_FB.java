@@ -5,6 +5,7 @@ import com.gb.rating.models.RatingsBase;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public String name = "";
     public String type = "";
     public String descr = "";
     public double rating = -3; //отрицательное значение, для сортировки
-    public String country  = "Russian Federations";
+    public String country  = "Россия";
     public String city  = "";
     public String addressMain;
     public float latitude = 0;
@@ -33,6 +34,10 @@ public String name = "";
     public RatingsBase ratingsBaseMap = new RatingsBase();
     public Map<String,String> propertiesMap = new HashMap<>();
 
+    //for database replication to internal Sql lite database
+    public long changeTime = new Date().getTime();
+    public long ratingChangeTime = new Date().getTime();
+    public boolean deleted = false;
 
     //CONSTRUCTOR FOR getValue()
     public Cafe_FB() {

@@ -34,6 +34,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
 
         fun bind (item: CafeItem) = with(itemView) {
             nameCafe_FragmentList.text = item.name
+            typeCafe_FragmentList.text = item.type;
             descriptionCafe_FragmentList.text = item.desc
             distanceToCafe_FragmentList.text = "${item.distance.toString()} км" //км нужно запихать в строковые ресурсы
             ratingBar_FragmentList.progress = item.rating
