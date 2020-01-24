@@ -66,6 +66,14 @@ class ViewModelMain : ViewModel() {
         var ourSearchPropertiesValue = ourSearchProperties.value;
         viewModelScope.launch {
             cafeList.value = withContext(Dispatchers.IO) { readAllCafeWithContext(ourSearchPropertiesValue) }
+
+            if (cafeList?.value?.size!!>0){
+                //временно
+                val dbHelperW = CafeDataSource(MainApplication.applicationContext())
+                dbHelperW.openW()
+                dbHelperW.setCafeFav(cafeList?.value?.get(0),true)
+
+            }
         }
     }
 

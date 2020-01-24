@@ -5,18 +5,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.gb.rating.models.CafeItem;
 import com.gb.rating.ui.settings.OurSearchPropertiesValue;
 
 import org.jetbrains.annotations.NotNull;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.gb.rating.dataBase.CafeDbScheme.CafeTable;
+import static com.gb.rating.dataBase.CafeDbScheme.FavCafeTable;
 
 public class CafeDataSource implements Closeable {
 
@@ -39,23 +38,15 @@ public class CafeDataSource implements Closeable {
         database.insert(CafeTable.NAME, null, cv);
     }
 
+
+    //основная выборка - список кафе из базы, ограниченных с помощью OurSearchPropertiesValue
     public List<CafeItem> readAllCafe(OurSearchPropertiesValue ourSearchPropertiesValue) {
         List<CafeItem> listCafe = new ArrayList<>();
-        String selection ="";
-        List<String> argList= new ArrayList<>();
+        PrepareSelection prepareSelection = new PrepareSelection(ourSearchPropertiesValue).invoke();
 
-        if (! ourSearchPropertiesValue.getType().equals("")){
-            selection = selection + (("".equals(selection))? "" : " AND ") + CafeTable.Cols.TYPE + "=?";
-            argList.add(ourSearchPropertiesValue.getType());
-        }
-        String[] args = new String[argList.size()];
-        int i = 0;
-        for (String arg : argList){
-            args[i] = arg;
-        }
-
-        Cursor cursor = database.query(CafeTable.NAME,
-                null, selection, args, null, null, CafeTable.Cols.RATING+" DESC");
+        Cursor cursor = database.rawQuery("SELECT * FROM " +CafeTable.NAME
+                +" LEFT JOIN "+ FavCafeTable.NAME +" ON  "+CafeTable.NAME+"." +CafeTable.Cols.CAFE_ID+" = "+ FavCafeTable.NAME+"." +FavCafeTable.Cols.CAFE_ID
+                + " WHERE "+prepareSelection.selection + " ORDER BY "+CafeTable.Cols.RATING+" DESC", prepareSelection.args);
         if (cursor.moveToFirst()) {
             CafeItem item = convertToCafeItem(cursor);
             listCafe.add(item);
@@ -69,24 +60,76 @@ public class CafeDataSource implements Closeable {
     }
 
 
+    private class PrepareSelection {
+        private OurSearchPropertiesValue ourSearchPropertiesValue;
+        String selection;
+        String[] args;
 
-    public List<CafeItem> readAllCafe_Withquery() {
-        List<CafeItem> listCafe = new ArrayList<>();
-        String query = "SELECT * FROM "+CafeTable.NAME+" order by "+CafeTable.Cols.RATING+"  DESC;";
-        Cursor cursor = database.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            CafeItem item = convertToCafeItem(cursor);
-            listCafe.add(item);
-            while (cursor.moveToNext()) {
-                item = convertToCafeItem(cursor);
-                listCafe.add(item);
-            }
-            cursor.close();
+        PrepareSelection(OurSearchPropertiesValue ourSearchPropertiesValue) {
+            this.ourSearchPropertiesValue = ourSearchPropertiesValue;
         }
-        return listCafe;
+
+        PrepareSelection invoke() {
+            selection = " deleted != 1";
+            List<String> argList= new ArrayList<>();
+
+            if (! ourSearchPropertiesValue.getType().equals("")){
+                selection += " AND " + CafeTable.Cols.TYPE + "=?";
+                argList.add(ourSearchPropertiesValue.getType());
+            }
+
+            for (OurSearchPropertiesValue.MyFilter curF : ourSearchPropertiesValue.getOtherFilters()){
+                selection += " AND " + curF.getWhere();
+                if (curF.getValue_1() != null) argList.add(curF.getValue_1().toString());
+                if (curF.getValue_2() != null) argList.add(curF.getValue_2().toString());
+            }
+
+            args = new String[argList.size()];
+            int i = 0;
+            for (String arg : argList){
+                args[i] = arg;
+            }
+            return this;
+        }
+    }
+
+    private void updateCafeByCafeId(ContentValues cv, String cafeId) {
+        int res = database.update(CafeTable.NAME, cv,
+                CafeTable.Cols.CAFE_ID + " = ?",
+                new String[]{cafeId});
+        if (res < 1)
+            database.insert(CafeTable.NAME,null,cv);
     }
 
 
+    @Override
+    public void close() throws IOException {
+        dbHelper.close();
+    }
+
+    public void writeCafeList(List<CafeItem> list){
+        ContentValues cv = new ContentValues();
+        CafeItem item;
+        for (int i = 0; i < list.size(); i++) {
+            item = list.get(i);
+            convertFromCafeItem(cv, item);
+            updateCafeByCafeId(cv,item.getCafeId());
+        }
+    }
+
+    public void setCafeFav(CafeItem item, Boolean fav) {
+        ContentValues cv = new ContentValues();
+        cv.put(FavCafeTable.Cols.CAFE_ID, item.getCafeId());
+        cv.put(FavCafeTable.Cols.FAV, fav);
+        int res = database.update(FavCafeTable.NAME, cv,
+                FavCafeTable.Cols.CAFE_ID + " = ?",
+                new String[]{item.getCafeId()});
+        if (res < 1)
+            database.insert(FavCafeTable.NAME,null,cv);
+    }
+
+
+    //портянки
     @NotNull
     private CafeItem convertToCafeItem(Cursor cursor) {
         CafeItem item = new CafeItem();
@@ -105,6 +148,7 @@ public class CafeDataSource implements Closeable {
         item.setLatitude(cursor.getInt(12));
         item.setLongitude(cursor.getInt(13));
         item.setDeleted(cursor.getInt(14) == 1);
+        item.setFav(cursor.getInt(17) == 1);
         return item;
     }
 
@@ -125,46 +169,6 @@ public class CafeDataSource implements Closeable {
         cv.put(CafeTable.Cols.DELETED, item.getDeleted());
     }
 
-    public CafeItem readCafeByName(String cafeName) {
-        CafeItem item = new CafeItem();
-        Cursor cursor = database.query(CafeTable.NAME,
-                null,
-                CafeTable.Cols.CAFE_NAME + "=?",
-                new String[]{cafeName}, null, null, null);
-        if (cursor.getCount() != 0) {
-            cursor.moveToFirst();
-            item = convertToCafeItem(cursor);
 
-            cursor.close();
-        }
-        return item;
-    }
-
-
-
-    public void updateCafeByCafeId(ContentValues cv, String cafeId) {
-        int res = database.update(CafeTable.NAME, cv,
-                CafeTable.Cols.CAFE_ID + " = ?",
-                new String[]{cafeId});
-        if (res < 1)
-            database.insert(CafeTable.NAME,null,cv);
-    }
-
-    @Override
-    public void close() throws IOException {
-        dbHelper.close();
-    }
-
-    public void writeCafeList(List<CafeItem> list){
-
-        ContentValues cv = new ContentValues();
-        CafeItem item;
-        for (int i = 0; i < list.size(); i++) {
-            item = list.get(i);
-            convertFromCafeItem(cv, item);
-            updateCafeByCafeId(cv,item.getCafeId());
-        }
-
-    }
 
 }

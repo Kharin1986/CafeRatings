@@ -22,13 +22,14 @@ public class Mapper {
         curCafe.latitude = cafe.getLatitude();
         curCafe.longitude = cafe.getLongitude();
         curCafe.deleted = cafe.getDeleted();
-        //cafeId не нужно
+        //cafeId, fav  не нужнs
+
 
         return curCafe;
     }
 
     public static CafeItem convert(Cafe_FB cafe){
-        return  new CafeItem(0, cafe.name, cafe.type, cafe.descr, (int) -cafe.rating, cafe.country, cafe.city, "", "", "", "", 0, cafe.cafeId, cafe.latitude, cafe.longitude, cafe.deleted );
+        return  new CafeItem(0, cafe.name, cafe.type, cafe.descr, (int) -cafe.rating, cafe.country, cafe.city, "", "", "", "", 0, cafe.cafeId, cafe.latitude, cafe.longitude, cafe.deleted, false );
 
     }
 

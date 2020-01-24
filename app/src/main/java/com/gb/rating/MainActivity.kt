@@ -67,10 +67,12 @@ class MainActivity : AppCompatActivity() {
         navController!!.navigate(R.id.navigation_list,bundle)
     }
     fun onTopClick(view: View) {
+        viewModelMain?.ourSearchProperties?.value = initialSearchProperties().addFilter_RatingMoreOrEquel(4.5f)
         bundle.putString("arg1", "top")
         navController!!.navigate(R.id.navigation_list,bundle)
     }
     fun onFavClick(view: View) {
+        viewModelMain?.ourSearchProperties?.value = initialSearchProperties().addFilter_Favorites(true)
         bundle.putString("arg1", "fav")
         navController!!.navigate(R.id.navigation_list,bundle)
     }

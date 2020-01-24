@@ -10,6 +10,8 @@ import com.gb.rating.ui.list.TempCafeList;
 import java.util.List;
 
 import static com.gb.rating.dataBase.CafeDbScheme.CafeTable;
+import static com.gb.rating.dataBase.CafeDbScheme.FavCafeTable;
+
 
 
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -42,28 +44,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 ");"
         );
         db.execSQL("CREATE INDEX "+CafeTable.NAME+"_"+CafeTable.Cols.RATING+"_idx ON "+CafeTable.NAME+"("+CafeTable.Cols.RATING+")");
+        db.execSQL("CREATE INDEX "+CafeTable.NAME+"_"+CafeTable.Cols.CAFE_ID+"_idx ON "+CafeTable.NAME+"("+CafeTable.Cols.CAFE_ID+")");
 
-        //временный код для наполнения БД из класса TempCafeList
 
-//        List<CafeItem> list = TempCafeList.INSTANCE.getCafeList();
-//        ContentValues cv = new ContentValues();
-//        CafeItem item;
-//        for (int i = 0; i < list.size(); i++) {
-//            item = list.get(i);
-//            cv.put(CafeTable.Cols.CAFE_NAME, item.getName());
-//            cv.put(CafeTable.Cols.TYPE, item.getType());
-//            cv.put(CafeTable.Cols.DESCRIPTION, item.getDesc());
-//            cv.put(CafeTable.Cols.RATING, item.getRating());
-//            cv.put(CafeTable.Cols.COUNTRY, item.getCountry());
-//            cv.put(CafeTable.Cols.CITY, item.getCity());
-//            cv.put(CafeTable.Cols.STREET, item.getStreet());
-//            cv.put(CafeTable.Cols.HOME, item.getHome());
-//            cv.put(CafeTable.Cols.LOCATION, item.getLoc());
-//            cv.put(CafeTable.Cols.WORK_TIME, item.getWTime());
-//            cv.put(CafeTable.Cols.WORK_TIME, item.getWTime());
-//            cv.put(CafeTable.Cols.CAFE_ID, item.getCafeId());
-//            db.insert(CafeTable.NAME, null, cv);
-//        }
+        db.execSQL("CREATE TABLE " + FavCafeTable.NAME + "(" +
+                        "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        FavCafeTable.Cols.CAFE_ID + ", " +
+                        FavCafeTable.Cols.FAV + " BOOLEAN " +
+                        ");");
+        db.execSQL("CREATE INDEX "+FavCafeTable.NAME+"_"+FavCafeTable.Cols.CAFE_ID+"_idx ON "+FavCafeTable.NAME+"("+FavCafeTable.Cols.CAFE_ID+")");
+
     }
 
     @Override
