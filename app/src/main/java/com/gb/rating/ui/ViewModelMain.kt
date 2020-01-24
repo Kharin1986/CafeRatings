@@ -18,37 +18,43 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ViewModelMain : ViewModel() {
-    var cafeList : MutableLiveData<List<CafeItem>> = MutableLiveData()
-    var ourSearchProperties :  MutableLiveData<OurSearchPropertiesValue> = MutableLiveData()
+    var cafeList: MutableLiveData<List<CafeItem>> = MutableLiveData()
+    var ourSearchProperties: MutableLiveData<OurSearchPropertiesValue> = MutableLiveData()
     // CafeInteractor - нужен сразу
     private val db = FirebaseDatabase.getInstance()
     private val repository = Cafe_FB_Impl(db, null)
-    var cafeInteractor  = CafeInteractor(repository)
+    var cafeInteractor = CafeInteractor(repository)
 
     init {
-        val ourSearchPropertiesValue: OurSearchPropertiesValue = initialSearchProperties().updateAction(INITIATION_ACTION) //не тратим время на старт Активити, помечаем ourSearchPropertiesValue INITIATION_ACTION
+        val ourSearchPropertiesValue: OurSearchPropertiesValue =
+            initialSearchProperties().updateAction(INITIATION_ACTION) //не тратим время на старт Активити, помечаем ourSearchPropertiesValue INITIATION_ACTION
         ourSearchProperties.value = ourSearchPropertiesValue
         refreshCafeList() //ассинхронно, IO,
-        initDatabaseUpdater(ourSearchPropertiesValue.country, ourSearchPropertiesValue.city) //ассинхронно, IO
+        initDatabaseUpdater(
+            ourSearchPropertiesValue.country,
+            ourSearchPropertiesValue.city
+        ) //ассинхронно, IO
     }
 
     private fun initDatabaseUpdater(country: String, city: String) {
-            viewModelScope.launch{
-                withContext(Dispatchers.IO){
-                    updateInternalDatabase(country, city)
-                }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                updateInternalDatabase(country, city)
+            }
         }
     }
 
-    private fun updateInternalDatabase(country: String = "", city: String= "") {
+    private fun updateInternalDatabase(country: String = "", city: String = "") {
         cafeInteractor?.retrieveCafeList(country, city)
-            ?.doOnSuccess { cafeItems -> writeRetrievedCafeListToLocalDatabase(cafeItems)}  //TODO проверить, в какой среде выполняется doOnSuccess
-                ?.subscribe(object : MaybeObserver<List<CafeItem>> {
+            ?.doOnSuccess { cafeItems -> writeRetrievedCafeListToLocalDatabase(cafeItems) }  //TODO проверить, в какой среде выполняется doOnSuccess
+            ?.subscribe(object : MaybeObserver<List<CafeItem>> {
                 override fun onSubscribe(d: Disposable) {}
                 override fun onSuccess(cafeItems: List<CafeItem>) {
                     ourSearchProperties.value = ourSearchProperties.value?.updateAction(
-                        BASE_UPDATED_ACTION)
+                        BASE_UPDATED_ACTION
+                    )
                 }
+
                 override fun onError(e: Throwable) {}
                 override fun onComplete() {
                     //empty result - a mistake may be or not
@@ -65,19 +71,19 @@ class ViewModelMain : ViewModel() {
     fun refreshCafeList() {
         var ourSearchPropertiesValue = ourSearchProperties.value;
         viewModelScope.launch {
-            cafeList.value = withContext(Dispatchers.IO) { readAllCafeWithContext(ourSearchPropertiesValue) }
+            cafeList.value =
+                withContext(Dispatchers.IO) { readAllCafeWithContext(ourSearchPropertiesValue) }
 
-            if (cafeList?.value?.size!!>0){
+            if (cafeList?.value?.size!! > 0) {
                 //временно
                 val dbHelperW = CafeDataSource(MainApplication.applicationContext())
                 dbHelperW.openW()
-                dbHelperW.setCafeFav(cafeList?.value?.get(0),true)
-
+                dbHelperW.setCafeFav(cafeList?.value?.get(0), true)
             }
         }
     }
 
-    fun readAllCafeWithContext(ourSearchPropertiesValue: OurSearchPropertiesValue?): List<CafeItem>{
+    fun readAllCafeWithContext(ourSearchPropertiesValue: OurSearchPropertiesValue?): List<CafeItem> {
         val dbHelperR = CafeDataSource(MainApplication.applicationContext())
         dbHelperR.openR()
         return dbHelperR.readAllCafe(ourSearchPropertiesValue) //TODO проверить, прямая работа с SQLLite не ведется ли уже в среде IO

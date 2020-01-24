@@ -1,19 +1,21 @@
 package com.gb.rating.dataBase;
 
-import com.gb.rating.models.CafeItem;
-import com.gb.rating.ui.settings.OurSearchPropertiesValue;
-import static com.gb.rating.dataBase.CafeDbScheme.CafeTable;
-import static com.gb.rating.dataBase.CafeDbScheme.FavCafeTable;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.gb.rating.models.CafeItem;
+import com.gb.rating.ui.settings.OurSearchPropertiesValue;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.gb.rating.dataBase.CafeDbScheme.CafeTable;
+import static com.gb.rating.dataBase.CafeDbScheme.FavCafeTable;
 
 
 public class CafeDataSource implements Closeable {
@@ -42,9 +44,9 @@ public class CafeDataSource implements Closeable {
         List<CafeItem> listCafe = new ArrayList<>();
         PrepareSelection prepareSelection = new PrepareSelection(ourSearchPropertiesValue).invoke();
 
-        Cursor cursor = database.rawQuery("SELECT * FROM " +CafeTable.NAME
-                +" LEFT JOIN "+ FavCafeTable.NAME +" ON  "+CafeTable.NAME+"." +CafeTable.Cols.CAFE_ID+" = "+ FavCafeTable.NAME+"." +FavCafeTable.Cols.CAFE_ID
-                + " WHERE "+prepareSelection.selection + " ORDER BY "+CafeTable.Cols.RATING+" DESC", prepareSelection.args);
+        Cursor cursor = database.rawQuery("SELECT * FROM " + CafeTable.NAME
+                + " LEFT JOIN " + FavCafeTable.NAME + " ON  " + CafeTable.NAME + "." + CafeTable.Cols.CAFE_ID + " = " + FavCafeTable.NAME + "." + FavCafeTable.Cols.CAFE_ID
+                + " WHERE " + prepareSelection.selection + " ORDER BY " + CafeTable.Cols.RATING + " DESC", prepareSelection.args);
         if (cursor.moveToFirst()) {
             CafeItem item = SQLMapper.convert(cursor);
             listCafe.add(item);
@@ -69,14 +71,14 @@ public class CafeDataSource implements Closeable {
         PrepareSelection invoke() {
             ourSearchPropertiesValue.checkLocationFilter();
             selection = " deleted != 1";
-            List<String> argList= new ArrayList<>();
+            List<String> argList = new ArrayList<>();
 
-            if (! ourSearchPropertiesValue.getType().equals("")){
+            if (!ourSearchPropertiesValue.getType().equals("")) {
                 selection += " AND " + CafeTable.Cols.TYPE + "=?";
                 argList.add(ourSearchPropertiesValue.getType());
             }
 
-            for (OurSearchPropertiesValue.MyFilter curF : ourSearchPropertiesValue.getOtherFilters()){
+            for (OurSearchPropertiesValue.MyFilter curF : ourSearchPropertiesValue.getOtherFilters()) {
                 selection += " AND " + curF.getWhere();
                 if (curF.getValue_1() != null) argList.add(curF.getValue_1().toString());
                 if (curF.getValue_2() != null) argList.add(curF.getValue_2().toString());
@@ -85,7 +87,7 @@ public class CafeDataSource implements Closeable {
 
             args = new String[argList.size()];
             int i = 0;
-            for (String arg : argList){
+            for (String arg : argList) {
                 args[i] = arg;
             }
             return this;
@@ -100,7 +102,7 @@ public class CafeDataSource implements Closeable {
                 CafeTable.Cols.CAFE_ID + " = ?",
                 new String[]{cafeId});
         if (res < 1)
-            database.insert(CafeTable.NAME,null,cv);
+            database.insert(CafeTable.NAME, null, cv);
     }
 
     @Override
@@ -108,12 +110,12 @@ public class CafeDataSource implements Closeable {
         dbHelper.close();
     }
 
-    public void writeCafeList(List<CafeItem> list){
+    public void writeCafeList(List<CafeItem> list) {
 
         CafeItem item;
         for (int i = 0; i < list.size(); i++) {
             item = list.get(i);
-            updateCafeByCafeId(SQLMapper.convert(item),item.getCafeId());
+            updateCafeByCafeId(SQLMapper.convert(item), item.getCafeId());
         }
     }
 
@@ -125,11 +127,8 @@ public class CafeDataSource implements Closeable {
                 FavCafeTable.Cols.CAFE_ID + " = ?",
                 new String[]{item.getCafeId()});
         if (res < 1)
-            database.insert(FavCafeTable.NAME,null,cv);
+            database.insert(FavCafeTable.NAME, null, cv);
     }
-
-
-
 
 
 }

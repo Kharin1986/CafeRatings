@@ -1,7 +1,6 @@
 package com.gb.rating
 
 import android.os.Bundle
-import android.view.ActionMode
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +18,7 @@ import com.gb.rating.ui.settings.*
 class MainActivity : AppCompatActivity() {
     var navController: NavController? = null
     var bundle = Bundle()
-    var viewModelMain : ViewModelMain? = null
+    var viewModelMain: ViewModelMain? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +30,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViewModel() {
         viewModelMain = ViewModelProviders.of(this)[ViewModelMain::class.java]
-        viewModelMain?.ourSearchProperties?.observe(this, Observer { it?.let {
-            if (it.action != INITIATION_ACTION)
-                viewModelMain?.refreshCafeList()
-        } }) //TODO: как перенести обозреватель LiveData в ViewModel ?
+        viewModelMain?.ourSearchProperties?.observe(this, Observer {
+            it?.let {
+                if (it.action != INITIATION_ACTION)
+                    viewModelMain?.refreshCafeList()
+            }
+        }) //TODO: как перенести обозреватель LiveData в ViewModel ?
     }
 
     private fun initNavControllerAndActionBar() {
@@ -57,34 +58,43 @@ class MainActivity : AppCompatActivity() {
 
     // Кнопки домашней страницы)
     fun onRestClick(view: View) {
-        viewModelMain?.ourSearchProperties?.value = initialSearchProperties().updateType(RESTAURANT_TYPE)
+        viewModelMain?.ourSearchProperties?.value =
+            initialSearchProperties().updateType(RESTAURANT_TYPE)
         bundle.putString("arg1", "rest")
-        navController!!.navigate(R.id.navigation_list,bundle)
+        navController!!.navigate(R.id.navigation_list, bundle)
     }
+
     fun onBarClick(view: View) {
         viewModelMain?.ourSearchProperties?.value = initialSearchProperties().updateType(BAR_TYPE)
         bundle.putString("arg1", "bar")
-        navController!!.navigate(R.id.navigation_list,bundle)
+        navController!!.navigate(R.id.navigation_list, bundle)
     }
+
     fun onTopClick(view: View) {
-        viewModelMain?.ourSearchProperties?.value = initialSearchProperties().addFilter_RatingMoreOrEquel(4.5f)
+        viewModelMain?.ourSearchProperties?.value =
+            initialSearchProperties().addFilter_RatingMoreOrEquel(4.5f)
         bundle.putString("arg1", "top")
-        navController!!.navigate(R.id.navigation_list,bundle)
+        navController!!.navigate(R.id.navigation_list, bundle)
     }
+
     fun onFavClick(view: View) {
-        viewModelMain?.ourSearchProperties?.value = initialSearchProperties().addFilter_Favorites(true)
+        viewModelMain?.ourSearchProperties?.value =
+            initialSearchProperties().addFilter_Favorites(true)
         bundle.putString("arg1", "fav")
-        navController!!.navigate(R.id.navigation_list,bundle)
+        navController!!.navigate(R.id.navigation_list, bundle)
     }
+
     fun onCafeClick(view: View) {
         viewModelMain?.ourSearchProperties?.value = initialSearchProperties().updateType(CAFE_TYPE)
         bundle.putString("arg1", "cafe")
-        navController!!.navigate(R.id.navigation_list,bundle)
+        navController!!.navigate(R.id.navigation_list, bundle)
     }
+
     fun onFastClick(view: View) {
-        viewModelMain?.ourSearchProperties?.value = initialSearchProperties().updateType(FASTFOOD_TYPE)
+        viewModelMain?.ourSearchProperties?.value =
+            initialSearchProperties().updateType(FASTFOOD_TYPE)
         bundle.putString("arg1", "fast")
-        navController!!.navigate(R.id.navigation_list,bundle)
+        navController!!.navigate(R.id.navigation_list, bundle)
     }
 
     override fun onStart() {
