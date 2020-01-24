@@ -18,6 +18,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "cafeBase.db";
     private static final int DB_VERSION = 1;
+    private static final String LOCATION_INDEX_NAME = "location";
 
     public DataBaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -45,6 +46,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         );
         db.execSQL("CREATE INDEX "+CafeTable.NAME+"_"+CafeTable.Cols.RATING+"_idx ON "+CafeTable.NAME+"("+CafeTable.Cols.RATING+")");
         db.execSQL("CREATE INDEX "+CafeTable.NAME+"_"+CafeTable.Cols.CAFE_ID+"_idx ON "+CafeTable.NAME+"("+CafeTable.Cols.CAFE_ID+")");
+        db.execSQL("CREATE INDEX "+CafeTable.NAME+"_"+LOCATION_INDEX_NAME+"_idx ON "+CafeTable.NAME+"("+CafeTable.Cols.LATITUDE+", "+CafeTable.Cols.LONGITUDE+")");
 
 
         db.execSQL("CREATE TABLE " + FavCafeTable.NAME + "(" +
