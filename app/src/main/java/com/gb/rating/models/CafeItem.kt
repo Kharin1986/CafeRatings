@@ -18,6 +18,6 @@ class CafeItem(
     var cafeId: String = "",
     var latitude: Float = 0f,
     var longitude: Float = 0f,
-    var deleted: Boolean = false //для обратного преобразования из Firebase и прочих в cv SQLlite - предполагаются, что они не знают друг друга
-
+    var deleted: Boolean = false, //для обратного преобразования из Firebase и прочих в cv SQLlite - предполагаются, что они не знают друг друга
+    var fav: Boolean = false
 )

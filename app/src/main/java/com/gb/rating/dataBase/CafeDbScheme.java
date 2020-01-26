@@ -23,4 +23,14 @@ public class CafeDbScheme {
         }
     }
 
+    public static final class FavCafeTable{
+        public static final String NAME = "favcafetable";
+
+        public static final class Cols {
+            public static final String CAFE_ID = "cafeId";
+            public static final String FAV = "fav";
+        }
+    }
+
+
 }
