@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#565c60">
 
     <TextView
         android:id="@+id/close_app_dialog"
@@ -15,7 +16,8 @@
         android:layout_marginBottom="4dp"
         android:textAlignment="center"
         android:text="Ваш отзыв успешно отправлен!"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textColor="#c2c4c5"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/ok_button"
@@ -23,7 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="OK"
-        android:textSize="16sp">
+        android:textSize="16sp"
+        android:textColor="#c2c4c5">
     </com.google.android.material.button.MaterialButton>
 
 </LinearLayout>

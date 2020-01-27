@@ -78,8 +78,8 @@ public class QrScanFragment extends Fragment {
                     //создаем фрагмент отзыва
                     ReviewFragment reviewFragment = new ReviewFragment();
                     //сохраняем строку с QR кода
-                    Bundle bundle = new Bundle();
-                    bundle.putString("tag", qrCodes.valueAt(0).displayValue);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("tag", qrCodes.valueAt(0).displayValue);
 //                    reviewFragment.setArguments(bundle);
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.replace(R.id.nav_host_fragment, reviewFragment);

@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 
@@ -21,6 +23,9 @@ public class ReviewFragment extends Fragment {
     private TextInputEditText reviewText;
     private Button cancelButton;
     private Button sendButton;
+    private Spinner cafeSpinner;
+    private String[] cafeTypes = { "Кафе", "Бар", "Ресторан", "ФастФуд" };
+    private String chosenCafeType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,9 +35,23 @@ public class ReviewFragment extends Fragment {
 
         initViews();
 
-        cancelButton.setOnClickListener(v -> {
-            getActivity().onBackPressed();
+        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(),
+                R.layout.spinner_item, cafeTypes);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        cafeSpinner.setAdapter(adapter);
+        cafeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                CustomSpinnerAdapter.flag = true;
+                chosenCafeType = cafeTypes[pos];
+            }
         });
+
+        cancelButton.setOnClickListener(v -> getActivity().onBackPressed());
 
         sendButton.setOnClickListener(v -> {
             float kitchenRat = kitchenRating.getRating();
@@ -40,9 +59,12 @@ public class ReviewFragment extends Fragment {
             float ambianceRat = ambianceRating.getRating();
             String reviewTextStr = reviewText.getText().toString();
 
-            if (kitchenRat != 0 & serviceRat != 0 & ambianceRat != 0) {
+            if (chosenCafeType != null & kitchenRat != 0 & serviceRat != 0 & ambianceRat != 0) {
                 ReviewSendDialog reviewSendDialog = new ReviewSendDialog();
                 reviewSendDialog.show(getFragmentManager(), "TAG");
+
+                //проверка
+                System.out.println(kitchenRat + "\n" + serviceRat + "\n" + ambianceRat + "\n" + reviewTextStr + "\n" + chosenCafeType);
             }
         });
 
@@ -56,6 +78,7 @@ public class ReviewFragment extends Fragment {
         reviewText = view.findViewById(R.id.edit_text_review);
         cancelButton = view.findViewById(R.id.cancel_button);
         sendButton = view.findViewById(R.id.send_button);
+        cafeSpinner = view.findViewById(R.id.cafe_spinner);
     }
 
 }
