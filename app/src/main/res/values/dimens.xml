@@ -1,11 +1,4 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="divider_space">20dp</dimen>
-    <dimen name="card_elevation">4dp</dimen>
-    <dimen name="cv_corner_radius">15dp</dimen>
-    <dimen name="cv_margin">7dp</dimen>
     <!--for card's sources-->
     <dimen name="rest_width">158dp</dimen>
     <dimen name="rest_height">226dp</dimen>
@@ -14,4 +7,16 @@
     <dimen name="fastfood_height">194dp</dimen>
     <dimen name="top_height">71dp</dimen>
     <dimen name="fav_height">71dp</dimen>
+    <!--for card's viewport sources-->
+    <dimen name="rest_wp_width">158</dimen>
+    <dimen name="rest_wp_height">226</dimen>
+    <dimen name="cafe_wp_height">142</dimen>
+    <dimen name="bar_wp_height">111</dimen>
+    <dimen name="fastfood_wp_height">194</dimen>
+    <dimen name="top_wp_height">71</dimen>
+    <dimen name="fav_wp_height">71</dimen>
+    <!--for home fragment-->
+    <dimen name="cv_margin_start">11dp</dimen>
+    <dimen name="cv_margin_btwn">12dp</dimen>
+    <dimen name="cv_margin_end">6dp</dimen>
 </resources>

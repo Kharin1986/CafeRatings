@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Rating</string>
+    <string name="app_name">Top rated</string>
     <string name="title_home">Home</string>
     <string name="title_list">Список</string>
     <string name="title_search">Поиск</string>
@@ -35,6 +35,6 @@
     <string name="Bar">Бар</string>
     <string name="TOP">ТОП</string>
     <string name="FAV">Избранное</string>
-    <string name="Cafe">Кафе</string>
+    <string name="cafe">Кафе</string>
     <string name="fastfood">Фастфуд</string>
 </resources>
