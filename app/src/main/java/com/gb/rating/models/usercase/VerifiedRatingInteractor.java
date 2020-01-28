@@ -30,6 +30,4 @@ public class VerifiedRatingInteractor {
     public Maybe<List<VerifiedRating>> retrieveVerifiedRatingsList(String iMEI) {
         return repository.retrieveVerifiedRatingList(iMEI);
     }
-
-
 }

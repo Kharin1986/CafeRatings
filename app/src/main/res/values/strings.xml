@@ -35,6 +35,6 @@
     <string name="Bar">Бар</string>
     <string name="TOP">ТОП</string>
     <string name="FAV">Избранное</string>
-    <string name="Cafe">Кафе</string>
+    <string name="cafe">Кафе</string>
     <string name="fastfood">Фастфуд</string>
 </resources>

@@ -1,0 +1,15 @@
+<resources>
+	<!--for card's sources-->
+	<dimen name="rest_width">105dp</dimen>
+	<dimen name="rest_height">151dp</dimen>
+	<dimen name="cafe_height">95dp</dimen>
+	<dimen name="bar_height">74dp</dimen>
+	<dimen name="fastfood_height">129dp</dimen>
+	<dimen name="top_height">47dp</dimen>
+	<dimen name="fav_height">47dp</dimen>
+	<!--for card's viewport sources-->
+	<!--for home fragment-->
+	<dimen name="cv_margin_start">7dp</dimen>
+	<dimen name="cv_margin_btwn">8dp</dimen>
+	<dimen name="cv_margin_end">4dp</dimen>
+</resources>
