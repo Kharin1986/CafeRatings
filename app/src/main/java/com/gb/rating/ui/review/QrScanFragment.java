@@ -3,9 +3,6 @@ package com.gb.rating.ui.review;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.SparseArray;
@@ -14,7 +11,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -31,7 +27,7 @@ import java.io.IOException;
 
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 
-public class ReviewFragment1 extends Fragment {
+public class QrScanFragment extends Fragment {
 
     private SurfaceView surfaceView;
     private View view;
@@ -42,7 +38,7 @@ public class ReviewFragment1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_review1,
+        view = inflater.inflate(R.layout.fragment_qr_scan,
                 container, false);
 
         if (checkForCameraPermission()) {
@@ -79,13 +75,14 @@ public class ReviewFragment1 extends Fragment {
                 if (qrCodes.size() != 0) {
                     Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
                     vibrator.vibrate(300);
-
-                    QRFragment qrFragment = new QRFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("tag", qrCodes.valueAt(0).displayValue);
-                    qrFragment.setArguments(bundle);
+                    //создаем фрагмент отзыва
+                    ReviewFragment reviewFragment = new ReviewFragment();
+                    //сохраняем строку с QR кода
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("tag", qrCodes.valueAt(0).displayValue);
+//                    reviewFragment.setArguments(bundle);
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(R.id.nav_host_fragment, qrFragment);
+                    ft.replace(R.id.nav_host_fragment, reviewFragment);
                     ft.addToBackStack(null);
                     ft.commit();
 
@@ -145,8 +142,8 @@ public class ReviewFragment1 extends Fragment {
     private void refreshFragment() {
         getFragmentManager()
                 .beginTransaction()
-                .detach(ReviewFragment1.this)
-                .attach(ReviewFragment1.this)
+                .detach(QrScanFragment.this)
+                .attach(QrScanFragment.this)
                 .commit();
     }
 }
