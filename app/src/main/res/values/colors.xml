@@ -5,4 +5,6 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorBack">#565C60</color>
+    <color name="b_cancel_clr">#e06c81</color>
+    <color name="b_send_clr">#61c3a0</color>
 </resources>

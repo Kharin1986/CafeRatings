@@ -136,5 +136,3 @@ class SearchFragment : Fragment() {
         val REQUEST_ID_MULTIPLE_PERMISSIONS = 1
     }
 }
-
-

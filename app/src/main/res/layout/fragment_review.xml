@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.review.ReviewFragment"
-    android:background="#565c60">
+    android:background="@color/colorBack">
 
     <Spinner
         android:id="@+id/cafe_spinner"
@@ -26,8 +26,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Кухня"
-        android:textColor="#c2c4c5"
+        android:text="@string/l_quality"
+        android:textColor="@color/colorIcons"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,13 +48,13 @@
         android:id="@+id/textView_service"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Обслуживание"
+        android:text="@string/l_service"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ratingBar_kitchen"
         android:layout_marginTop="5dp"
-        android:textColor="#c2c4c5"/>
+        android:textColor="@color/colorIcons"/>
 
     <RatingBar
         android:id="@+id/ratingBar_service"
@@ -71,13 +71,13 @@
         android:id="@+id/textView_ambiance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Атмосфера"
+        android:text="@string/l_atmosphere"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ratingBar_service"
         android:layout_marginTop="5dp"
-        android:textColor="#c2c4c5"/>
+        android:textColor="@color/colorIcons"/>
 
     <RatingBar
         android:id="@+id/ratingBar_ambiance"
@@ -101,17 +101,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ratingBar_ambiance"
-        android:textColorHint="#c2c4c5">
+        android:textColorHint="@color/colorIcons">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_review"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="start"
-            android:hint="Напишите Ваш отзыв"
+            android:hint="@string/hint_review_txt"
             android:textSize="20sp"
             android:background="@drawable/round_corner_toggle"
-            android:textColor="#c2c4c5" />
+            android:textColor="@color/colorIcons" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -122,10 +122,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="отмена"
+        android:text="@string/b_cancel_review_txt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        android:backgroundTint="#e06c81"
+        android:backgroundTint="@color/b_cancel_clr"
         android:textColor="@android:color/black"
         android:textSize="12sp"/>
 
@@ -136,10 +136,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:text="отправить"
+        android:text="@string/b_send_review_txt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        android:backgroundTint="#61c3a0"
+        android:backgroundTint="@color/b_send_clr"
         android:textColor="@android:color/black"
         android:textSize="12sp"/>
 
