@@ -1,6 +1,8 @@
 package com.gb.rating.fireBase_RealTime.repository;
 
 //package
+
+import com.gb.rating.fireBase_RealTime.FrangSierraPlus;
 import com.gb.rating.fireBase_RealTime.models_FireBase.Mapper;
 import com.gb.rating.models.UnverifiedRating;
 import com.gb.rating.models.repository.UnverifiedRatingRepository;
@@ -14,7 +16,6 @@ import java.util.List;
 import androidx.annotation.NonNull;
 
 //rxJava
-import durdinapps.rxfirebase2.RxFirebaseDatabase;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.functions.Function;
@@ -22,7 +23,7 @@ import io.reactivex.functions.Function;
 public class UnverifiedRating_FB_Impl implements UnverifiedRatingRepository {
     public static final String UNVERIFIED_RATINGS_LIST_CATALOG = "UnverifiedRatingsList";
     public static final String FISCAL_DATE_PROPERTY = "fiscalDate";
-    private Object anyapi=null;
+    private Object anyapi = null;
     private FirebaseDatabase db;
 
     //----------------------------------------------------------------------------------------------------------------------------------
@@ -35,10 +36,10 @@ public class UnverifiedRating_FB_Impl implements UnverifiedRatingRepository {
     public static Function FromSnapshotToUnverifiedRating_FBFunction = new Function<DataSnapshot, List<UnverifiedRating>>() {
         @Override
         public List<UnverifiedRating> apply(DataSnapshot dataSnapshot) throws Exception {
-            List<UnverifiedRating> ratingList= new ArrayList();
+            List<UnverifiedRating> ratingList = new ArrayList();
 
-            for (DataSnapshot ratingSnapshot: dataSnapshot.getChildren()) {
-                UnverifiedRating curRating=ratingSnapshot.getValue(UnverifiedRating.class);
+            for (DataSnapshot ratingSnapshot : dataSnapshot.getChildren()) {
+                UnverifiedRating curRating = ratingSnapshot.getValue(UnverifiedRating.class);
                 ratingList.add(Mapper.convert(curRating));
             }
             return ratingList;
@@ -47,8 +48,8 @@ public class UnverifiedRating_FB_Impl implements UnverifiedRatingRepository {
 
 
     @io.reactivex.annotations.NonNull
-    public static  Maybe<List<UnverifiedRating>> observeSingleValueEvent_UnverifiedRating_FBList(@NonNull Query query) {
-        return RxFirebaseDatabase.observeSingleValueEvent(query).map(FromSnapshotToUnverifiedRating_FBFunction);
+    public static Maybe<List<UnverifiedRating>> observeSingleValueEvent_UnverifiedRating_FBList(@NonNull Query query) {
+        return FrangSierraPlus.observeSingleValueEvent(query).map(FromSnapshotToUnverifiedRating_FBFunction);
     }
 
 
@@ -57,7 +58,7 @@ public class UnverifiedRating_FB_Impl implements UnverifiedRatingRepository {
     @Override
     @io.reactivex.annotations.NonNull
     public Completable writeUnverifiedRating(UnverifiedRating rating, String iMEI) {
-        return RxFirebaseDatabase.setValue(db.getReference().child(UNVERIFIED_RATINGS_LIST_CATALOG).child(iMEI).push(), rating);
+        return FrangSierraPlus.setValue(db.getReference().child(UNVERIFIED_RATINGS_LIST_CATALOG).child(iMEI).push(), rating);
     }
 
     @Override
