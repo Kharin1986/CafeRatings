@@ -13,7 +13,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.Callable;
 
-import durdinapps.rxfirebase2.exceptions.RxFirebaseDataException;
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.CompletableOnSubscribe;

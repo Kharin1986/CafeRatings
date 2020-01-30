@@ -12,10 +12,13 @@ import com.gb.rating.ui.settings.OurSearchPropertiesValue
 import com.gb.rating.ui.settings.initialSearchProperties
 import com.google.firebase.database.FirebaseDatabase
 import io.reactivex.MaybeObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import io.reactivex.schedulers.Schedulers;
+
 
 class ViewModelMain : ViewModel() {
     var cafeList: MutableLiveData<List<CafeItem>> = MutableLiveData()
