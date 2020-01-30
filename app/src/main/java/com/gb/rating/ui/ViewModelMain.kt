@@ -12,10 +12,13 @@ import com.gb.rating.ui.settings.OurSearchPropertiesValue
 import com.gb.rating.ui.settings.initialSearchProperties
 import com.google.firebase.database.FirebaseDatabase
 import io.reactivex.MaybeObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import io.reactivex.schedulers.Schedulers;
+
 
 class ViewModelMain : ViewModel() {
     var cafeList: MutableLiveData<List<CafeItem>> = MutableLiveData()
@@ -46,7 +49,10 @@ class ViewModelMain : ViewModel() {
 
     private fun updateInternalDatabase(country: String = "", city: String = "") {
         cafeInteractor?.retrieveCafeList(country, city)
-            ?.doOnSuccess { cafeItems -> writeRetrievedCafeListToLocalDatabase(cafeItems) }  //TODO проверить, в какой среде выполняется doOnSuccess
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            ?.doOnSuccess { cafeItems -> writeRetrievedCafeListToLocalDatabase(cafeItems);}
+            .observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(object : MaybeObserver<List<CafeItem>> {
                 override fun onSubscribe(d: Disposable) {}
                 override fun onSuccess(cafeItems: List<CafeItem>) {

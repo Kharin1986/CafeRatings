@@ -1,7 +1,8 @@
 package com.gb.rating.fireBase_RealTime.repository;
 
 //package
-import com.gb.rating.fireBase_RealTime.CommonFunctions;
+
+import com.gb.rating.fireBase_RealTime.FrangSierraPlus;
 import com.gb.rating.fireBase_RealTime.models_FireBase.Cafe_FB;
 import com.gb.rating.fireBase_RealTime.models_FireBase.Mapper;
 import com.gb.rating.firebase_storage.StorageStaticFunctions;
@@ -28,9 +29,9 @@ import com.google.firebase.storage.UploadTask;
 //rxJava 2.0
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import durdinapps.rxfirebase2.RxFirebaseDatabase;
 
 
 public class Cafe_FB_Impl implements CafeRepository {
@@ -38,7 +39,7 @@ public class Cafe_FB_Impl implements CafeRepository {
     public static final String TYPE_PROPERTY = "type";
     public static final String RATING_PROPERTY = "rating";
     public static final String CAFE_PROPERTIES_FILE_NAME = "cafeProperties.txt";
-    private Object anyapi=null;
+    private Object anyapi = null;
     private FirebaseDatabase db;
 
     //----------------------------------------------------------------------------------------------------------------------------------
@@ -51,11 +52,11 @@ public class Cafe_FB_Impl implements CafeRepository {
     public static Function FromSnapshotToCafeItemFunction = new Function<DataSnapshot, List<CafeItem>>() {
         @Override
         public List<CafeItem> apply(DataSnapshot dataSnapshot) throws Exception {
-            List<CafeItem> cafeList= new ArrayList();
+            List<CafeItem> cafeList = new ArrayList();
 
-            for (DataSnapshot CafeSnapshot: dataSnapshot.getChildren()) {
-                Cafe_FB curCafe=CafeSnapshot.getValue(Cafe_FB.class);
-                curCafe.cafeId=CafeSnapshot.getKey();
+            for (DataSnapshot CafeSnapshot : dataSnapshot.getChildren()) {
+                Cafe_FB curCafe = CafeSnapshot.getValue(Cafe_FB.class);
+                curCafe.cafeId = CafeSnapshot.getKey();
                 cafeList.add(Mapper.convert(curCafe));
             }
             return cafeList;
@@ -64,29 +65,29 @@ public class Cafe_FB_Impl implements CafeRepository {
 
 
     @NonNull
-    public static  Maybe<List<CafeItem>> observeSingleValueEvent_CafeItemList(@NonNull final Query query) {
-        return RxFirebaseDatabase.observeSingleValueEvent(query).map(FromSnapshotToCafeItemFunction);
+    public static Maybe<List<CafeItem>> observeSingleValueEvent_CafeItemList(@NonNull final Query query) {
+        return FrangSierraPlus.observeSingleValueEvent(query).map(FromSnapshotToCafeItemFunction);
     }
 
 
     //----------------------------------------------------------------------------------------------------------------------------------
     //MAIN METHODS
 
-    private Task<Void> writeCafe_prepareTask(@NonNull Cafe_FB cafe_fb){
+    private Task<Void> writeCafe_prepareTask(@NonNull Cafe_FB cafe_fb) {
         //подготовка переменных
         DatabaseReference refToCityCafeList = db.getReference().child(CAFELIST_CATALOG).child(cafe_fb.country).child(cafe_fb.city);
 
         //cafeID - добавляем новое кафе через .push()
-        DatabaseReference newRef = ("".equals(cafe_fb.cafeId)) ?  refToCityCafeList.push() :  refToCityCafeList.child(cafe_fb.cafeId);
+        DatabaseReference newRef = ("".equals(cafe_fb.cafeId)) ? refToCityCafeList.push() : refToCityCafeList.child(cafe_fb.cafeId);
         String cafeId = newRef.getKey();
 
-        String fileText = "This is root directory for Cafe: "+cafe_fb.toString();
+        String fileText = "This is root directory for Cafe: " + cafe_fb.toString();
         byte[] data = fileText.getBytes();
 
         //первый Task (запись в Cloud Storage)
-        UploadTask firstTask = StorageStaticFunctions.getReftoImageCatalog().child(""+cafeId+"/"+ CAFE_PROPERTIES_FILE_NAME).putBytes(data);
+        UploadTask firstTask = StorageStaticFunctions.getReftoImageCatalog().child("" + cafeId + "/" + CAFE_PROPERTIES_FILE_NAME).putBytes(data);
         //второй Task (запись в Realtime Database)
-        Task<Void> twoTasks = firstTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Void>>(){
+        Task<Void> twoTasks = firstTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Void>>() {
             @Override
             public Task<Void> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                 return newRef.setValue(cafe_fb);
@@ -106,7 +107,7 @@ public class Cafe_FB_Impl implements CafeRepository {
             }
         };
 
-        return CommonFunctions.compleatableFromCallable(c).subscribeOn(Schedulers.io()); //subscribeOn(Schedulers.io() - не нужен другой поток, но нужно другое ядро процессора
+        return FrangSierraPlus.compleatableFromCallable(c);
     }
 
     @Override
@@ -116,41 +117,42 @@ public class Cafe_FB_Impl implements CafeRepository {
     }
 
     @Override
-    public @NonNull Maybe<List<CafeItem>> retrieveCafeList(@NonNull String country, @NonNull String city) {
+    public @NonNull
+    Maybe<List<CafeItem>> retrieveCafeList(@NonNull String country, @NonNull String city) {
         Query query = db.getReference().child(CAFELIST_CATALOG).child(country).child(city)
-                .orderByChild(RATING_PROPERTY)
-                ;
+                .orderByChild(RATING_PROPERTY);
         return observeSingleValueEvent_CafeItemList(query);
     }
 
 
-    public static Comparator<CafeItem> comparatorByRatingDescending = new Comparator<CafeItem>(){
+    public static Comparator<CafeItem> comparatorByRatingDescending = new Comparator<CafeItem>() {
         @Override
         public int compare(CafeItem o1, CafeItem o2) {
 
             int r1 = (o1 == null) ? 0 : o1.getRating();
             int r2 = (o2 == null) ? 0 : o2.getRating();
 
-            return r2-r1;
+            return r2 - r1;
         }
     };
 
     @Override
-    public @NonNull Maybe<List<CafeItem>> retrieveCafeListByType(@NonNull String country, @NonNull String city, String type) {
+    public @NonNull
+    Maybe<List<CafeItem>> retrieveCafeListByType(@NonNull String country, @NonNull String city, String type) {
         if (type == null || "".equals(type)) {
             return retrieveCafeList(country, city);
         }
 
         Query query = db.getReference().child(CAFELIST_CATALOG).child(country).child(city).orderByChild(TYPE_PROPERTY).equalTo(type);
 
-        return observeSingleValueEvent_CafeItemList(query)
+        return observeSingleValueEvent_CafeItemList(query).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) //в UI можно переопределить subscribeOn, observeOn
                 .map(new Function<List<CafeItem>, List<CafeItem>>() {
                     @Override
                     public List<CafeItem> apply(List<CafeItem> cafeItems) throws Exception {
                         Collections.sort(cafeItems, comparatorByRatingDescending);
                         return cafeItems;
                     }
-        })
+                })
                 ;
 
     }
