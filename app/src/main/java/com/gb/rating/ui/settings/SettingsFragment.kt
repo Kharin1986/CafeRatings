@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -27,6 +28,12 @@ class SettingsFragment : Fragment() {
         settingsViewModel.text.observe(this, Observer {
             textView.text = it
         })
+
+        val crash: Button = root.findViewById(R.id.crashButton)
+        crash.setOnClickListener {
+            throw RuntimeException("Test Crash") // Force a crash
+        }
+
         return root
     }
 }
