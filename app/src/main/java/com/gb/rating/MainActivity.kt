@@ -11,7 +11,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.gb.rating.models.Firebase_Auth.CommonAuthFunctions
 import com.gb.rating.ui.ViewModelMain
 import com.gb.rating.ui.settings.*
 
@@ -99,7 +98,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        CommonAuthFunctions.checkAuth()
     }
 
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.gb.rating.dataBase.CafeDataSource
 import com.gb.rating.fireBase_RealTime.repository.Cafe_FB_Impl
 import com.gb.rating.models.CafeItem
+import com.gb.rating.models.Firebase_Auth.CommonAuthFunctions
 import com.gb.rating.models.usercase.CafeInteractor
 import com.gb.rating.models.utils.MainApplication
 import com.gb.rating.ui.settings.BASE_UPDATED_ACTION
@@ -29,6 +30,9 @@ class ViewModelMain : ViewModel() {
     var cafeInteractor = CafeInteractor(repository)
 
     init {
+        db.setPersistenceEnabled(true)
+        CommonAuthFunctions.checkAuth()
+
         val ourSearchPropertiesValue: OurSearchPropertiesValue =
             initialSearchProperties().updateAction(INITIATION_ACTION) //не тратим время на старт Активити, помечаем ourSearchPropertiesValue INITIATION_ACTION
         ourSearchProperties.value = ourSearchPropertiesValue
