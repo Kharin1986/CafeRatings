@@ -17,7 +17,6 @@ import com.gb.rating.ui.settings.*
 
 class MainActivity : AppCompatActivity() {
     var navController: NavController? = null
-    var bundle = Bundle()
     var viewModelMain: ViewModelMain? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,46 +59,40 @@ class MainActivity : AppCompatActivity() {
     fun onRestClick(view: View) {
         viewModelMain?.ourSearchProperties?.value =
             initialSearchProperties().updateType(RESTAURANT_TYPE)
-        bundle.putString("arg1", "rest")
-        navController!!.navigate(R.id.navigation_list, bundle)
+        navController!!.navigate(R.id.navigation_list)
     }
 
     fun onBarClick(view: View) {
         viewModelMain?.ourSearchProperties?.value = initialSearchProperties().updateType(BAR_TYPE)
-        bundle.putString("arg1", "bar")
-        navController!!.navigate(R.id.navigation_list, bundle)
+
+        navController!!.navigate(R.id.navigation_list)
     }
 
     fun onTopClick(view: View) {
         viewModelMain?.ourSearchProperties?.value =
             initialSearchProperties().addFilter_RatingMoreOrEquel(4.5f)
-        bundle.putString("arg1", "top")
-        navController!!.navigate(R.id.navigation_list, bundle)
+        navController!!.navigate(R.id.navigation_list)
     }
 
     fun onFavClick(view: View) {
         viewModelMain?.ourSearchProperties?.value =
             initialSearchProperties().addFilter_Favorites(true)
-        bundle.putString("arg1", "fav")
-        navController!!.navigate(R.id.navigation_list, bundle)
+        navController!!.navigate(R.id.navigation_list)
     }
 
     fun onCafeClick(view: View) {
         viewModelMain?.ourSearchProperties?.value = initialSearchProperties().updateType(CAFE_TYPE)
-        bundle.putString("arg1", "cafe")
-        navController!!.navigate(R.id.navigation_list, bundle)
+        navController!!.navigate(R.id.navigation_list)
     }
 
     fun onFastClick(view: View) {
         viewModelMain?.ourSearchProperties?.value =
             initialSearchProperties().updateType(FASTFOOD_TYPE)
-        bundle.putString("arg1", "fast")
-        navController!!.navigate(R.id.navigation_list, bundle)
+        navController!!.navigate(R.id.navigation_list)
     }
 
     override fun onStart() {
         super.onStart()
         CommonAuthFunctions.checkAuth()
     }
-
 }
