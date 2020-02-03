@@ -43,4 +43,7 @@
     <string name="l_atmosphere">Атмосфера</string>
     <string name="l_service">Обслуживание</string>
     <string name="l_quality">Кухня</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

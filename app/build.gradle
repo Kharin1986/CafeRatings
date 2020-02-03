@@ -47,14 +47,10 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
 
-    //OSM
-    implementation 'org.osmdroid:osmdroid-android:6.1.5'
-    implementation 'org.osmdroid:osmdroid-mapsforge:6.1.5'
-    implementation 'org.osmdroid:osmdroid-shape:6.1.5'
-    //comment 2 str
-   //implementation 'org.osmdroid:osmdroid-geopackage:6.1.5'
-  //  implementation 'org.osmdroid:osmdroid-third-party:6.0.1'
-    //qrcode
+    //GoogleMap
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+
     implementation 'com.google.android.gms:play-services-vision:19.0.0'
     implementation 'info.androidhive:barcode-reader:1.1.5'
 
