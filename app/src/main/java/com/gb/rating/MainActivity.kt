@@ -11,6 +11,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.preference.PreferenceManager
+import com.gb.rating.models.utils.MainApplication
 import com.gb.rating.ui.ViewModelMain
 import com.gb.rating.ui.settings.*
 
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        PreferenceManager.setDefaultValues(this, R.xml.main_settings, false)
         initViewModel()
         initNavControllerAndActionBar()
     }
