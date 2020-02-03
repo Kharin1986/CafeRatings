@@ -77,6 +77,15 @@ public class CafeDataSource implements Closeable {
                 selection += " AND " + CafeTable.Cols.TYPE + "=?";
                 argList.add(ourSearchPropertiesValue.getType());
             }
+            //добавим ограничения по городу и стране - не обязательно из локальной базы удалять данные по городу, можно и хранить
+            if (!ourSearchPropertiesValue.getCountry().equals("")) {
+                selection += " AND " + CafeTable.Cols.COUNTRY + "=?";
+                argList.add(ourSearchPropertiesValue.getCountry());
+            }
+            if (!ourSearchPropertiesValue.getCity().equals("")) {
+                selection += " AND " + CafeTable.Cols.CITY + "=?";
+                argList.add(ourSearchPropertiesValue.getCity());
+            }
 
             for (OurSearchPropertiesValue.MyFilter curF : ourSearchPropertiesValue.getOtherFilters()) {
                 selection += " AND " + curF.getWhere();
@@ -84,11 +93,11 @@ public class CafeDataSource implements Closeable {
                 if (curF.getValue_2() != null) argList.add(curF.getValue_2().toString());
             }
 
-
             args = new String[argList.size()];
             int i = 0;
             for (String arg : argList) {
                 args[i] = arg;
+                i++;
             }
             return this;
         }
@@ -130,8 +139,7 @@ public class CafeDataSource implements Closeable {
             database.insert(FavCafeTable.NAME, null, cv);
     }
 
-    public void removeAll()
-    {
+    public void removeAll() {
         // db.delete(String tableName, String whereClause, String[] whereArgs);
         // If whereClause is null, it will delete all rows.
         database.delete(CafeTable.NAME, null, null);

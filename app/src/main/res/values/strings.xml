@@ -48,7 +48,14 @@
     <string name="SettingsDefaultCountry">Россия</string>
     <string name="SettingsCityTitle">Город</string>
     <string name="SettingsDefaultCity">Москва</string>
-    <string name="COUNTRY_FIELD">country</string>
-    <string name="CITY_FIELD">city</string>
+    <string name="SettingsDistanceTitle">Ограничение дальности</string>
+    <string name="SettingsDistanceSummary">Искать в пределах N*100 m</string>
+    <string name="SettingsDefaultDistance">50</string>
+    <string name="COUNTRY_KEY">country</string>
+    <string name="CITY_KEY">city</string>
+    <string name="DISTANCE_KEY">distance</string>
+    <string name="SettingsDistanceFilterTitle">Искать по расстоянию</string>
+    <string name="SettingsDistanceFilterSummary">Включает ограничение поиска общепита по расстоянию (в км) от установленной точки</string>
+    <string name="DISTANCEFILTER_KEY">DistanceFilter</string>
 
 </resources>

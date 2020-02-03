@@ -47,7 +47,12 @@ class OurSearchPropertiesValue(
     }
 
     fun updateCity(city: String): OurSearchPropertiesValue {
-        this.city= city
+        this.city = city
+        return this
+    }
+
+    fun updateDistance(distance: Double): OurSearchPropertiesValue {
+        this.distance = distance
         return this
     }
 
@@ -64,19 +69,19 @@ class OurSearchPropertiesValue(
     )
 
     fun addFilter_RatingMoreOrEquel(rating: Float): OurSearchPropertiesValue {
-        otherFilters.filter { it.field != RATING_FIELD }
+        otherFilters = otherFilters.filter { it.field != RATING_FIELD } as MutableList<MyFilter>
         otherFilters.add(MyFilter(RATING_FIELD, "$RATING_FIELD >= $rating"))
         return this
     }
 
     fun addFilter_Favorites(fav: Boolean = true): OurSearchPropertiesValue {
-        otherFilters.filter { it.field != FAV_FIELD }
+        otherFilters = otherFilters.filter { it.field != FAV_FIELD } as MutableList<MyFilter>
         otherFilters.add(MyFilter(FAV_FIELD, "IFNULL($FAV_FIELD,0) = ${if (fav) 1 else 0}"))
         return this
     }
 
     fun checkLocationFilter() {
-        otherFilters.filter { it.field != LOCATION_FIELD }
+        otherFilters = otherFilters.filter { it.field != LOCATION_FIELD } as MutableList<MyFilter>
         if (centerPoint != null && distance > 0 && centerPoint!!.latitude != 0.0 && centerPoint!!.longityde != 0.0) {
             val distanceInDegrees: Double = distance / KM_PER_DEGREE
             otherFilters.add(
@@ -92,13 +97,36 @@ class OurSearchPropertiesValue(
 
 fun initialSearchProperties(): OurSearchPropertiesValue {
 
-    val context = MainApplication.applicationContext();
+    val context = MainApplication.applicationContext()
     // Get the preferences
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     // Get the user dark theme settings
-    val settingsCity: String = prefs.getString(context.resources.getString(R.string.CITY_FIELD),"") as String
-    val settingsCountry = prefs.getString(context.resources.getString(R.string.COUNTRY_FIELD),"") as String
+    val settingsCity: String =
+        prefs.getString(context.resources.getString(R.string.CITY_KEY), "").toString()
+    val settingsCountry =
+        prefs.getString(context.resources.getString(R.string.COUNTRY_KEY), "").toString()
 
-    return OurSearchPropertiesValue(settingsCountry, settingsCity)
+    return OurSearchPropertiesValue(settingsCountry, settingsCity, "", countDistance())
+}
+
+fun countDistance(newValue: Any? = null): Double {
+    val context = MainApplication.applicationContext()
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    val distanceFilter: Boolean = if (newValue is Boolean) {
+        newValue
+    } else {
+        prefs.getBoolean(context.resources.getString(R.string.DISTANCEFILTER_KEY), true)
+    }
+
+    val settingsDistance: Int = if (!distanceFilter) {
+        -1
+    } else if (newValue is Int) {
+        newValue
+    } else {
+        prefs.getInt(context.resources.getString(R.string.DISTANCE_KEY), 0)
+    }
+    val realDistance: Double = settingsDistance.toDouble() / 10
+
+    return realDistance
 }
 
