@@ -28,7 +28,7 @@ class ViewModelMain : ViewModel() {
     var cafeInteractor = CafeInteractor(repository)
 
     init {
-        db.setPersistenceEnabled(true)
+        //db.setPersistenceEnabled(true)
         CommonAuthFunctions.checkAuth()
 
         val ourSearchPropertiesValue: OurSearchPropertiesValue =
