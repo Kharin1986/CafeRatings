@@ -25,14 +25,15 @@
             app:srcCompat="@drawable/ic_back_rest"/>
         <ImageView
             android:id="@+id/iw_rest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:contentDescription="@string/restaurant"
             android:focusable="true"
             android:onClick="onRestClick"
             android:scaleType="fitCenter"
             android:layout_gravity="center"
+            android:layout_margin="8dp"
             app:srcCompat="@drawable/ic_im_rest" />
     </FrameLayout>
 
@@ -53,14 +54,15 @@
             app:srcCompat="@drawable/ic_back_bar"/>
         <ImageView
             android:id="@+id/iw_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:contentDescription="@string/Bar"
             android:focusable="true"
             android:onClick="onBarClick"
             android:scaleType="fitCenter"
             android:layout_gravity="center"
+            android:layout_margin="8dp"
             app:srcCompat="@drawable/ic_im_bar"/>
     </FrameLayout>
 
@@ -81,16 +83,16 @@
             app:srcCompat="@drawable/ic_back_fav"/>
         <ImageView
             android:id="@+id/iw_fav"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:contentDescription="@string/FAV"
             android:focusable="true"
             android:onClick="onFavClick"
             android:scaleType="fitCenter"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_im_fav"
-            tools:ignore="MissingConstraints" />
+            android:layout_margin="8dp"
+            app:srcCompat="@drawable/ic_im_fav"/>
     </FrameLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -124,16 +126,16 @@
             app:srcCompat="@drawable/ic_back_top"/>
         <ImageView
             android:id="@+id/iw_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:contentDescription="@string/TOP"
             android:focusable="true"
             android:onClick="onTopClick"
             android:scaleType="fitCenter"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_im_top"
-            tools:ignore="MissingConstraints" />
+            android:layout_margin="8dp"
+            app:srcCompat="@drawable/ic_im_top"/>
     </FrameLayout>
 
     <FrameLayout
@@ -153,15 +155,15 @@
             app:srcCompat="@drawable/ic_back_cafe"/>
         <ImageView
             android:id="@+id/iw_cafe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:focusable="true"
             android:onClick="onCafeClick"
             android:scaleType="fitCenter"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_im_cafe"
-            tools:ignore="MissingConstraints" />
+            android:layout_margin="8dp"
+            app:srcCompat="@drawable/ic_im_cafe"/>
     </FrameLayout>
 
     <FrameLayout
@@ -182,16 +184,16 @@
             app:srcCompat="@drawable/ic_back_fastfood"/>
         <ImageView
             android:id="@+id/iw_fastfood"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:contentDescription="@string/fastfood"
             android:focusable="true"
             android:onClick="onFastClick"
             android:scaleType="fitCenter"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_im_fast"
-            tools:ignore="MissingConstraints" />
+            android:layout_margin="8dp"
+            app:srcCompat="@drawable/ic_im_fast"/>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
