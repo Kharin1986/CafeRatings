@@ -13,13 +13,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.gb.rating.R;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 
 public class SearchFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnPoiClickListener {
@@ -49,8 +49,13 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng moscow = new LatLng(55.6902907, 37.6850383);
-        mMap.addMarker(new MarkerOptions().position(moscow).title("Marker in Moscow"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(moscow));
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(moscow)
+                .zoom(8)
+                .build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        mMap.animateCamera(cameraUpdate);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setOnPoiClickListener(this);

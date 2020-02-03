@@ -39,7 +39,5 @@ class ListFragment : Fragment() {
         }}) //подписка на обновление листа
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
+
 }
