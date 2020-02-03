@@ -34,7 +34,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
 
         fun bind (item: CafeItem) = with(itemView) {
             nameCafe_FragmentList.text = item.name
-            typeCafe_FragmentList.text = item.type;
+            typeCafe_FragmentList.text = item.type
             descriptionCafe_FragmentList.text = item.desc
             distanceToCafe_FragmentList.text = "${item.distance.toString()} км" //км нужно запихать в строковые ресурсы
             ratingBar_FragmentList.progress = item.rating
@@ -50,22 +50,13 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
                     val storageReference = FirebaseStorage.getInstance().getReference()
                         .child("cafeImages/" + item.cafeId + "/main.jpg")
                     storageReference.downloadUrl.addOnSuccessListener { uri ->
-                        var imageURL = uri.toString()
+                        val imageURL = uri.toString()
                         Glide.with(this).load(imageURL).into(imageList_FragmentItem)
                     }.addOnFailureListener {
                         // Handle any errors
                     }
                 } catch (s: StorageException) {
                 }
-
-                // можно использовать все это с помощью GlideApp в Kotlin (в Java - просто через Glide.load(storageReference).into(imageList_FragmentItem)), но мне ... не удалось ... GlideApp не появился.
-                // https://medium.com/@egemenhamutcu/displaying-images-from-firebase-storage-using-glide-for-kotlin-projects-3e4950f6c103
-
-                //val storage = FirebaseStorage.getInstance()
-                //val gsReference = storage.getReferenceFromUrl("gs://fir-test-81397.appspot.com/cafeImages/cloud.jpg")
-                //GlideApp.with(context)
-                //.load(gsReference)
-                //.into(imageList_FragmentItem)
             }
         }
     }
