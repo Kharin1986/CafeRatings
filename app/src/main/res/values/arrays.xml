@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="country_titles">
+        <item>Россия</item>
+        <item>не Россия</item>
+    </string-array>
+    <string-array name="country_values">
+        <item>Россия</item>
+        <item>неРоссия</item>
+    </string-array>
+    <string-array name="city_titles">
+        <item>Москва</item>
+        <item>Екатеринбург</item>
+        <item>Ревда</item>
+    </string-array>
+    <string-array name="city_values">
+        <item>Москва</item>
+        <item>Екатеринбург</item>
+        <item>Ревда</item>
+    </string-array>
+</resources>

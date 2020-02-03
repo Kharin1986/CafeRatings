@@ -7,10 +7,7 @@ import com.gb.rating.models.CafeItem
 import com.gb.rating.models.Firebase_Auth.CommonAuthFunctions
 import com.gb.rating.models.usercase.CafeInteractor
 import com.gb.rating.models.utils.MainApplication
-import com.gb.rating.ui.settings.BASE_UPDATED_ACTION
-import com.gb.rating.ui.settings.INITIATION_ACTION
-import com.gb.rating.ui.settings.OurSearchPropertiesValue
-import com.gb.rating.ui.settings.initialSearchProperties
+import com.gb.rating.ui.settings.*
 import com.google.firebase.database.FirebaseDatabase
 import io.reactivex.MaybeObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import io.reactivex.schedulers.Schedulers;
+import java.util.ArrayList
 
 
 class ViewModelMain : ViewModel() {
@@ -39,25 +37,29 @@ class ViewModelMain : ViewModel() {
         refreshCafeList() //ассинхронно, IO,
         initDatabaseUpdater(
             ourSearchPropertiesValue.country,
-            ourSearchPropertiesValue.city
+            ourSearchPropertiesValue.city,
+            true
         ) //ассинхронно, IO
     }
 
-    private fun initDatabaseUpdater(country: String, city: String) {
+    private fun initDatabaseUpdater(country: String, city: String, removeAll : Boolean = false) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                updateInternalDatabase(country, city)
+                updateInternalDatabase(country, city, removeAll)
             }
         }
     }
 
-    private fun updateInternalDatabase(country: String = "", city: String = "") {
+    private fun updateInternalDatabase(country: String = "", city: String = "", removeAll : Boolean = false) {
         cafeInteractor?.retrieveCafeList(country, city)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-            ?.doOnSuccess { cafeItems -> writeRetrievedCafeListToLocalDatabase(cafeItems);}
+            .doOnSuccess {
+                    cafeItems -> writeRetrievedCafeListToLocalDatabase(cafeItems, removeAll) }
+            .doOnComplete {
+                writeRetrievedCafeListToLocalDatabase(ArrayList(), removeAll) }
             .observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : MaybeObserver<List<CafeItem>> {
+            .subscribe(object : MaybeObserver<List<CafeItem>> {
                 override fun onSubscribe(d: Disposable) {}
                 override fun onSuccess(cafeItems: List<CafeItem>) {
                     ourSearchProperties.value = ourSearchProperties.value?.updateAction(
@@ -67,19 +69,30 @@ class ViewModelMain : ViewModel() {
 
                 override fun onError(e: Throwable) {}
                 override fun onComplete() {
-                    //empty result - a mistake may be or not
+                    ourSearchProperties.value = ourSearchProperties.value?.updateAction(
+                        BASE_UPDATED_ACTION
+                    )
                 }
             })
     }
 
-    private fun writeRetrievedCafeListToLocalDatabase(cafeItems: List<CafeItem>) {
+    private fun writeRetrievedCafeListToLocalDatabase(cafeItems: List<CafeItem>, removeAll : Boolean = false) {
         val dbHelperW = CafeDataSource(MainApplication.applicationContext())
         dbHelperW.openW()
+        if (removeAll) {dbHelperW.removeAll()}
         dbHelperW.writeCafeList(cafeItems)
     }
 
     fun refreshCafeList() {
         var ourSearchPropertiesValue = ourSearchProperties.value;
+
+        if (ourSearchPropertiesValue?.action.equals(RELOAD_DATABASE_ACTION)) {
+
+            initDatabaseUpdater(ourSearchPropertiesValue?.country!!, ourSearchPropertiesValue.city, true)
+
+            return
+        }
+
         viewModelScope.launch {
             cafeList.value =
                 withContext(Dispatchers.IO) { readAllCafeWithContext(ourSearchPropertiesValue) }

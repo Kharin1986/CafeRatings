@@ -43,4 +43,12 @@
     <string name="l_atmosphere">Атмосфера</string>
     <string name="l_service">Обслуживание</string>
     <string name="l_quality">Кухня</string>
+    <string name="SettingsTitle">Settings</string>
+    <string name="SettingsCountryTitle">Страна</string>
+    <string name="SettingsDefaultCountry">Россия</string>
+    <string name="SettingsCityTitle">Город</string>
+    <string name="SettingsDefaultCity">Москва</string>
+    <string name="COUNTRY_FIELD">country</string>
+    <string name="CITY_FIELD">city</string>
+
 </resources>

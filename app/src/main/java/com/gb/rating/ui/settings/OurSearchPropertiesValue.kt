@@ -1,7 +1,12 @@
 package com.gb.rating.ui.settings
 
+import androidx.preference.PreferenceManager
+import com.gb.rating.R
+import com.gb.rating.models.utils.MainApplication
+
 const val INITIATION_ACTION = "initiation"
 const val BASE_UPDATED_ACTION = "baseUpdated"
+const val RELOAD_DATABASE_ACTION = "reloadBase"
 const val RESTAURANT_TYPE = "ресторан"
 const val FASTFOOD_TYPE = "фастфуд"
 const val BAR_TYPE = "бар"
@@ -33,6 +38,16 @@ class OurSearchPropertiesValue(
 
     fun updateType(type: String): OurSearchPropertiesValue {
         this.type = type
+        return this
+    }
+
+    fun updateCountry(country: String): OurSearchPropertiesValue {
+        this.country = country
+        return this
+    }
+
+    fun updateCity(city: String): OurSearchPropertiesValue {
+        this.city= city
         return this
     }
 
@@ -76,6 +91,14 @@ class OurSearchPropertiesValue(
 }
 
 fun initialSearchProperties(): OurSearchPropertiesValue {
-    return OurSearchPropertiesValue("Россия", "Москва")
+
+    val context = MainApplication.applicationContext();
+    // Get the preferences
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    // Get the user dark theme settings
+    val settingsCity: String = prefs.getString(context.resources.getString(R.string.CITY_FIELD),"") as String
+    val settingsCountry = prefs.getString(context.resources.getString(R.string.COUNTRY_FIELD),"") as String
+
+    return OurSearchPropertiesValue(settingsCountry, settingsCity)
 }
 

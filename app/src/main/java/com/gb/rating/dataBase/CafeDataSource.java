@@ -130,5 +130,12 @@ public class CafeDataSource implements Closeable {
             database.insert(FavCafeTable.NAME, null, cv);
     }
 
+    public void removeAll()
+    {
+        // db.delete(String tableName, String whereClause, String[] whereArgs);
+        // If whereClause is null, it will delete all rows.
+        database.delete(CafeTable.NAME, null, null);
+        database.delete(FavCafeTable.NAME, null, null);
+    }
 
 }
