@@ -95,7 +95,6 @@
         app:layout_constraintGuide_percent="0.98" />
 
     <FrameLayout
-        android:id="@+id/cl_rest"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineCenterHorizontal3"
@@ -104,7 +103,6 @@
         app:layout_constraintTop_toTopOf="@id/guidelineTop">
 
         <ImageView
-            android:id="@+id/back_rest"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
@@ -125,7 +123,6 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/cl_bar"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
@@ -133,7 +130,6 @@
         app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal4"
         app:layout_constraintBottom_toTopOf="@id/guidelineCenterHorizontal5">
         <ImageView
-            android:id="@+id/back_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
@@ -153,7 +149,6 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/cl_fav"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
@@ -161,7 +156,6 @@
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
         app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal6">
         <ImageView
-            android:id="@+id/back_fav"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
@@ -181,7 +175,6 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/cl_top"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="@id/guidelineRight"
@@ -189,7 +182,6 @@
         app:layout_constraintTop_toTopOf="@id/guidelineTop"
         app:layout_constraintBottom_toTopOf="@id/guidelineCenterHorizontal1">
         <ImageView
-            android:id="@+id/back_top"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
@@ -209,7 +201,6 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/cl_cafe"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineCenterHorizontal3"
@@ -217,7 +208,6 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineCenterVertical2"
         app:layout_constraintTop_toBottomOf="@id/guidelineCenterHorizontal2">
         <ImageView
-            android:id="@+id/back_cafe"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
@@ -236,16 +226,13 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/cl_fastfood"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
         app:layout_constraintEnd_toEndOf="@id/guidelineRight"
         app:layout_constraintStart_toStartOf="@+id/guidelineCenterVertical2"
-        app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal4"
-        app:srcCompat="@drawable/card_fastfood">
+        app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal4">
         <ImageView
-            android:id="@+id/back_fast"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
