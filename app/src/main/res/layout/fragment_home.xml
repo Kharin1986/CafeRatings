@@ -1,97 +1,269 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBack"
     android:baselineAligned="false"
+    android:layout_marginBottom="?attr/actionBarSize"
     android:orientation="horizontal">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.04" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.96" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterVertical1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.48" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterVertical2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.52" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.17" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.19" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.49" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.51" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.81" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.83" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.98" />
+
+    <FrameLayout
+        android:id="@+id/cl_rest"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineCenterHorizontal3"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineCenterVertical1"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop">
+
+        <ImageView
+            android:id="@+id/back_rest"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_back_rest" />
 
         <ImageView
             android:id="@+id/iw_rest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/cv_margin_end"
-            android:layout_marginBottom="@dimen/cv_margin_btwn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
             android:clickable="true"
             android:contentDescription="@string/restaurant"
             android:focusable="true"
             android:onClick="onRestClick"
-            app:layout_constraintBottom_toTopOf="@+id/iw_bar"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
-            app:srcCompat="@drawable/card_rest">
-        </ImageView>
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_im_rest" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/cl_bar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+        app:layout_constraintEnd_toStartOf="@id/guidelineCenterVertical1"
+        app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal4"
+        app:layout_constraintBottom_toTopOf="@id/guidelineCenterHorizontal5">
+        <ImageView
+            android:id="@+id/back_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_back_bar"/>
         <ImageView
             android:id="@+id/iw_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/cv_margin_btwn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:contentDescription="@string/Bar"
             android:focusable="true"
             android:onClick="onBarClick"
-            app:layout_constraintBottom_toTopOf="@+id/iw_fav"
-            app:layout_constraintStart_toStartOf="@+id/iw_rest"
-            app:srcCompat="@drawable/card_bar">
-        </ImageView>
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            app:srcCompat="@drawable/ic_im_bar"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/cl_fav"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineCenterVertical1"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+        app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal6">
+        <ImageView
+            android:id="@+id/back_fav"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_back_fav"/>
         <ImageView
             android:id="@+id/iw_fav"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/cv_margin_btwn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:contentDescription="@string/FAV"
             android:focusable="true"
             android:onClick="onFavClick"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/iw_rest"
-            app:srcCompat="@drawable/card_fav">
-        </ImageView>
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="56dp" />
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            app:srcCompat="@drawable/ic_im_fav"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/cl_top"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+        app:layout_constraintStart_toStartOf="@+id/guidelineCenterVertical2"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop"
+        app:layout_constraintBottom_toTopOf="@id/guidelineCenterHorizontal1">
+        <ImageView
+            android:id="@+id/back_top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_back_top"/>
         <ImageView
             android:id="@+id/iw_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/cv_margin_end"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:contentDescription="@string/TOP"
             android:focusable="true"
             android:onClick="onTopClick"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="@+id/iw_rest"
-            app:srcCompat="@drawable/card_top" />
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            app:srcCompat="@drawable/ic_im_top"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/cl_cafe"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineCenterHorizontal3"
+        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+        app:layout_constraintStart_toStartOf="@+id/guidelineCenterVertical2"
+        app:layout_constraintTop_toBottomOf="@id/guidelineCenterHorizontal2">
+        <ImageView
+            android:id="@+id/back_cafe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_back_cafe"/>
         <ImageView
             android:id="@+id/iw_cafe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
-            android:contentDescription="@string/cafe"
             android:focusable="true"
             android:onClick="onCafeClick"
-            app:layout_constraintBottom_toBottomOf="@+id/iw_rest"
-            app:layout_constraintEnd_toEndOf="@+id/iw_top"
-            app:srcCompat="@drawable/card_cafe" />
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            app:srcCompat="@drawable/ic_im_cafe"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/cl_fastfood"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+        app:layout_constraintStart_toStartOf="@+id/guidelineCenterVertical2"
+        app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal4"
+        app:srcCompat="@drawable/card_fastfood">
+        <ImageView
+            android:id="@+id/back_fast"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_back_fastfood"/>
         <ImageView
             android:id="@+id/iw_fastfood"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:contentDescription="@string/fastfood"
             android:focusable="true"
             android:onClick="onFastClick"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            app:srcCompat="@drawable/ic_im_fast"/>
+    </FrameLayout>
+
             app:layout_constraintBottom_toBottomOf="@+id/iw_fav"
             app:layout_constraintEnd_toEndOf="@+id/iw_top"
             app:srcCompat="@drawable/card_fastfood" />
