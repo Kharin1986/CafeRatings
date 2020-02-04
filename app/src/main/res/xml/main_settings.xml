@@ -31,7 +31,7 @@
 <!--            app:summary="@string/summary_switch_preference"/>-->
 
         <DropDownPreference
-            app:key="@string/COUNTRY_FIELD"
+            app:key="@string/COUNTRY_KEY"
             app:title="@string/SettingsCountryTitle"
             app:useSimpleSummaryProvider="true"
             app:entries="@array/country_titles"
@@ -39,17 +39,27 @@
             app:defaultValue="@string/SettingsDefaultCountry"/>
 
         <DropDownPreference
-            app:key="@string/CITY_FIELD"
+            app:key="@string/CITY_KEY"
             app:title="@string/SettingsCityTitle"
             app:useSimpleSummaryProvider="true"
             app:entries="@array/city_titles"
             app:entryValues="@array/city_values"
             app:defaultValue="@string/SettingsDefaultCity"/>
 
-<!--        <SeekBarPreference-->
-<!--            app:key="seekbar"-->
-<!--            app:title="@string/title_seekbar_preference"-->
-<!--            app:defaultValue="20"/>-->
+        <SwitchPreferenceCompat
+            app:key="@string/DISTANCEFILTER_KEY"
+            app:title="@string/SettingsDistanceFilterTitle"
+            app:summary="@string/SettingsDistanceFilterSummary"
+            app:defaultValue="false"/>
+        <SeekBarPreference
+            app:key="@string/DISTANCE_KEY"
+            app:dependency="DistanceFilter"
+            app:title="@string/SettingsDistanceTitle"
+            app:summary="@string/SettingsDistanceSummary"
+            app:min="1"
+            app:seekBarIncrement="1"
+            app:adjustable="true"
+            app:defaultValue="@string/SettingsDefaultDistance"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
