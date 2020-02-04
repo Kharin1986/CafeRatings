@@ -8,44 +8,135 @@
     android:baselineAligned="false"
     android:orientation="horizontal">
 
-    <FrameLayout
-        android:id="@+id/cl_rest"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.04" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.96" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterVertical1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.48" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterVertical2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.52" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.141" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.161" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.444" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.464" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.747" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.767" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenterHorizontal7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.89" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.91" />
+
+    <FrameLayout
+        android:id="@+id/cl_rest"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineCenterHorizontal3"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineCenterVertical1"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop">
+
         <ImageView
             android:id="@+id/back_rest"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_back_rest"/>
+            app:srcCompat="@drawable/ic_back_rest" />
+
         <ImageView
             android:id="@+id/iw_rest"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
             android:clickable="true"
             android:contentDescription="@string/restaurant"
             android:focusable="true"
             android:onClick="onRestClick"
             android:scaleType="fitCenter"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
             app:srcCompat="@drawable/ic_im_rest" />
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/cl_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/cl_fav"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl_rest">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+        app:layout_constraintEnd_toStartOf="@id/guidelineCenterVertical1"
+        app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal4"
+        app:layout_constraintBottom_toTopOf="@id/guidelineCenterHorizontal5">
         <ImageView
             android:id="@+id/back_bar"
             android:layout_width="match_parent"
@@ -68,13 +159,12 @@
 
     <FrameLayout
         android:id="@+id/cl_fav"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineCenterHorizontal7"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineCenterVertical1"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+        app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal6">
         <ImageView
             android:id="@+id/back_fav"
             android:layout_width="match_parent"
@@ -95,29 +185,14 @@
             app:srcCompat="@drawable/ic_im_fav"/>
     </FrameLayout>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="56dp" />
-
     <FrameLayout
         android:id="@+id/cl_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+        app:layout_constraintStart_toStartOf="@+id/guidelineCenterVertical2"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop"
+        app:layout_constraintBottom_toTopOf="@id/guidelineCenterHorizontal1">
         <ImageView
             android:id="@+id/back_top"
             android:layout_width="match_parent"
@@ -140,13 +215,12 @@
 
     <FrameLayout
         android:id="@+id/cl_cafe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/cl_fastfood"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/cl_top">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineCenterHorizontal3"
+        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+        app:layout_constraintStart_toStartOf="@+id/guidelineCenterVertical2"
+        app:layout_constraintTop_toBottomOf="@id/guidelineCenterHorizontal2">
         <ImageView
             android:id="@+id/back_cafe"
             android:layout_width="match_parent"
@@ -168,13 +242,12 @@
 
     <FrameLayout
         android:id="@+id/cl_fastfood"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineCenterHorizontal7"
+        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+        app:layout_constraintStart_toStartOf="@+id/guidelineCenterVertical2"
+        app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal4"
         app:srcCompat="@drawable/card_fastfood">
         <ImageView
             android:id="@+id/back_fast"
