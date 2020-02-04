@@ -2,8 +2,14 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="divider_space">20dp</dimen>
-    <dimen name="card_elevation">4dp</dimen>
+    
+	<dimen name="divider_space">20dp</dimen>
+    
+	<dimen name="card_elevation">4dp</dimen>
+	
     <dimen name="cv_corner_radius">15dp</dimen>
     <dimen name="cv_margin">7dp</dimen>
+	<dimen name="cv_margin_start">11dp</dimen>
+    <dimen name="cv_margin_btwn">12dp</dimen>
+    <dimen name="cv_margin_end">6dp</dimen>
 </resources>
