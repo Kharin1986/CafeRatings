@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Top rated</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">Дом</string>
     <string name="title_list">Список</string>
     <string name="title_search">Поиск</string>
     <string name="title_review">Отзыв</string>
@@ -37,8 +37,10 @@
     <string name="FAV">Избранное</string>
     <string name="cafe">Кафе</string>
     <string name="fastfood">Фастфуд</string>
-    <string name="b_send_review_txt">отправить</string>
+	
+	<string name="b_send_review_txt">отправить</string>
     <string name="b_cancel_review_txt">отмена</string>
+	
     <string name="hint_review_txt">Напишите Ваш отзыв</string>
     <string name="l_atmosphere">Атмосфера</string>
     <string name="l_service">Обслуживание</string>
