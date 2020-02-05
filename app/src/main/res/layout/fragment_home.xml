@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="?attr/actionBarSize"
     android:background="@color/colorBack"
     android:baselineAligned="false"
-    android:layout_marginBottom="?attr/actionBarSize"
     android:orientation="horizontal">
 
     <androidx.constraintlayout.widget.Guideline
@@ -94,9 +92,10 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.98" />
 
-    <FrameLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineCenterHorizontal3"
         app:layout_constraintEnd_toStartOf="@+id/guidelineCenterVertical1"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
@@ -112,144 +111,153 @@
             android:id="@+id/iw_rest"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
+            android:layout_marginBottom="4dp"
             android:clickable="true"
             android:contentDescription="@string/restaurant"
             android:focusable="true"
             android:onClick="onRestClick"
-            android:scaleType="fitCenter"
+            android:scaleType="fitEnd"
             app:srcCompat="@drawable/ic_im_rest" />
-    </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
-    <FrameLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@id/guidelineCenterHorizontal5"
         app:layout_constraintEnd_toStartOf="@id/guidelineCenterVertical1"
-        app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal4"
-        app:layout_constraintBottom_toTopOf="@id/guidelineCenterHorizontal5">
+        app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+        app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal4">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_back_bar"/>
+            app:srcCompat="@drawable/ic_back_bar" />
+
         <ImageView
             android:id="@+id/iw_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="4dp"
             android:clickable="true"
             android:contentDescription="@string/Bar"
             android:focusable="true"
             android:onClick="onBarClick"
-            android:scaleType="fitCenter"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            app:srcCompat="@drawable/ic_im_bar"/>
-    </FrameLayout>
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/ic_im_bar" />
+    </androidx.cardview.widget.CardView>
 
-    <FrameLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
         app:layout_constraintEnd_toStartOf="@+id/guidelineCenterVertical1"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
         app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal6">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_back_fav"/>
+            app:srcCompat="@drawable/ic_back_fav" />
+
         <ImageView
             android:id="@+id/iw_fav"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="4dp"
             android:clickable="true"
             android:contentDescription="@string/FAV"
             android:focusable="true"
             android:onClick="onFavClick"
-            android:scaleType="fitCenter"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            app:srcCompat="@drawable/ic_im_fav"/>
-    </FrameLayout>
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/ic_im_fav" />
+    </androidx.cardview.widget.CardView>
 
-    <FrameLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@id/guidelineCenterHorizontal1"
         app:layout_constraintEnd_toEndOf="@id/guidelineRight"
         app:layout_constraintStart_toStartOf="@+id/guidelineCenterVertical2"
-        app:layout_constraintTop_toTopOf="@id/guidelineTop"
-        app:layout_constraintBottom_toTopOf="@id/guidelineCenterHorizontal1">
+        app:layout_constraintTop_toTopOf="@id/guidelineTop">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_back_top"/>
+            app:srcCompat="@drawable/ic_back_top" />
+
         <ImageView
             android:id="@+id/iw_top"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="4dp"
             android:clickable="true"
             android:contentDescription="@string/TOP"
             android:focusable="true"
             android:onClick="onTopClick"
-            android:scaleType="fitCenter"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            app:srcCompat="@drawable/ic_im_top"/>
-    </FrameLayout>
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/ic_im_top" />
+    </androidx.cardview.widget.CardView>
 
-    <FrameLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineCenterHorizontal3"
         app:layout_constraintEnd_toEndOf="@id/guidelineRight"
         app:layout_constraintStart_toStartOf="@+id/guidelineCenterVertical2"
         app:layout_constraintTop_toBottomOf="@id/guidelineCenterHorizontal2">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_back_cafe"/>
+            app:srcCompat="@drawable/ic_back_cafe" />
+
         <ImageView
             android:id="@+id/iw_cafe"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="4dp"
             android:clickable="true"
             android:focusable="true"
             android:onClick="onCafeClick"
-            android:scaleType="fitCenter"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            app:srcCompat="@drawable/ic_im_cafe"/>
-    </FrameLayout>
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/ic_im_cafe" />
+    </androidx.cardview.widget.CardView>
 
-    <FrameLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
         app:layout_constraintEnd_toEndOf="@id/guidelineRight"
         app:layout_constraintStart_toStartOf="@+id/guidelineCenterVertical2"
         app:layout_constraintTop_toTopOf="@id/guidelineCenterHorizontal4">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_back_fastfood"/>
+            app:srcCompat="@drawable/ic_back_fast" />
+
         <ImageView
             android:id="@+id/iw_fastfood"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="4dp"
             android:clickable="true"
             android:contentDescription="@string/fastfood"
             android:focusable="true"
             android:onClick="onFastClick"
-            android:scaleType="fitCenter"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            app:srcCompat="@drawable/ic_im_fast"/>
-    </FrameLayout>
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/ic_im_fast" />
+    </androidx.cardview.widget.CardView>
 
             app:layout_constraintBottom_toBottomOf="@+id/iw_fav"
             app:layout_constraintEnd_toEndOf="@+id/iw_top"
