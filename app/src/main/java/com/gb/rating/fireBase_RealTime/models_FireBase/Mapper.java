@@ -29,7 +29,7 @@ public class Mapper {
     }
 
     public static CafeItem convert(Cafe_FB cafe){
-        return  new CafeItem(0, cafe.name, cafe.type, cafe.descr, (int) -cafe.rating, cafe.country, cafe.city, "", "", "", "", 0, cafe.cafeId, cafe.latitude, cafe.longitude, cafe.deleted, false );
+        return  new CafeItem(0, cafe.name, cafe.type, cafe.descr, (int) -cafe.rating, cafe.country, cafe.city, cafe.addressMain, "", "", "", 0, cafe.cafeId, cafe.latitude, cafe.longitude, cafe.deleted, false );
 
     }
 
