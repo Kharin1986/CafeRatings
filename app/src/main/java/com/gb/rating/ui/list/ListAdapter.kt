@@ -38,6 +38,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
             descriptionCafe_FragmentList.text = item.desc
             distanceToCafe_FragmentList.text = "${item.distance.toString()} км" //км нужно запихать в строковые ресурсы
             ratingBar_FragmentList.progress = item.rating
+            heartselector.isChecked = item.fav
 
             // установка картинки с Firebase Storage через реквизит cafeItem.cafeId
             setImage(item)
