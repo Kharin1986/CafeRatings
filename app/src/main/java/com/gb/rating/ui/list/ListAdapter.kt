@@ -34,7 +34,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
 
         fun bind (item: CafeItem) = with(itemView) {
             nameCafe_FragmentList.text = item.name
-            typeCafe_FragmentList.text = item.type
+            address_FragmentList.text = buildAddress(item)
             descriptionCafe_FragmentList.text = item.desc
             distanceToCafe_FragmentList.text = "${item.distance.toString()} км" //км нужно запихать в строковые ресурсы
             ratingBar_FragmentList.progress = item.rating
@@ -42,6 +42,17 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
             // установка картинки с Firebase Storage через реквизит cafeItem.cafeId
             setImage(item)
        }
+
+        private fun buildAddress (item: CafeItem) : String {
+            var sb = java.lang.StringBuilder()
+            sb.append("ул. ")
+                .append(item.street)
+                .append(", ")
+                .append(item.home)
+
+            return sb.toString()
+        }
+
 
         // установка картинки с Firebase Storage через реквизит cafeItem.cafeId
         private fun View.setImage(item: CafeItem) {
