@@ -5,7 +5,6 @@ package com.gb.rating.ui.settings
 import androidx.preference.PreferenceManager
 import com.gb.rating.R
 import com.gb.rating.models.utils.MainApplication
-import java.lang.IllegalArgumentException
 import kotlin.math.sqrt
 import kotlin.math.pow
 
