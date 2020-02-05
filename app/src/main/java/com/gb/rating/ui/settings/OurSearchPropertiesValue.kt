@@ -1,8 +1,13 @@
+@file:JvmName("SearchUtils")
+
 package com.gb.rating.ui.settings
 
 import androidx.preference.PreferenceManager
 import com.gb.rating.R
 import com.gb.rating.models.utils.MainApplication
+import java.lang.IllegalArgumentException
+import kotlin.math.sqrt
+import kotlin.math.pow
 
 const val INITIATION_ACTION = "initiation"
 const val BASE_UPDATED_ACTION = "baseUpdated"
@@ -18,6 +23,7 @@ const val LOCATION_FIELD = "location"
 const val LATITUDE_FIELD = "latitude"
 const val LONGITUDE_FIELD = "longitude"
 const val KM_PER_DEGREE = 111.134861111
+const val EARTH_RADIUS = 6371.0
 
 
 class OurSearchPropertiesValue(
@@ -28,7 +34,7 @@ class OurSearchPropertiesValue(
     var sizeOfList: Long = -1,
     var action: String = "",
     var otherFilters: MutableList<MyFilter> = ArrayList(),
-    var centerPoint: MyPoint? = MyPoint()
+    var centerPoint: MyPoint = MyPoint()
 ) {
 
     fun updateAction(action: String): OurSearchPropertiesValue {
@@ -93,6 +99,7 @@ class OurSearchPropertiesValue(
             )
         }
     }
+
 }
 
 fun initialSearchProperties(): OurSearchPropertiesValue {
@@ -100,7 +107,7 @@ fun initialSearchProperties(): OurSearchPropertiesValue {
     val context = MainApplication.applicationContext()
     // Get the preferences
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    // Get the user dark theme settings
+
     val settingsCity: String =
         prefs.getString(context.resources.getString(R.string.CITY_KEY), "").toString()
     val settingsCountry =
@@ -128,5 +135,17 @@ fun countDistance(newValue: Any? = null): Double {
     val realDistance: Double = settingsDistance.toDouble() / 10
 
     return realDistance
+}
+
+
+fun countDistanceToAnotherPoint(
+    centerPoint: OurSearchPropertiesValue.MyPoint,
+    anotherPoint: OurSearchPropertiesValue.MyPoint
+): Double {
+
+    require(!(anotherPoint.latitude.equals(0) || anotherPoint.longityde.equals(0))) { "countDistanceToAnotherPoint" }
+    require(!(centerPoint.latitude.equals(0) || centerPoint.longityde.equals(0))) { "countDistanceToAnotherPoint" }
+
+    return EARTH_RADIUS*sqrt(((anotherPoint.latitude - centerPoint.latitude)*Math.PI/180).pow(2.0) + ((anotherPoint.longityde - centerPoint.longityde)*Math.PI/180).pow(2.0))
 }
 
