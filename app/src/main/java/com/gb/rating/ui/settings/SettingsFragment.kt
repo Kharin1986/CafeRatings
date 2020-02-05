@@ -7,8 +7,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.preference.*
 import com.gb.rating.MainActivity
 import com.gb.rating.R
-import java.util.prefs.PreferenceChangeListener
-
 
 class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var settingsViewModel: SettingsViewModel
@@ -20,16 +18,18 @@ class SettingsFragment : PreferenceFragmentCompat() {
         initListerners()
     }
 
+    private fun takeOurSearchPropertiesValue() = (activity as MainActivity).viewModelMain.ourSearchPropertiesValue()
+    private fun updateOurSearchProperties(intValue : OurSearchPropertiesValue) = (activity as MainActivity).viewModelMain.ourSearchProperties_update(intValue)
+
     private fun initListerners() {
 
         //настройки страны
         val chooseCountry: DropDownPreference? =
             findPreference(activity?.resources!!.getString(R.string.COUNTRY_KEY))
         chooseCountry?.setOnPreferenceChangeListener { _, newValue ->
-            (activity as MainActivity).viewModelMain?.ourSearchProperties?.value =
-                (activity as MainActivity).viewModelMain?.ourSearchProperties?.value?.updateCountry(
-                    newValue as String
-                )?.updateAction(RELOAD_DATABASE_ACTION)
+            updateOurSearchProperties(
+                takeOurSearchPropertiesValue().updateCountry(newValue as String).updateAction(RELOAD_DATABASE_ACTION)
+            )
             true
         }
 
@@ -37,10 +37,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val chooseCity: DropDownPreference? =
             findPreference(activity?.resources!!.getString(R.string.CITY_KEY))
         chooseCity?.setOnPreferenceChangeListener { _, newValue ->
-            (activity as MainActivity).viewModelMain?.ourSearchProperties?.value =
-                (activity as MainActivity).viewModelMain?.ourSearchProperties?.value?.updateCity(
-                    newValue as String
-                )?.updateAction(RELOAD_DATABASE_ACTION)
+            updateOurSearchProperties(
+                takeOurSearchPropertiesValue().updateCity(newValue as String).updateAction(RELOAD_DATABASE_ACTION)
+            )
             true
         }
 
@@ -50,10 +49,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val listener = Preference.OnPreferenceChangeListener { preference, newValue ->
             val realDistance: Double = countDistance(newValue)
             limitDistance?.summary = prepareDistanceTitle(realDistance)
-            (activity as MainActivity).viewModelMain?.ourSearchProperties?.value =
-                (activity as MainActivity).viewModelMain?.ourSearchProperties?.value?.updateDistance(
-                    (realDistance)
-                )?.updateAction("")
+            updateOurSearchProperties(
+                takeOurSearchPropertiesValue().updateDistance((realDistance)).updateAction("")
+            )
             true
         }
 

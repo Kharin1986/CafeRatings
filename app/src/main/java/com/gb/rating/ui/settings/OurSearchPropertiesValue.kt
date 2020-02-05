@@ -43,21 +43,25 @@ class OurSearchPropertiesValue(
 
     fun updateType(type: String): OurSearchPropertiesValue {
         this.type = type
+        updateAction("")
         return this
     }
 
     fun updateCountry(country: String): OurSearchPropertiesValue {
         this.country = country
+        updateAction("")
         return this
     }
 
     fun updateCity(city: String): OurSearchPropertiesValue {
         this.city = city
+        updateAction("")
         return this
     }
 
     fun updateDistance(distance: Double): OurSearchPropertiesValue {
         this.distance = distance
+        updateAction("")
         return this
     }
 

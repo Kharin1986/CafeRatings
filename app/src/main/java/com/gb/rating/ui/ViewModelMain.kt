@@ -20,12 +20,17 @@ import java.util.ArrayList
 
 
 class ViewModelMain : ViewModel() {
-    var cafeList: MutableLiveData<List<CafeItem>> = MutableLiveData()
-    var ourSearchProperties: MutableLiveData<OurSearchPropertiesValue> = MutableLiveData()
+    private val cafeList: MutableLiveData<List<CafeItem>> = MutableLiveData()
+    private val ourSearchProperties: MutableLiveData<OurSearchPropertiesValue> = MutableLiveData()
     // CafeInteractor - нужен сразу
     private val db = FirebaseDatabase.getInstance()
     private val repository = Cafe_FB_Impl(db, null)
     var cafeInteractor = CafeInteractor(repository)
+
+    fun cafelist() : LiveData<List<CafeItem>> = cafeList
+    fun ourSearchProperties() : LiveData<OurSearchPropertiesValue> = ourSearchProperties
+    fun ourSearchPropertiesValue() : OurSearchPropertiesValue = ourSearchProperties.value!!
+    fun ourSearchProperties_update(intValue: OurSearchPropertiesValue) {ourSearchProperties.value = intValue}
 
     init {
         //db.setPersistenceEnabled(true)
