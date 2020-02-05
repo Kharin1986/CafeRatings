@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="title_home">Home</string>
+    <string name="title_list">List</string>
+    <string name="title_search">Search</string>
+    <string name="title_review">Feedback</string>
+    <string name="title_settings">Settings</string>
+
+    <string name="menu_home">Type selection</string>
+    <string name="menu_by_map">Show on map</string>
+    <string name="menu_list">Show list</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_response">Rate a cafe</string>
+    <string name="menu_save_list">Save list</string>
+    <string name="menu_offline">Offline-list</string>
+
+    <string name="open_map">Show on map</string>
+    <string name="choice_by_type">Type selection</string>
+
+    <string name="choice_by_list">Show list</string>
+    <string name="search">Search</string>
+    <string name="registration">Sign up</string>
+    <string name="offline">Offline</string>
+    <string name="save_list">Save list</string>
+    <string name="offline_mode">Offline list</string>
+    <string name="restaurant">Restaurant</string>
+    <string name="Bar">Pub</string>
+    <string name="TOP">TOP</string>
+    <string name="FAV">Favorite</string>
+    <string name="cafe">Cafe</string>
+    <string name="fastfood">Fast Food</string>
+
+    <string name="b_send_review_txt">send</string>
+    <string name="b_cancel_review_txt" tools:ignore="ButtonCase">cancel</string>
+
+    <string name="hint_review_txt">Write a feedback</string>
+    <string name="l_atmosphere">Ambiance</string>
+    <string name="l_service">Servicing</string>
+    <string name="l_quality">Cuisine</string>
+    <string name="SettingsTitle">Settings</string>
+    <string name="SettingsCountryTitle">Country</string>
+    <string name="SettingsDefaultCountry">Russia</string>
+    <string name="SettingsCityTitle">City</string>
+    <string name="SettingsDefaultCity">Moscow</string>
+    <string name="SettingsDistanceTitle">Range Limitation</string>
+    <string name="SettingsDistanceSummary">Find around N*100 m</string>
+    <string name="SettingsDistanceFilterTitle">Distance search</string>
+    <string name="SettingsDistanceFilterSummary">Switch limitation on for searching catering by distance (km) from the set point.</string>
+</resources>

@@ -1,18 +1,18 @@
 <resources>
-    <string name="app_name">CafeRate</string>
+    <string name="app_name" translatable="false">CafeRate</string>
     <string name="title_home">Дом</string>
     <string name="title_list">Список</string>
     <string name="title_search">Поиск</string>
     <string name="title_review">Отзыв</string>
     <string name="title_settings">Настройки</string>
 
-    <string name="title_activity_main">MainActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="title_activity_main" translatable="false">MainActivity</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
+    <string name="action_settings" translatable="false">Settings</string>
 
     <string name="menu_home">Выбор по типу</string>
     <string name="menu_by_map">Показать на карте</string>
@@ -52,12 +52,12 @@
     <string name="SettingsDefaultCity">Москва</string>
     <string name="SettingsDistanceTitle">Ограничение дальности</string>
     <string name="SettingsDistanceSummary">Искать в пределах N*100 m</string>
-    <string name="SettingsDefaultDistance">50</string>
-    <string name="COUNTRY_KEY">country</string>
-    <string name="CITY_KEY">city</string>
-    <string name="DISTANCE_KEY">distance</string>
+    <string name="SettingsDefaultDistance" translatable="false">50</string>
+    <string name="COUNTRY_KEY" translatable="false">country</string>
+    <string name="CITY_KEY" translatable="false">city</string>
+    <string name="DISTANCE_KEY" translatable="false">distance</string>
     <string name="SettingsDistanceFilterTitle">Искать по расстоянию</string>
     <string name="SettingsDistanceFilterSummary">Включает ограничение поиска общепита по расстоянию (в км) от установленной точки</string>
-    <string name="DISTANCEFILTER_KEY">DistanceFilter</string>
+    <string name="DISTANCEFILTER_KEY" translatable="false">DistanceFilter</string>
 
 </resources>
