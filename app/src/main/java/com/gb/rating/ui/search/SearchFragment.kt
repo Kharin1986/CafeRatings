@@ -94,7 +94,7 @@ class SearchFragment : Fragment() {
         map.setMultiTouchControls(true)
 
         val mapController: IMapController
-        mapController = map.getController()!!
+        mapController = map.controller
         mapController.zoomTo(14, 1)
 
         val mGpsMyLocationProvider = GpsMyLocationProvider(activity)
@@ -104,12 +104,12 @@ class SearchFragment : Fragment() {
 
         val icon = BitmapFactory.decodeResource(resources, R.drawable.ic_menu_compass)
         mLocationOverlay.setPersonIcon(icon)
-        map.getOverlays().add(mLocationOverlay)
+        map.overlays.add(mLocationOverlay)
 
         mLocationOverlay.runOnFirstFix {
             UIhandler.post {
-                if (centerPoint == null) centerPoint = mLocationOverlay.getMyLocation()
-                map.getController().animateTo(centerPoint, 15.0, 100L)
+                if (centerPoint == null) centerPoint = mLocationOverlay.myLocation
+                map.controller.animateTo(centerPoint, 15.0, 100L)
             }
         }
     }
@@ -117,8 +117,8 @@ class SearchFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if (centerPoint != null) {
-            outState.putDouble("latCenterPoint", centerPoint!!.getLatitude())
-            outState.putDouble("lonCenterPoint", centerPoint!!.getLongitude())
+            outState.putDouble("latCenterPoint", centerPoint!!.latitude)
+            outState.putDouble("lonCenterPoint", centerPoint!!.longitude)
         }
     }
 
