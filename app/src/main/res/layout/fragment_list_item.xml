@@ -50,6 +50,7 @@
                 tools:text="Название Заведения" />
 
             <CheckBox
+                android:id="@+id/heartselector"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:button="@null"
@@ -60,9 +61,9 @@
             <TextView
                 android:id="@+id/descriptionCafe_FragmentList"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="#FFFFFF"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintStart_toStartOf="@+id/ratingBar_FragmentList"
                 app:layout_constraintTop_toBottomOf="@id/nameCafe_FragmentList"
                 tools:text="Описание заведения, оказываемые услуги и т.п. Описание оказываемых услуг" />
@@ -73,7 +74,7 @@
                 android:layout_height="wrap_content"
                 tools:text="ул. Луначарского, 43"
                 android:textColor="#FFFFFF"
-                android:textSize="10sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintLeft_toLeftOf="@id/ratingBar_FragmentList"
                 app:layout_constraintBottom_toTopOf="@id/ratingBar_FragmentList"/>
 
@@ -83,7 +84,7 @@
                 android:layout_height="wrap_content"
                 tools:text="3.5 км"
                 android:textColor="#FFFFFF"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="@id/address_FragmentList"/>
 
