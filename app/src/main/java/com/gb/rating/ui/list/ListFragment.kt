@@ -14,7 +14,7 @@ import com.gb.rating.ui.ViewModelMain
 
 
 class ListFragment : Fragment() {
-    var activityViewModel : ViewModelMain? = null
+    lateinit var activityViewModel : ViewModelMain
     var mViewModel : ListViewModel? = null
 
     override fun onCreateView(
@@ -34,7 +34,7 @@ class ListFragment : Fragment() {
 
         mViewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
         activity?.let { fragmentActivity ->  activityViewModel = ViewModelProviders.of(fragmentActivity).get(ViewModelMain::class.java)}
-        activityViewModel?.cafeList?.observe(this, Observer {it?.let {
+        activityViewModel.cafelist().observe(this, Observer {it?.let {
             adapter.refreshList(it)
         }}) //подписка на обновление листа
     }

@@ -12,13 +12,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
-import com.gb.rating.models.utils.MainApplication
 import com.gb.rating.ui.ViewModelMain
 import com.gb.rating.ui.settings.*
 
 class MainActivity : AppCompatActivity() {
     var navController: NavController? = null
-    var viewModelMain: ViewModelMain? = null
+    lateinit var viewModelMain: ViewModelMain
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViewModel() {
         viewModelMain = ViewModelProviders.of(this)[ViewModelMain::class.java]
-        viewModelMain?.ourSearchProperties?.observe(this, Observer {
+        viewModelMain.ourSearchProperties().observe(this, Observer {
             it?.let {
                 if (it.action != INITIATION_ACTION)
                     viewModelMain?.refreshCafeList()
@@ -59,37 +58,44 @@ class MainActivity : AppCompatActivity() {
 
     // Кнопки домашней страницы)
     fun onRestClick(view: View) {
-        viewModelMain?.ourSearchProperties?.value =
+        viewModelMain.ourSearchProperties_update(
             initialSearchProperties().updateType(RESTAURANT_TYPE)
+        )
         navController!!.navigate(R.id.navigation_list)
     }
 
     fun onBarClick(view: View) {
-        viewModelMain?.ourSearchProperties?.value = initialSearchProperties().updateType(BAR_TYPE)
-
+        viewModelMain.ourSearchProperties_update(
+            initialSearchProperties().updateType(BAR_TYPE)
+        )
         navController!!.navigate(R.id.navigation_list)
     }
 
     fun onTopClick(view: View) {
-        viewModelMain?.ourSearchProperties?.value =
+        viewModelMain.ourSearchProperties_update(
             initialSearchProperties().addFilter_RatingMoreOrEquel(4.5f)
+        )
         navController!!.navigate(R.id.navigation_list)
     }
 
     fun onFavClick(view: View) {
-        viewModelMain?.ourSearchProperties?.value =
+        viewModelMain.ourSearchProperties_update(
             initialSearchProperties().addFilter_Favorites(true)
+        )
         navController!!.navigate(R.id.navigation_list)
     }
 
     fun onCafeClick(view: View) {
-        viewModelMain?.ourSearchProperties?.value = initialSearchProperties().updateType(CAFE_TYPE)
+        viewModelMain.ourSearchProperties_update(
+            initialSearchProperties().updateType(CAFE_TYPE)
+        )
         navController!!.navigate(R.id.navigation_list)
     }
 
     fun onFastClick(view: View) {
-        viewModelMain?.ourSearchProperties?.value =
+        viewModelMain.ourSearchProperties_update(
             initialSearchProperties().updateType(FASTFOOD_TYPE)
+        )
         navController!!.navigate(R.id.navigation_list)
     }
 
