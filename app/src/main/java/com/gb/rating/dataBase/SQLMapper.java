@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.gb.rating.models.CafeItem;
+import com.gb.rating.ui.settings.OurSearchPropertiesValue;
+import com.gb.rating.ui.settings.SearchUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,11 +27,17 @@ public class SQLMapper {
         item.setLoc(cursor.getString(9));
         item.setWTime(cursor.getString(10));
         item.setCafeId(cursor.getString(11));
-        item.setLatitude(cursor.getInt(12));
-        item.setLongitude(cursor.getInt(13));
+        item.setLatitude(cursor.getFloat(12));
+        item.setLongitude(cursor.getFloat(13));
         item.setDeleted(cursor.getInt(14) == 1);
         item.setFav(cursor.getInt(17) == 1);
+        double dist = SearchUtils.countDistanceToAnotherPoint(new OurSearchPropertiesValue.MyPoint(),new OurSearchPropertiesValue.MyPoint(item.getLatitude(),item.getLongitude()));
+        item.setDistance(MyRound(dist));
         return item;
+    }
+
+    private static double MyRound(double f){
+        return ((double) Math.round(f*10))/10;
     }
 
     public static ContentValues convert(CafeItem item) {
