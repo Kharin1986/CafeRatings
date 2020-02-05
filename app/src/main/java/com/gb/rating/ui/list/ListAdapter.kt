@@ -47,8 +47,8 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
             var sb = java.lang.StringBuilder()
             sb.append("ул. ")
                 .append(item.street)
-                .append(", ")
-                .append(item.home)
+//                .append(", ")
+//                .append(item.home)
 
             return sb.toString()
         }
