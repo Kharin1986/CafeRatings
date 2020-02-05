@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardBackgroundColor="@color/back_item"
+    tools:cardBackgroundColor="@color/colorBack"
     android:layout_margin="8dp"
-    app:cardCornerRadius="6dp">
+    app:cardElevation="0dp"
+    app:cardCornerRadius="9dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,28 +40,32 @@
 
             <TextView
                 android:id="@+id/nameCafe_FragmentList"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Название Заведения"
-                android:textSize="16sp"
-                android:textAlignment="center"
-                android:textColor="#000000"
+                android:textAlignment="viewStart"
+                android:textColor="#FFFFFF"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="@+id/ratingBar_FragmentList"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                tools:text="Название Заведения" />
 
             <TextView
                 android:id="@+id/descriptionCafe_FragmentList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Описание заведения, оказываемые услуги и т.п. Описание оказываемых услуг"
+                android:textColor="#FFFFFF"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="@+id/ratingBar_FragmentList"
                 app:layout_constraintTop_toBottomOf="@id/nameCafe_FragmentList"
-                app:layout_constraintStart_toStartOf="parent"/>
+                tools:text="Описание заведения, оказываемые услуги и т.п. Описание оказываемых услуг" />
 
             <TextView
-                android:id="@+id/typeCafe_FragmentList"
+                android:id="@+id/address_FragmentList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="фастфуд"
+                tools:text="ул. Луначарского, 43"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
                 app:layout_constraintLeft_toLeftOf="@id/ratingBar_FragmentList"
                 app:layout_constraintBottom_toTopOf="@id/ratingBar_FragmentList"/>
 
@@ -68,9 +73,11 @@
                 android:id="@+id/distanceToCafe_FragmentList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3.5 км"
+                tools:text="3.5 км"
+                android:textColor="#FFFFFF"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/ratingBar_FragmentList"/>
+                app:layout_constraintBottom_toBottomOf="@id/address_FragmentList"/>
 
             <RatingBar
                 android:id="@+id/ratingBar_FragmentList"
