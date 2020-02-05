@@ -49,6 +49,14 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Название Заведения" />
 
+            <CheckBox
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:button="@null"
+                android:background="@drawable/heat_selector"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
             <TextView
                 android:id="@+id/descriptionCafe_FragmentList"
                 android:layout_width="wrap_content"

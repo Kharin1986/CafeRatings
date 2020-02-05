@@ -7,5 +7,5 @@
     <color name="colorBack">#565C60</color>
     <color name="b_cancel_clr">#e06c81</color>
     <color name="b_send_clr">#61c3a0</color>
-    <color name="back_item">#1AFFFFFF</color>
+    <color name="back_item">#33FFFFFF</color>
 </resources>
