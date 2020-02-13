@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_list.*
-import android.R
 import com.gb.rating.ui.ViewModelMain
 
 
@@ -27,7 +26,7 @@ class ListFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        //инициализируем адаптер и присваеваем его списку
+        //инициализируем адаптер и присваиваем его списку
         val adapter = ListAdapter()
         cafeListRecycler_FragmentList?.layoutManager = LinearLayoutManager(activity)
         cafeListRecycler_FragmentList?.adapter = adapter

@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
                 if (it.action != INITIATION_ACTION)
                     viewModelMain?.refreshCafeList()
             }
-        }) //TODO: как перенести обозреватель LiveData в ViewModel ?
+        })
     }
 
     private fun initNavControllerAndActionBar() {

@@ -1,21 +1,34 @@
 package com.gb.rating.ui.list
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
+
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.gb.rating.R
 import com.gb.rating.models.CafeItem
+import com.gb.rating.ui.info.CafeInfoFragment
+import com.google.android.material.internal.ContextUtils.getActivity
+
 import kotlinx.android.synthetic.main.fragment_list_item.view.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
 
-class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
+
+class ListAdapter(val onItemClick: ((CafeItem)-> Unit)? = null) : RecyclerView.Adapter<ListAdapter.ListHolder>(){
 
     private var cafeItems : List<CafeItem> = ArrayList()
 
+
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListHolder {
-        return ListHolder(LayoutInflater.from(parent.context).inflate(com.gb.rating.R.layout.fragment_list_item,
+        return ListHolder(LayoutInflater.from(parent.context).inflate(R.layout.fragment_list_item,
             parent, false))
     }
 
@@ -30,7 +43,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
         notifyDataSetChanged()
     }
 
-    class ListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind (item: CafeItem) = with(itemView) {
             nameCafe_FragmentList.text = item.name
@@ -41,7 +54,14 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
 
             // установка картинки с Firebase Storage через реквизит cafeItem.cafeId
             setImage(item)
-       }
+            // по нажатию открываем фрагмент с отзывами и информацией на заведение
+
+
+            itemView.setOnClickListener {
+               Log.d("AAA",itemView.nameCafe_FragmentList.text.toString())
+
+            }
+        }
 
         // установка картинки с Firebase Storage через реквизит cafeItem.cafeId
         private fun View.setImage(item: CafeItem) {

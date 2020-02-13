@@ -32,4 +32,9 @@
         android:name="com.gb.rating.ui.review.QrScanFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_qr_scan" />
+    <fragment
+        android:id="@+id/cafeInfoFragment"
+        android:name="com.gb.rating.ui.info.CafeInfoFragment"
+        android:label="fragment_cafe_info"
+        tools:layout="@layout/fragment_cafe_info" />
 </navigation>
