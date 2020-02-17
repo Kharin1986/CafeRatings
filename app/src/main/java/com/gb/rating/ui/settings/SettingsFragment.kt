@@ -3,17 +3,19 @@ package com.gb.rating.ui.settings
 import android.os.Bundle
 
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.*
 import com.gb.rating.MainActivity
 import com.gb.rating.R
+import com.gb.rating.models.OurSearchPropertiesValue
+import com.gb.rating.models.countDistance
 
 class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var settingsViewModel: SettingsViewModel
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.main_settings, rootKey)
-        settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel::class.java)
+        settingsViewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
         settingsViewModel.text.observe(this, Observer {})
         initListerners()
     }
@@ -28,7 +30,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             findPreference(activity?.resources!!.getString(R.string.COUNTRY_KEY))
         chooseCountry?.setOnPreferenceChangeListener { _, newValue ->
             updateOurSearchProperties(
-                takeOurSearchPropertiesValue().updateCountry(newValue as String).updateAction(RELOAD_DATABASE_ACTION)
+                takeOurSearchPropertiesValue().updateCountry(newValue as String)
             )
             true
         }
@@ -38,7 +40,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             findPreference(activity?.resources!!.getString(R.string.CITY_KEY))
         chooseCity?.setOnPreferenceChangeListener { _, newValue ->
             updateOurSearchProperties(
-                takeOurSearchPropertiesValue().updateCity(newValue as String).updateAction(RELOAD_DATABASE_ACTION)
+                takeOurSearchPropertiesValue().updateCity(newValue as String)
             )
             true
         }
@@ -50,7 +52,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             val realDistance: Double = countDistance(newValue)
             limitDistance?.summary = prepareDistanceTitle(realDistance)
             updateOurSearchProperties(
-                takeOurSearchPropertiesValue().updateDistance((realDistance)).updateAction("")
+                takeOurSearchPropertiesValue().updateDistance((realDistance))
             )
             true
         }

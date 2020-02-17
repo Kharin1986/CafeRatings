@@ -7,7 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gb.rating.models.CafeItem;
-import com.gb.rating.ui.settings.OurSearchPropertiesValue;
+import com.gb.rating.models.OurSearchPropertiesValue;
 
 import java.io.Closeable;
 import java.io.IOException;

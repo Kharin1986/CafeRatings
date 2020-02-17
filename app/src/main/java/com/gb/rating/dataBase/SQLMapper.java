@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.gb.rating.models.CafeItem;
-import com.gb.rating.ui.settings.OurSearchPropertiesValue;
-import com.gb.rating.ui.settings.SearchUtils;
+import com.gb.rating.models.OurSearchPropertiesValue;
+import com.gb.rating.models.SearchUtils;
 
 import org.jetbrains.annotations.NotNull;
 

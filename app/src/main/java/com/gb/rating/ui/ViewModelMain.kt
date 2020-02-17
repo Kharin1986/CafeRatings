@@ -3,19 +3,18 @@ package com.gb.rating.ui
 import androidx.lifecycle.*
 import com.gb.rating.dataBase.CafeDataSource
 import com.gb.rating.fireBase_RealTime.repository.Cafe_FB_Impl
-import com.gb.rating.models.CafeItem
+import com.gb.rating.models.*
 import com.gb.rating.models.Firebase_Auth.CommonAuthFunctions
 import com.gb.rating.models.usercase.CafeInteractor
 import com.gb.rating.models.utils.MainApplication
-import com.gb.rating.ui.settings.*
 import com.google.firebase.database.FirebaseDatabase
 import io.reactivex.MaybeObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import java.util.ArrayList
 
 
@@ -23,9 +22,10 @@ class ViewModelMain : ViewModel() {
     private val cafeList: MutableLiveData<List<CafeItem>> = MutableLiveData()
     private val ourSearchProperties: MutableLiveData<OurSearchPropertiesValue> = MutableLiveData()
     // CafeInteractor - нужен сразу
-    private val db = FirebaseDatabase.getInstance()
+    private val db by lazy {FirebaseDatabase.getInstance()}
     private val repository = Cafe_FB_Impl(db, null)
     var cafeInteractor = CafeInteractor(repository)
+    lateinit var ourSearchPropertiesObserver : Observer<OurSearchPropertiesValue>
 
     fun cafelist() : LiveData<List<CafeItem>> = cafeList
     fun ourSearchProperties() : LiveData<OurSearchPropertiesValue> = ourSearchProperties
@@ -33,18 +33,31 @@ class ViewModelMain : ViewModel() {
     fun ourSearchProperties_update(intValue: OurSearchPropertiesValue) {ourSearchProperties.value = intValue}
 
     init {
-        //db.setPersistenceEnabled(true)
+        db.setPersistenceEnabled(true)
         CommonAuthFunctions.checkAuth()
+        val ourSearchPropertiesValue: OurSearchPropertiesValue = initOurSearchProperties()
+        initDatabaseUpdater(ourSearchPropertiesValue.country, ourSearchPropertiesValue.city,false) //ассинхронно, IO
+    }
 
+    private fun initOurSearchProperties(): OurSearchPropertiesValue {
         val ourSearchPropertiesValue: OurSearchPropertiesValue =
-            initialSearchProperties().updateAction(INITIATION_ACTION) //не тратим время на старт Активити, помечаем ourSearchPropertiesValue INITIATION_ACTION
+            initialSearchProperties()
+                .updateAction(INITIATION_ACTION) //не тратим время на старт Активити, помечаем ourSearchPropertiesValue INITIATION_ACTION
         ourSearchProperties.value = ourSearchPropertiesValue
         refreshCafeList() //ассинхронно, IO,
-        initDatabaseUpdater(
-            ourSearchPropertiesValue.country,
-            ourSearchPropertiesValue.city,
-            true
-        ) //ассинхронно, IO
+        ourSearchPropertiesObserver = Observer {
+            it?.let {
+                if (it.action != INITIATION_ACTION)
+                    refreshCafeList()
+            }
+        }
+        ourSearchProperties.observeForever(ourSearchPropertiesObserver) // в onCleared() - удаляется
+        return ourSearchPropertiesValue
+    }
+
+    override fun onCleared() {
+        ourSearchProperties.removeObserver(ourSearchPropertiesObserver)
+        super.onCleared()
     }
 
     private fun initDatabaseUpdater(country: String, city: String, removeAll : Boolean = false) {
@@ -89,7 +102,7 @@ class ViewModelMain : ViewModel() {
     }
 
     fun refreshCafeList() {
-        var ourSearchPropertiesValue = ourSearchProperties.value;
+        val ourSearchPropertiesValue = ourSearchProperties.value;
 
         if (ourSearchPropertiesValue?.action.equals(RELOAD_DATABASE_ACTION)) {
 
@@ -102,11 +115,11 @@ class ViewModelMain : ViewModel() {
             cafeList.value =
                 withContext(Dispatchers.IO) { readAllCafeWithContext(ourSearchPropertiesValue) }
 
-            if (cafeList?.value?.size!! > 0) {
+            if (cafeList.value?.size!! > 0) {
                 //временно
                 val dbHelperW = CafeDataSource(MainApplication.applicationContext())
                 dbHelperW.openW()
-                dbHelperW.setCafeFav(cafeList?.value?.get(0), true)
+                dbHelperW.setCafeFav(cafeList.value?.get(0), true)
             }
         }
     }

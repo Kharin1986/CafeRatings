@@ -1,6 +1,6 @@
 @file:JvmName("SearchUtils")
 
-package com.gb.rating.ui.settings
+package com.gb.rating.models
 
 import androidx.preference.PreferenceManager
 import com.gb.rating.R
@@ -25,7 +25,7 @@ const val KM_PER_DEGREE = 111.134861111
 const val EARTH_RADIUS = 6371.0
 
 
-class OurSearchPropertiesValue(
+data class OurSearchPropertiesValue(
     var country: String = "",
     var city: String = "",
     var type: String = "",
@@ -49,13 +49,13 @@ class OurSearchPropertiesValue(
 
     fun updateCountry(country: String): OurSearchPropertiesValue {
         this.country = country
-        updateAction("")
+        updateAction(RELOAD_DATABASE_ACTION)
         return this
     }
 
     fun updateCity(city: String): OurSearchPropertiesValue {
         this.city = city
-        updateAction("")
+        updateAction(RELOAD_DATABASE_ACTION)
         return this
     }
 
@@ -79,13 +79,23 @@ class OurSearchPropertiesValue(
 
     fun addFilter_RatingMoreOrEquel(rating: Float): OurSearchPropertiesValue {
         otherFilters = otherFilters.filter { it.field != RATING_FIELD } as MutableList<MyFilter>
-        otherFilters.add(MyFilter(RATING_FIELD, "$RATING_FIELD >= $rating"))
+        otherFilters.add(
+            MyFilter(
+                RATING_FIELD,
+                "$RATING_FIELD >= $rating"
+            )
+        )
         return this
     }
 
     fun addFilter_Favorites(fav: Boolean = true): OurSearchPropertiesValue {
         otherFilters = otherFilters.filter { it.field != FAV_FIELD } as MutableList<MyFilter>
-        otherFilters.add(MyFilter(FAV_FIELD, "IFNULL($FAV_FIELD,0) = ${if (fav) 1 else 0}"))
+        otherFilters.add(
+            MyFilter(
+                FAV_FIELD,
+                "IFNULL($FAV_FIELD,0) = ${if (fav) 1 else 0}"
+            )
+        )
         return this
     }
 
@@ -97,7 +107,7 @@ class OurSearchPropertiesValue(
                 MyFilter(
                     LOCATION_FIELD,
                     "$LATITUDE_FIELD BETWEEN ${(centerPoint!!.latitude - distanceInDegrees)} AND ${(centerPoint!!.latitude + distanceInDegrees)}" +
-                            " AND ${LONGITUDE_FIELD} BETWEEN ${(centerPoint!!.longityde - distanceInDegrees)} AND ${(centerPoint!!.longityde + distanceInDegrees)}"
+                            " AND $LONGITUDE_FIELD BETWEEN ${(centerPoint!!.longityde - distanceInDegrees)} AND ${(centerPoint!!.longityde + distanceInDegrees)}"
                 )
             )
         }
@@ -116,7 +126,12 @@ fun initialSearchProperties(): OurSearchPropertiesValue {
     val settingsCountry =
         prefs.getString(context.resources.getString(R.string.COUNTRY_KEY), "").toString()
 
-    return OurSearchPropertiesValue(settingsCountry, settingsCity, "", countDistance())
+    return OurSearchPropertiesValue(
+        settingsCountry,
+        settingsCity,
+        "",
+        countDistance()
+    )
 }
 
 fun countDistance(newValue: Any? = null): Double {
@@ -149,6 +164,6 @@ fun countDistanceToAnotherPoint(
     require(!(anotherPoint.latitude.equals(0) || anotherPoint.longityde.equals(0))) { "countDistanceToAnotherPoint" }
     require(!(centerPoint.latitude.equals(0) || centerPoint.longityde.equals(0))) { "countDistanceToAnotherPoint" }
 
-    return EARTH_RADIUS*sqrt(((anotherPoint.latitude - centerPoint.latitude)*Math.PI/180).pow(2.0) + ((anotherPoint.longityde - centerPoint.longityde)*Math.PI/180).pow(2.0))
+    return EARTH_RADIUS *sqrt(((anotherPoint.latitude - centerPoint.latitude)*Math.PI/180).pow(2.0) + ((anotherPoint.longityde - centerPoint.longityde)*Math.PI/180).pow(2.0))
 }
 
