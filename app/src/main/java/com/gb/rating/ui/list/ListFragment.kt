@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_list.*
 import android.R
+import androidx.lifecycle.ViewModelProvider
 import com.gb.rating.ui.ViewModelMain
 
 
@@ -32,8 +32,8 @@ class ListFragment : Fragment() {
         cafeListRecycler_FragmentList?.layoutManager = LinearLayoutManager(activity)
         cafeListRecycler_FragmentList?.adapter = adapter
 
-        mViewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
-        activity?.let { fragmentActivity ->  activityViewModel = ViewModelProviders.of(fragmentActivity).get(ViewModelMain::class.java)}
+        mViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
+        activity?.let { fragmentActivity ->  activityViewModel = ViewModelProvider(fragmentActivity).get(ViewModelMain::class.java)}
         activityViewModel.cafelist().observe(this, Observer {it?.let {
             adapter.refreshList(it)
         }}) //подписка на обновление листа

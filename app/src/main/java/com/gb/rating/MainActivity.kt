@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
+import com.gb.rating.models.*
 import com.gb.rating.ui.ViewModelMain
-import com.gb.rating.ui.settings.*
 
 class MainActivity : AppCompatActivity() {
     var navController: NavController? = null
@@ -29,13 +28,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        viewModelMain = ViewModelProviders.of(this)[ViewModelMain::class.java]
-        viewModelMain.ourSearchProperties().observe(this, Observer {
-            it?.let {
-                if (it.action != INITIATION_ACTION)
-                    viewModelMain?.refreshCafeList()
-            }
-        }) //TODO: как перенести обозреватель LiveData в ViewModel ?
+        viewModelMain = ViewModelProvider(this).get(ViewModelMain::class.java)
     }
 
     private fun initNavControllerAndActionBar() {

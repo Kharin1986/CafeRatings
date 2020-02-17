@@ -25,11 +25,12 @@ public class ReviewSendDialog extends DialogFragment {
         Button okButton = dialogView.findViewById(R.id.ok_button);
         okButton.setOnClickListener(v -> {
             dismiss();
-            Intent parentActivityIntent = new Intent(getContext(), MainActivity.class);
-            parentActivityIntent.addFlags(
-                    Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                            Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(parentActivityIntent);
+            ((MainActivity) getActivity()).getNavController().navigate(R.id.navigation_home);
+//            Intent parentActivityIntent = new Intent(getContext(), MainActivity.class);
+//            parentActivityIntent.addFlags(
+//                    Intent.FLAG_ACTIVITY_CLEAR_TOP |
+//                            Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(parentActivityIntent);
         });
         builder.setView(dialogView);
         return builder.create();

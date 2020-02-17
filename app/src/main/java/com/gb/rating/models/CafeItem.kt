@@ -1,7 +1,7 @@
 
 package com.gb.rating.models
 
-class CafeItem(
+data class CafeItem(
     var img: Int=0,
     var name: String = "",
     var type: String = "",

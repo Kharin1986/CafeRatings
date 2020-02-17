@@ -61,7 +61,8 @@ public class ReviewFragment extends Fragment {
 
             if (chosenCafeType != null & kitchenRat != 0 & serviceRat != 0 & ambianceRat != 0) {
                 ReviewSendDialog reviewSendDialog = new ReviewSendDialog();
-                reviewSendDialog.show(getFragmentManager(), "TAG");
+                if (getActivity() != null)
+                    reviewSendDialog.show(getActivity().getSupportFragmentManager(), "TAG");
 
                 //проверка
                 System.out.println(kitchenRat + "\n" + serviceRat + "\n" + ambianceRat + "\n" + reviewTextStr + "\n" + chosenCafeType);
