@@ -1,21 +1,29 @@
 package com.gb.rating.ui.list
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.gb.rating.MainActivity
+import com.gb.rating.R
 import com.gb.rating.models.CafeItem
+import com.gb.rating.ui.review.ReviewFragment
 import kotlinx.android.synthetic.main.fragment_list_item.view.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
 
-class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
+class ListAdapter(val onItemClick: ((CafeItem)-> Unit)? = null) : RecyclerView.Adapter<ListAdapter.ListHolder>(){
 
     private var cafeItems : List<CafeItem> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListHolder {
-        return ListHolder(LayoutInflater.from(parent.context).inflate(com.gb.rating.R.layout.fragment_list_item,
+        return ListHolder(LayoutInflater.from(parent.context).inflate(R.layout.fragment_list_item,
             parent, false))
     }
 
@@ -30,7 +38,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
         notifyDataSetChanged()
     }
 
-    class ListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind (item: CafeItem) = with(itemView) {
             nameCafe_FragmentList.text = item.name
@@ -42,10 +50,16 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListHolder>() {
 
             // установка картинки с Firebase Storage через реквизит cafeItem.cafeId
             setImage(item)
+
+            itemView.setOnClickListener {
+                onItemClick?.invoke(item)
+                Log.d("AAA",itemView.nameCafe_FragmentList.text.toString())
+
+            }
        }
 
         private fun buildAddress (item: CafeItem) : String {
-            var sb = java.lang.StringBuilder()
+            val sb = java.lang.StringBuilder()
             sb.append("ул. ")
                 .append(item.street)
 //                .append(", ")
