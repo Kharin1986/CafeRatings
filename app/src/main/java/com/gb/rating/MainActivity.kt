@@ -13,10 +13,12 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.gb.rating.models.*
 import com.gb.rating.ui.ViewModelMain
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     var navController: NavController? = null
-    lateinit var viewModelMain: ViewModelMain
+    val viewModelMain: ViewModelMain by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        viewModelMain = ViewModelProvider(this).get(ViewModelMain::class.java)
+        //viewModelMain = ViewModelProvider(this).get(ViewModelMain::class.java)
+        viewModelMain.toString()
     }
 
     private fun initNavControllerAndActionBar() {

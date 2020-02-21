@@ -10,14 +10,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_list.*
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import com.gb.rating.MainActivity
 import com.gb.rating.ui.ViewModelMain
 import com.gb.rating.ui.cafeInfo.CafeInfoFragment
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class ListFragment : Fragment() {
-    lateinit var activityViewModel : ViewModelMain
-    var mViewModel : ListViewModel? = null
+    val activityViewModel : ViewModelMain get()=(activity as MainActivity).viewModelMain
+    val mViewModel : ListViewModel by viewModel()
+    //val activityViewModel : ViewModelMain by viewModel()
     lateinit var adapter: ListAdapter
 
 
@@ -37,7 +39,7 @@ class ListFragment : Fragment() {
 
             val cafeInfoFragment = CafeInfoFragment()
 
-            val ft = fragmentManager!!.beginTransaction()
+            val ft = (activity as MainActivity).supportFragmentManager.beginTransaction()
             ft.replace(com.gb.rating.R.id.nav_host_fragment, cafeInfoFragment)
             ft.addToBackStack(null)
             ft.commit()
@@ -47,8 +49,8 @@ class ListFragment : Fragment() {
         cafeListRecycler_FragmentList?.layoutManager = LinearLayoutManager(activity)
         cafeListRecycler_FragmentList?.adapter = adapter
 
-        mViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
-        activity?.let { fragmentActivity ->  activityViewModel = ViewModelProvider(fragmentActivity).get(ViewModelMain::class.java)}
+        //mViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
+        mViewModel.viewState.observe(this, Observer {  })
         activityViewModel.cafelist().observe(this, Observer {it?.let {
             adapter.refreshList(it)
         }}) //подписка на обновление листа

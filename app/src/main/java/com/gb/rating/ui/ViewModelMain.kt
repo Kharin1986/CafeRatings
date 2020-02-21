@@ -105,9 +105,7 @@ class ViewModelMain : ViewModel() {
         val ourSearchPropertiesValue = ourSearchProperties.value;
 
         if (ourSearchPropertiesValue?.action.equals(RELOAD_DATABASE_ACTION)) {
-
             initDatabaseUpdater(ourSearchPropertiesValue?.country!!, ourSearchPropertiesValue.city, true)
-
             return
         }
 

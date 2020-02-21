@@ -11,4 +11,5 @@ import io.reactivex.disposables.Disposable
 import java.util.ArrayList
 
 class ListViewModel : ViewModel() {
+    val viewState = MutableLiveData<String>()
 }
