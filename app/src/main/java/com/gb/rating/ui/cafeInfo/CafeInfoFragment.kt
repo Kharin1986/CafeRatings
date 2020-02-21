@@ -5,9 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 
 import com.gb.rating.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CafeInfoFragment : Fragment() {
 
@@ -15,7 +15,7 @@ class CafeInfoFragment : Fragment() {
         fun newInstance() = CafeInfoFragment()
     }
 
-    private lateinit var viewModel: CafeInfoViewModel
+    private val model: CafeInfoViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +26,7 @@ class CafeInfoFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CafeInfoViewModel::class.java)
+        //viewModel = ViewModelProvider(this).get(CafeInfoViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

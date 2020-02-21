@@ -2,12 +2,10 @@ package com.gb.rating.ui
 
 import androidx.lifecycle.*
 import com.gb.rating.dataBase.CafeDataSource
-import com.gb.rating.fireBase_RealTime.repository.Cafe_FB_Impl
 import com.gb.rating.models.*
 import com.gb.rating.models.Firebase_Auth.CommonAuthFunctions
 import com.gb.rating.models.usercase.CafeInteractor
 import com.gb.rating.models.utils.MainApplication
-import com.google.firebase.database.FirebaseDatabase
 import io.reactivex.MaybeObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -18,13 +16,10 @@ import kotlinx.coroutines.launch
 import java.util.ArrayList
 
 
-class ViewModelMain : ViewModel() {
+class ViewModelMain (private val cafeInteractor : CafeInteractor) : ViewModel() {
     private val cafeList: MutableLiveData<List<CafeItem>> = MutableLiveData()
     private val ourSearchProperties: MutableLiveData<OurSearchPropertiesValue> = MutableLiveData()
     // CafeInteractor - нужен сразу
-    private val db by lazy {FirebaseDatabase.getInstance()}
-    private val repository = Cafe_FB_Impl(db, null)
-    var cafeInteractor = CafeInteractor(repository)
     lateinit var ourSearchPropertiesObserver : Observer<OurSearchPropertiesValue>
 
     fun cafelist() : LiveData<List<CafeItem>> = cafeList
@@ -33,8 +28,6 @@ class ViewModelMain : ViewModel() {
     fun ourSearchProperties_update(intValue: OurSearchPropertiesValue) {ourSearchProperties.value = intValue}
 
     init {
-        db.setPersistenceEnabled(true)
-        CommonAuthFunctions.checkAuth()
         val ourSearchPropertiesValue: OurSearchPropertiesValue = initOurSearchProperties()
         initDatabaseUpdater(ourSearchPropertiesValue.country, ourSearchPropertiesValue.city,false) //ассинхронно, IO
     }
@@ -69,7 +62,7 @@ class ViewModelMain : ViewModel() {
     }
 
     private fun updateInternalDatabase(country: String = "", city: String = "", removeAll : Boolean = false) {
-        cafeInteractor?.retrieveCafeList(country, city)
+        cafeInteractor.retrieveCafeList(country, city)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .doOnSuccess {

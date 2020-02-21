@@ -2,9 +2,10 @@ package com.gb.rating.models.utils
 
 import android.app.Application
 import android.content.Context
-import com.gb.rating.di.appModule
-import com.gb.rating.di.listFragment
-import com.gb.rating.di.main
+import com.gb.rating.di.*
+import com.gb.rating.models.Firebase_Auth.CommonAuthFunctions
+import com.google.firebase.database.FirebaseDatabase
+import org.koin.android.ext.android.inject
 import org.koin.core.context.startKoin
 
 
@@ -28,8 +29,11 @@ class MainApplication : Application() {
 
         startKoin {
             // declare modules
-            modules(listOf(appModule, main, listFragment))
+            modules(listOf(appModule, main, listFragment, cafeInfo, home, review, search, settings ))
         }
-        //startKoin(this, listOf(appModule))
+
+        val db : FirebaseDatabase by inject()
+        db.setPersistenceEnabled(true)
+        CommonAuthFunctions.checkAuth()
     }
 }

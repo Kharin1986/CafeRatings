@@ -35,10 +35,10 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class Cafe_FB_Impl implements CafeRepository {
-    public static final String CAFELIST_CATALOG = "CafeList";
-    public static final String TYPE_PROPERTY = "type";
-    public static final String RATING_PROPERTY = "rating";
-    public static final String CAFE_PROPERTIES_FILE_NAME = "cafeProperties.txt";
+    private static final String RATING_PROPERTY = "rating";
+    private static final String CAFE_PROPERTIES_FILE_NAME = "cafeProperties.txt";
+    private static final String CAFELIST_CATALOG = "CafeList";
+    private static final String TYPE_PROPERTY = "type";
     private Object anyapi = null;
     private FirebaseDatabase db;
 
@@ -49,7 +49,7 @@ public class Cafe_FB_Impl implements CafeRepository {
         this.anyapi = api;
     }
 
-    public static Function FromSnapshotToCafeItemFunction = new Function<DataSnapshot, List<CafeItem>>() {
+    private static Function FromSnapshotToCafeItemFunction = new Function<DataSnapshot, List<CafeItem>>() {
         @Override
         public List<CafeItem> apply(DataSnapshot dataSnapshot) throws Exception {
             List<CafeItem> cafeList = new ArrayList();
@@ -65,7 +65,7 @@ public class Cafe_FB_Impl implements CafeRepository {
 
 
     @NonNull
-    public static Maybe<List<CafeItem>> observeSingleValueEvent_CafeItemList(@NonNull final Query query) {
+    private static Maybe<List<CafeItem>> observeSingleValueEvent_CafeItemList(@NonNull final Query query) {
         return FrangSierraPlus.observeSingleValueEvent(query).map(FromSnapshotToCafeItemFunction);
     }
 

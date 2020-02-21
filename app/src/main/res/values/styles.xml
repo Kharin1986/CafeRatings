@@ -6,8 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+<!--        Для каждого элемента можно определить бэкграунд и прочее - ЭТО РАБОТАЕТ-->
+<!--        <item name="actionBarTheme">@style/AppThemeActionBar</item>-->
+<!--        <item name="toolbarStyle">@style/AppThemeActionBar</item>-->
+
     </style>
-	
+
+    <style name="AppThemeActionBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:background">@color/colorPrimaryDark</item>
+    </style>
+
 	<style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">#898d90</item>
         <item name="colorControlActivated">#FAFF00</item>
