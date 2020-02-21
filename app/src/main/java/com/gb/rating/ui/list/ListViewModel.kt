@@ -10,5 +10,6 @@ import io.reactivex.MaybeObserver
 import io.reactivex.disposables.Disposable
 import java.util.ArrayList
 
-class ListViewModel : ViewModel() {
+class ListViewModel() : ViewModel() {
+    val viewState = MutableLiveData<String>()
 }

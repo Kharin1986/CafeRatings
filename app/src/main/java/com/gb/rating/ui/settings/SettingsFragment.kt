@@ -9,14 +9,13 @@ import com.gb.rating.MainActivity
 import com.gb.rating.R
 import com.gb.rating.models.OurSearchPropertiesValue
 import com.gb.rating.models.countDistance
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
-    private lateinit var settingsViewModel: SettingsViewModel
+    private val settingsViewModel : SettingsViewModel by viewModel()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.main_settings, rootKey)
-        settingsViewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
-        settingsViewModel.text.observe(this, Observer {})
         initListerners()
     }
 
