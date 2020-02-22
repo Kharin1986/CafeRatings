@@ -18,11 +18,19 @@ import java.util.ArrayList
 
 class ViewModelMain (private val cafeInteractor : CafeInteractor) : ViewModel() {
     private val cafeList: MutableLiveData<List<CafeItem>> = MutableLiveData()
+    //Kharin 22.02.2020
+    private val cafeReviewList: MutableLiveData<List<CafeReviewItem>> = MutableLiveData() //Kharin 22.02.2020
+
+
     private val ourSearchProperties: MutableLiveData<OurSearchPropertiesValue> = MutableLiveData()
     // CafeInteractor - нужен сразу
     lateinit var ourSearchPropertiesObserver : Observer<OurSearchPropertiesValue>
 
     fun cafelist() : LiveData<List<CafeItem>> = cafeList
+
+    //Kharin 22.02.2020
+    fun cafeReviewList() : LiveData<List<CafeReviewItem>> = cafeReviewList //Kharin 22.02.2020
+
     fun ourSearchProperties() : LiveData<OurSearchPropertiesValue> = ourSearchProperties
     fun ourSearchPropertiesValue() : OurSearchPropertiesValue = ourSearchProperties.value!!
     fun ourSearchProperties_update(intValue: OurSearchPropertiesValue) {ourSearchProperties.value = intValue}

@@ -51,11 +51,7 @@ class ListAdapter(val onItemClick: ((CafeItem)-> Unit)? = null) : RecyclerView.A
             // установка картинки с Firebase Storage через реквизит cafeItem.cafeId
             setImage(item)
 
-            itemView.setOnClickListener {
-                onItemClick?.invoke(item)
-                Log.d("AAA",itemView.nameCafe_FragmentList.text.toString())
-
-            }
+            itemView.setOnClickListener { onItemClick?.invoke(item) }
        }
 
         private fun buildAddress (item: CafeItem) : String {

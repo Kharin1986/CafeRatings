@@ -60,4 +60,8 @@
     <string name="SettingsDistanceFilterSummary">Включает ограничение поиска общепита по расстоянию (в км) от установленной точки</string>
     <string name="DISTANCEFILTER_KEY" translatable="false">DistanceFilter</string>
 
+    <string name="author">Автор</string>
+    <string name="user_icon">Статус</string>
+    <string name="user_rating">+200</string>
+
 </resources>
