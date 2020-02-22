@@ -8,9 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_list.*
-import android.util.Log
-import androidx.lifecycle.ViewModelProvider
-import com.gb.rating.MainActivity
 import com.gb.rating.ui.ViewModelMain
 import com.gb.rating.ui.cafeInfo.CafeInfoFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -22,7 +19,7 @@ class ListFragment : Fragment() {
     private val mViewModel: ListViewModel by viewModel()
     private val activityViewModel: ViewModelMain by sharedViewModel()
     private lateinit var adapter: ListAdapter
-    private val TAG = "BBB"
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,15 +29,15 @@ class ListFragment : Fragment() {
         return inflater.inflate(com.gb.rating.R.layout.fragment_list, container, false)
     }
 
-
     override fun onStart() {
         super.onStart()
         //инициализируем адаптер и присваеваем его списку
         adapter = ListAdapter {
-            Log.d(TAG, it.name)
+            // при нажатии на карточку переходим на ссответствующие отзывы, доступ
+            // получить можно здесь, например, it.cafeId
+            //TODO Использовать фильтр it.cafeId
             val cafeInfoFragment = CafeInfoFragment()
-
-            val ft = (activity as MainActivity).supportFragmentManager.beginTransaction()
+            val ft = activity!!.supportFragmentManager.beginTransaction()
             ft.replace(com.gb.rating.R.id.nav_host_fragment, cafeInfoFragment)
             ft.addToBackStack(null)
             ft.commit()
@@ -48,7 +45,6 @@ class ListFragment : Fragment() {
         cafeListRecycler_FragmentList?.layoutManager = LinearLayoutManager(activity)
         cafeListRecycler_FragmentList?.adapter = adapter
 
-        //mViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
         mViewModel.viewState.observe(this, Observer { })
         activityViewModel.cafelist().observe(this, Observer {
             it?.let {
@@ -56,5 +52,4 @@ class ListFragment : Fragment() {
             }
         }) //подписка на обновление листа
     }
-
 }

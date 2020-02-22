@@ -46,4 +46,8 @@
     <string name="SettingsDistanceSummary">Find around N*100 m</string>
     <string name="SettingsDistanceFilterTitle">Distance search</string>
     <string name="SettingsDistanceFilterSummary">Switch limitation on for searching catering by distance (km) from the set point.</string>
+
+    <string name="author">Author</string>
+    <string name="user_icon">Status</string>
+    <string name="user_rating">+200</string>
 </resources>
