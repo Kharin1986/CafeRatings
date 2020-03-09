@@ -46,7 +46,8 @@ val listFragment = module {
 }
 
 val cafeInfo = module {
-    viewModel {CafeInfoViewModel(get())}
+ //   viewModel {CafeInfoViewModel(get())} // убрано для демонстрации 27.02 Kharin
+    viewModel {CafeInfoViewModel()}
 }
 
 val home = module {

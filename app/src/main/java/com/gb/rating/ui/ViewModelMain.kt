@@ -3,7 +3,6 @@ package com.gb.rating.ui
 import androidx.lifecycle.*
 import com.gb.rating.dataBase.CafeDataSource
 import com.gb.rating.models.*
-import com.gb.rating.models.Firebase_Auth.CommonAuthFunctions
 import com.gb.rating.models.usercase.CafeInteractor
 import com.gb.rating.models.utils.MainApplication
 import io.reactivex.MaybeObserver
@@ -19,7 +18,7 @@ import java.util.ArrayList
 class ViewModelMain (private val cafeInteractor : CafeInteractor) : ViewModel() {
     private val cafeList: MutableLiveData<List<CafeItem>> = MutableLiveData()
     //Kharin 22.02.2020
-    private val cafeReviewList: MutableLiveData<List<CafeReviewItem>> = MutableLiveData() //Kharin 22.02.2020
+    private val currentCafeItem: MutableLiveData<List<CafeReviewItem>> = MutableLiveData() //Kharin 22.02.2020
 
 
     private val ourSearchProperties: MutableLiveData<OurSearchPropertiesValue> = MutableLiveData()
@@ -29,7 +28,7 @@ class ViewModelMain (private val cafeInteractor : CafeInteractor) : ViewModel() 
     fun cafelist() : LiveData<List<CafeItem>> = cafeList
 
     //Kharin 22.02.2020
-    fun cafeReviewList() : LiveData<List<CafeReviewItem>> = cafeReviewList //Kharin 22.02.2020
+    fun cafeReviewList() : LiveData<List<CafeReviewItem>> = currentCafeItem //Kharin 22.02.2020
 
     fun ourSearchProperties() : LiveData<OurSearchPropertiesValue> = ourSearchProperties
     fun ourSearchPropertiesValue() : OurSearchPropertiesValue = ourSearchProperties.value!!

@@ -17,6 +17,7 @@ import com.gb.rating.ui.review.ReviewFragment
 import kotlinx.android.synthetic.main.fragment_list_item.view.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
+import kotlinx.android.extensions.LayoutContainer
 
 class ListAdapter(val onItemClick: ((CafeItem)-> Unit)? = null) : RecyclerView.Adapter<ListAdapter.ListHolder>(){
 
@@ -38,8 +39,8 @@ class ListAdapter(val onItemClick: ((CafeItem)-> Unit)? = null) : RecyclerView.A
         notifyDataSetChanged()
     }
 
-    inner class ListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+    inner class ListHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+        // LayoutContainer - чтобы кэшировать, а не обращаться каждый раз
         fun bind (item: CafeItem) = with(itemView) {
             nameCafe_FragmentList.text = item.name
             address_FragmentList.text = buildAddress(item)
