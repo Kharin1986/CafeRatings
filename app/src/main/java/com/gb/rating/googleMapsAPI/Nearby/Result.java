@@ -39,13 +39,13 @@ public class Result {
     private String vicinity;
     @SerializedName("rating")
     @Expose
-    private Float rating;
+    private float rating;
     @SerializedName("opening_hours")
     @Expose
     private OpeningHours openingHours;
     @SerializedName("price_level")
     @Expose
-    private Integer priceLevel;
+    private int priceLevel;
 
     public Geometry getGeometry() {
         return geometry;

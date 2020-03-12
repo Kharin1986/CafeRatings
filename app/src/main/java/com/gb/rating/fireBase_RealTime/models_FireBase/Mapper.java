@@ -1,7 +1,9 @@
 package com.gb.rating.fireBase_RealTime.models_FireBase;
 
+import com.gb.rating.googleMapsAPI.Nearby.Photo;
 import com.gb.rating.googleMapsAPI.Nearby.Result;
 import com.gb.rating.models.CafeItem;
+import com.gb.rating.models.OurSearchPropertiesValue;
 import com.gb.rating.models.SearchUtils;
 import com.gb.rating.models.UnverifiedRating;
 import com.gb.rating.models.VerifiedRating;
@@ -45,23 +47,26 @@ public class Mapper {
         return (rating == null)? new VerifiedRating() : rating;
     }
 
-    public static Cafe_FB convert(Result cafeG) {
+    public static Cafe_FB convert(Result cafeG, OurSearchPropertiesValue ourSearchPropertiesValue) {
         Cafe_FB curCafe = new Cafe_FB();
         if (cafeG == null) {return curCafe;}
 
+        curCafe.cafeId = cafeG.getPlaceId(); //присваиваем гугловский ID
         curCafe.name = cafeG.getName();
         curCafe.type = chooseType(cafeG.getTypes());
-//        curCafe.descr = cafeG.;
-//        curCafe.rating = -cafe.getRating();
-//        curCafe.country = cafe.getCountry();
-//        curCafe.city = cafe.getCity();
-//        curCafe.addressMain = cafe.getStreet()+" "+cafe.getHome();
-//        curCafe.cafeId = cafe.getCafeId();
-//        curCafe.latitude = cafe.getLatitude();
-//        curCafe.longitude = cafe.getLongitude();
-//        curCafe.deleted = cafe.getDeleted();
-        //cafeId, fav  не нужнs
+        curCafe.rating = -cafeG.getRating(); //пусть будет гугловский коли свой пустой
+        curCafe.country = ourSearchPropertiesValue.getCountry();
+        curCafe.city = ourSearchPropertiesValue.getCity();
+        curCafe.addressMain = cafeG.getVicinity();
+        curCafe.latitude =  cafeG.getGeometry().getLocation().getLat();
+        curCafe.longitude = cafeG.getGeometry().getLocation().getLng();
 
+        curCafe.googlePlaceId = cafeG.getPlaceId();
+        curCafe.googleRating = cafeG.getRating();
+        curCafe.googlePriceLevel = cafeG.getPriceLevel();
+        if (cafeG.getPhotos() != null && cafeG.getPhotos().size()>0) {
+            curCafe.googlePhotoReference = ((Photo) cafeG.getPhotos().toArray()[0]).getPhotoReference();
+        }
         return curCafe;
     }
 

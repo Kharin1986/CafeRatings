@@ -39,6 +39,14 @@ public String name = "";
     public long ratingChangeTime = new Date().getTime();
     public boolean deleted = false;
 
+    //for Google maps
+    public String googlePlaceId;
+    public String googlePhotoReference;
+    public float googleRating;
+    public int googlePriceLevel;
+
+
+
     //CONSTRUCTOR FOR getValue()
     public Cafe_FB() {
     }

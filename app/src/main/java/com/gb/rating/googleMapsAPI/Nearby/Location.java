@@ -8,24 +8,24 @@ public class Location {
 
     @SerializedName("lat")
     @Expose
-    private Double lat;
+    private float lat;
     @SerializedName("lng")
     @Expose
-    private Double lng;
+    private float lng;
 
-    public Double getLat() {
+    public float getLat() {
         return lat;
     }
 
-    public void setLat(Double lat) {
+    public void setLat(float lat) {
         this.lat = lat;
     }
 
-    public Double getLng() {
+    public float getLng() {
         return lng;
     }
 
-    public void setLng(Double lng) {
+    public void setLng(float lng) {
         this.lng = lng;
     }
 

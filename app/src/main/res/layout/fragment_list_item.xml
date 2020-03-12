@@ -60,8 +60,8 @@
 
             <TextView
                 android:id="@+id/descriptionCafe_FragmentList"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_width="254dp"
+                android:layout_height="39dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#FFFFFF"
                 app:layout_constraintStart_toStartOf="@+id/ratingBar_FragmentList"
@@ -70,8 +70,8 @@
 
             <TextView
                 android:id="@+id/address_FragmentList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="211dp"
+                android:layout_height="36dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#FFFFFF"
                 app:layout_constraintBottom_toTopOf="@id/ratingBar_FragmentList"
