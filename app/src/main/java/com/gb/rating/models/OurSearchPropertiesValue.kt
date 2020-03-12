@@ -16,6 +16,11 @@ const val FASTFOOD_TYPE = "фастфуд"
 const val BAR_TYPE = "бар"
 const val CAFE_TYPE = "кафе"
 
+const val RESTAURANT_GOOGLE = "restaurant"
+const val BAR_GOOGLE = "bar"
+const val CAFE_GOOGLE = "cafe"
+
+
 const val RATING_FIELD = "rating"
 const val FAV_FIELD = "fav"
 const val LOCATION_FIELD = "location"
