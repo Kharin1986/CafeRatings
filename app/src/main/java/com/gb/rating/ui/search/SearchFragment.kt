@@ -12,7 +12,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.gb.rating.R
+import com.gb.rating.models.CafeItem
+import com.gb.rating.ui.ViewModelMain
 import kotlinx.android.synthetic.main.fragment_search.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
@@ -24,11 +27,17 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.util.*
+import org.osmdroid.views.overlay.OverlayItem
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus
+
+
 
 
 class SearchFragment : Fragment() {
 
     private val searchViewModel: SearchViewModel by viewModel()
+    private val activityViewModel: ViewModelMain by sharedViewModel()
     private var latCenterPoint: Double = 0.0
     private  var lonCenterPoint: Double = 0.0
     private var centerPoint: GeoPoint? = null
@@ -48,6 +57,49 @@ class SearchFragment : Fragment() {
         checkAndRequestPermissions()
 
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        activityViewModel.cafelist().observe(this, androidx.lifecycle.Observer {
+            it?.let {cafeItem->
+                //your items
+                refreshOverlay(cafeItem)
+            }
+        }) //подписка на обновление листа
+
+    }
+
+    private fun refreshOverlay(cafeItem: List<CafeItem>): Boolean {
+        val items = ArrayList<OverlayItem>()
+        cafeItem.forEach {
+            items.add(
+                OverlayItem(
+                    it.name,
+                    it.desc,
+                    GeoPoint(it.latitude.toDouble(), it.longitude.toDouble())
+                )
+            ) // Lat/Lon decimal degrees
+        }
+
+        //the overlay
+        val mOverlay = ItemizedOverlayWithFocus(
+            items,
+            object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
+                override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                    //do something
+                    return true
+                }
+
+                override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                    return false
+                }
+            }, context
+        )
+        mOverlay.setFocusItemsOnTap(true)
+
+        return map.overlays.add(mOverlay)
     }
 
     private fun getLastPosition(savedInstanceState: Bundle?) {
@@ -88,6 +140,7 @@ class SearchFragment : Fragment() {
         provider.osmdroidTileCache = getStorage()
 
         val map: MapView = v.findViewById(R.id.map)
+        map.setDestroyMode(false)
         map.setUseDataConnection(true)
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setMultiTouchControls(true)
