@@ -6,11 +6,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.plusAssign
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.gb.rating.models.*
+import com.gb.rating.ui.KeepStateNavigator
 import com.gb.rating.ui.ViewModelMain
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,11 +22,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
+        initNavControllerAndActionBar()
 
         PreferenceManager.setDefaultValues(this, R.xml.main_settings, false)
         initViewModel()
-        initNavControllerAndActionBar()
+
     }
 
     private fun initViewModel() {
@@ -34,9 +38,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun initNavControllerAndActionBar() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!
+//        // setup custom navigator
+        val navigator = KeepStateNavigator(this, navHostFragment.childFragmentManager, R.id.nav_host_fragment)
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.navigatorProvider += navigator
+        navController.setGraph(R.navigation.mobile_navigation)
+        //appbar and navView
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_home,
