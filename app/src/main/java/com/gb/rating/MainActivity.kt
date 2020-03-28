@@ -60,45 +60,51 @@ class MainActivity : AppCompatActivity() {
 
     // Кнопки домашней страницы)
     fun onRestClick(view: View) {
-        viewModelMain.ourSearchProperties_update(
-            initialSearchProperties().updateType(RESTAURANT_TYPE)
-        )
-        navController!!.navigate(R.id.navigation_list)
+        updateType_and_navigateToList(RESTAURANT_TYPE)
     }
 
     fun onBarClick(view: View) {
-        viewModelMain.ourSearchProperties_update(
-            initialSearchProperties().updateType(BAR_TYPE)
-        )
-        navController!!.navigate(R.id.navigation_list)
+        updateType_and_navigateToList(BAR_TYPE)
+    }
+
+    fun onCafeClick(view: View) {
+        updateType_and_navigateToList(CAFE_TYPE)
+    }
+
+    fun onFastClick(view: View) {
+        updateType_and_navigateToList(FASTFOOD_TYPE)
     }
 
     fun onTopClick(view: View) {
         viewModelMain.ourSearchProperties_update(
             initialSearchProperties().addFilter_RatingMoreOrEquel(4.5f)
         )
-        navController!!.navigate(R.id.navigation_list)
+        navigateToList()
     }
 
     fun onFavClick(view: View) {
         viewModelMain.ourSearchProperties_update(
             initialSearchProperties().addFilter_Favorites(true)
         )
-        navController!!.navigate(R.id.navigation_list)
+        navigateToList()
     }
 
-    fun onCafeClick(view: View) {
+
+    private fun updateType_and_navigateToList(cafeType: String) {
         viewModelMain.ourSearchProperties_update(
-            initialSearchProperties().updateType(CAFE_TYPE)
+            initialSearchProperties().updateType(cafeType)
         )
-        navController!!.navigate(R.id.navigation_list)
+        navigateToList()
     }
 
-    fun onFastClick(view: View) {
-        viewModelMain.ourSearchProperties_update(
-            initialSearchProperties().updateType(FASTFOOD_TYPE)
-        )
-        navController!!.navigate(R.id.navigation_list)
+     fun navigateToList() {
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.navigate(R.id.navigation_list)
+    }
+
+    fun navigateToHome() {
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.navigate(R.id.navigation_home)
     }
 
     override fun onStart() {
