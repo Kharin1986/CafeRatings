@@ -32,7 +32,10 @@ public class ReviewSendDialog extends DialogFragment {
         okButton.setOnClickListener(v -> {
             //TODO save rating
             dismiss();
-            ((MainActivity) getActivity()).getNavController().navigate(R.id.navigation_home);
+            //((MainActivity) getActivity()).getNavController().navigate(R.id.navigation_home);
+            ((MainActivity) getActivity()).navigateToHome();
+
+
 //            Intent parentActivityIntent = new Intent(getContext(), MainActivity.class);
 //            parentActivityIntent.addFlags(
 //                    Intent.FLAG_ACTIVITY_CLEAR_TOP |
