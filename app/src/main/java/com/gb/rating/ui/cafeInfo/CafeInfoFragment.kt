@@ -6,22 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.gb.rating.R
 import com.gb.rating.ui.ViewModelMain
+import com.gb.rating.ui.list.ListViewModel
 import kotlinx.android.synthetic.main.fragment_cafe_info.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CafeInfoFragment : Fragment() {
     private lateinit var adapter: CafeInfoAdapter
+// Работает убрано для эксперимента 27.02. Kharin
+  //  private val mViewModel: CafeInfoViewModel by viewModel()
+  //  private val activityViewModel: ViewModelMain by sharedViewModel()
 
-    private val mViewModel: CafeInfoViewModel by viewModel()
-    private val activityViewModel: ViewModelMain by sharedViewModel()
+    private val mViewModel by lazy { ViewModelProviders.of(this).get(CafeInfoViewModel::class.java) }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_cafe_info, container, false)
@@ -34,11 +39,17 @@ class CafeInfoFragment : Fragment() {
         rv_cafe_info_list?.layoutManager = LinearLayoutManager(activity)
         rv_cafe_info_list?.adapter = adapter
 
-        mViewModel.viewState.observe(this, Observer { })
-        activityViewModel.cafeReviewList().observe(this, Observer {
-            it?.let {
-                adapter.refreshList(it)
-            }
+
+// Работает убрано для эксперимента 27.02. Kharin
+//       mViewModel.viewState.observe(this, Observer { })
+//        activityViewModel.cafeReviewList().observe(this, Observer {
+//            it?.let {
+//                adapter.refreshList(it)
+//            }
+//        })
+        // новое, временные данные 27.02. Kharin (3 строки)
+        mViewModel.getReviewList().observe(this, Observer {
+            it?.let { adapter.refreshList(it)}
         })
     }
 

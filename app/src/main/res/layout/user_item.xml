@@ -17,5 +17,7 @@
         android:id="@+id/tv_user_rating"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+        android:gravity="center"
         android:text="@string/user_rating" />
 </LinearLayout>
