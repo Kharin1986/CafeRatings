@@ -13,16 +13,17 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.gb.rating.R
 import com.gb.rating.models.*
 import com.gb.rating.ui.ViewModelMain
 import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapAdapter
-import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
 import org.osmdroid.library.BuildConfig
@@ -38,18 +39,14 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus
 
-
-
-
-
 class SearchFragment : Fragment() {
 
     private val searchViewModel: SearchViewModel by viewModel()
     private val activityViewModel: ViewModelMain by sharedViewModel()
     private var latCenterPoint: Double = 0.0
-    private  var lonCenterPoint: Double = 0.0
-    private var centerPoint: GeoPoint? = null
+    private var lonCenterPoint: Double = 0.0
     var UIhandler: Handler = Handler()
+
 
     companion object {
         val REQUEST_ID_MULTIPLE_PERMISSIONS = 1
@@ -73,20 +70,28 @@ class SearchFragment : Fragment() {
         return view
     }
 
+    fun getLastPosition(savedInstanceState: Bundle?) {
+        searchViewModel.lastMapWindow = null
+        if (savedInstanceState != null) {
+            searchViewModel.lastMapWindow =
+                savedInstanceState.getSerializable("lastMapWindow") as? MapWindow
+        }
+    }
+
     override fun onStart() {
         super.onStart()
 
         prepareMapAfterOnStart()
-        setLiveDataObservers() //подписка на обновление листа
+        setCafeListObserver() //подписка на обновление листа
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if (centerPoint != null) {
-            outState.putDouble("latCenterPoint", centerPoint!!.latitude)
-            outState.putDouble("lonCenterPoint", centerPoint!!.longitude)
+        searchViewModel.lastMapWindow?.let {
+            outState.putSerializable("lastMapWindow", it.centerPoint)
         }
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -98,23 +103,20 @@ class SearchFragment : Fragment() {
         map.onPause()
     }
 
-    private fun getLastPosition(savedInstanceState: Bundle?) {
-        centerPoint = null
-
-        if (savedInstanceState != null) {
-            latCenterPoint = savedInstanceState.getDouble("latCenterPoint")
-            lonCenterPoint = savedInstanceState.getDouble("lonCenterPoint")
-            centerPoint = GeoPoint(latCenterPoint, lonCenterPoint)
-        }
-    }
 
     //-------------------------- TECHNICAL FUNCTIONS ----------------------------------------------------
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //-------------------------- MAP CONFIGURATION ----------------------------------------------------
 
     private fun checkAndRequestPermissions() {
-        val permissionWrite = ContextCompat.checkSelfPermission(activity!!, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        val permissionLocation = ContextCompat.checkSelfPermission(activity!!, android.Manifest.permission.ACCESS_FINE_LOCATION)
+        val permissionWrite = ContextCompat.checkSelfPermission(
+            activity!!,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        val permissionLocation = ContextCompat.checkSelfPermission(
+            activity!!,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        )
 
         val listPermissionsNeeded = ArrayList<String>()
 
@@ -125,13 +127,18 @@ class SearchFragment : Fragment() {
             listPermissionsNeeded.add(android.Manifest.permission.ACCESS_FINE_LOCATION)
         }
         if (listPermissionsNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(activity!!, listPermissionsNeeded.toTypedArray(), REQUEST_ID_MULTIPLE_PERMISSIONS)
+            ActivityCompat.requestPermissions(
+                activity!!,
+                listPermissionsNeeded.toTypedArray(),
+                REQUEST_ID_MULTIPLE_PERMISSIONS
+            )
         }
     }
 
     @SuppressLint("FragmentLiveDataObserve")
     private fun configurationMap(v: View) {
-        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        Configuration.getInstance()
+            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
 
         val provider = Configuration.getInstance()
         provider.userAgentValue = BuildConfig.APPLICATION_ID
@@ -157,9 +164,9 @@ class SearchFragment : Fragment() {
 
         mLocationOverlay.runOnFirstFix {
             UIhandler.post {
-                if (centerPoint == null) centerPoint = mLocationOverlay.myLocation
-                //                map.controller.animateTo(centerPoint, 15.0, 100L)
-                map.controller.animateTo(centerPoint)
+                searchViewModel.lastMapWindow?.let {
+                    map.controller.animateTo(it.centerPoint)
+                }
             }
         }
 
@@ -171,20 +178,45 @@ class SearchFragment : Fragment() {
 
         map.addMapListener(object : MapAdapter() {
             override fun onScroll(event: ScrollEvent?): Boolean {
+                event?.let { checkWhatToDOWithNewEvent(event.source.projection.boundingBox) }
                 return super.onScroll(event)
             }
 
             override fun onZoom(event: ZoomEvent?): Boolean {
+                event?.let { checkWhatToDOWithNewEvent(event.source.projection.boundingBox) }
                 return super.onZoom(event)
             }
         })
     }
 
+    fun checkWhatToDOWithNewEvent(newBoundingBox: BoundingBox) {
+        val saveTimeChanged = Calendar.getInstance().time
+        searchViewModel.setNewMapWindow(newBoundingBox, saveTimeChanged)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            delay(1000)
+            val newTime = searchViewModel.newMapWindow?.timeChanged?.time ?: 0
+            if (newTime == saveTimeChanged.time) {
+                searchViewModel.lastMapWindow = searchViewModel.newMapWindow!!.copy(timeChanged = Calendar.getInstance().time)
+                searchViewModel.newMapWindow = null
+
+                activityViewModel.ourSearchProperties_update(
+                    searchViewModel.convertBoundingBoxToNewOurSearchProperties(
+                        newBoundingBox,
+                        activityViewModel.ourSearchPropertiesValue()
+                    )
+                )
+            }
+        }
+
+    }
+
+
     //-------------------------- MAP CONFIGURATION ----------------------------------------------------
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //-------------------------- MAIN FUNCTIONS ----------------------------------------------------
 
-    private fun setLiveDataObservers() {
+    private fun setCafeListObserver() {
         activityViewModel.cafelist().observe(this, Observer {
             it?.let { cafeItem ->
                 refreshOverlay(cafeItem)
@@ -195,23 +227,19 @@ class SearchFragment : Fragment() {
 
     private fun observeOurSearchProperties() {
         activityViewModel.ourSearchProperties().observe(this, Observer {
-            it?.let { spv ->
-                if (spv.distance > 0 && spv.centerPoint.latitude != 0.0 && spv.centerPoint.longityde != 0.0) {
-                    val distanceInDegrees: Double = spv.distance / KM_PER_DEGREE
-                    if (centerPoint == null) centerPoint = GeoPoint(spv.centerPoint.latitude, spv.centerPoint.longityde)
-
-                    centerPoint?.let {sp-> map.zoomToBoundingBox(
-                        BoundingBox(
-                            sp.latitude + distanceInDegrees,
-                            sp.longitude + distanceInDegrees,
-                            sp.latitude - distanceInDegrees,
-                            sp.longitude - distanceInDegrees
-                        ), false
-                    )}
+            if (searchViewModel.lastMapWindow == null) {
+                searchViewModel.setLastMapWindow(it)
+                searchViewModel.lastMapWindow?.let { lMW ->
+                    map.zoomToBoundingBox(
+                        lMW.mapBoundingBox,
+                        true
+                    )
                 }
             }
+
         })
     }
+
 
     private fun refreshOverlay(cafeItem: List<CafeItem>): Boolean {
         val items = ArrayList<OverlayItem>()
@@ -241,6 +269,7 @@ class SearchFragment : Fragment() {
         )
         mOverlay.setFocusItemsOnTap(true)
 
+        if (map.overlays.size>1) map.overlays.removeAt(map.overlays.size-1)
         return map.overlays.add(mOverlay)
     }
 
