@@ -12,6 +12,8 @@ import kotlin.math.abs
 
 const val MAP_PRECISION_RATE = 0.1
 
+const val DEFAULT_SCREEN_DISTANCE = 2.0
+
 class SearchViewModel : ViewModel() {
 
     var lastMapWindow: MapWindow? = null
@@ -82,13 +84,14 @@ class SearchViewModel : ViewModel() {
     }
 
 
-    fun InitialSetLastMapWindow(it: OurSearchPropertiesValue?) {
-        it?.let { spv ->
-            if (spv.distance > 0 && spv.centerPoint.latitude != 0.0 && spv.centerPoint.longityde != 0.0) {
+    fun InitialSetLastMapWindow(ourSearchPropertiesValue: OurSearchPropertiesValue?) {
+        ourSearchPropertiesValue?.let { spv ->
+            val newDistance= if (spv.distance > 0) spv.distance else DEFAULT_SCREEN_DISTANCE
+            if (spv.centerPoint.latitude != 0.0 && spv.centerPoint.longityde != 0.0) {
                 if (lastMapWindow == null) {
                     val centerPoint =
                         GeoPoint(spv.centerPoint.latitude, spv.centerPoint.longityde)
-                    val distanceInDegrees: Double = spv.distance / KM_PER_DEGREE
+                    val distanceInDegrees: Double = newDistance / KM_PER_DEGREE
                     val boundingBox = BoundingBox(
                         centerPoint.latitude + distanceInDegrees,
                         centerPoint.longitude + distanceInDegrees,
