@@ -180,11 +180,6 @@ class SearchFragment : Fragment() {
             }
         }
 
-        map.post(object : Runnable { // map.height выдавало 0
-            override fun run() {
-                observeOurSearchProperties() //подписка на обновление поисковых условий
-            }
-        })
 
         map.addMapListener(object : MapAdapter() {
             override fun onScroll(event: ScrollEvent?): Boolean {
@@ -197,6 +192,13 @@ class SearchFragment : Fragment() {
                 return super.onZoom(event)
             }
         })
+
+        map.post(object : Runnable { // map.height выдавало 0
+            override fun run() {
+                observeOurSearchProperties() //подписка на обновление поисковых условий
+            }
+        })
+
     }
 
     fun checkWhatToDOWithNewEvent(newBoundingBox: BoundingBox) {
@@ -206,12 +208,12 @@ class SearchFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             delay(1000)
             val newTime = searchViewModel.newMapWindow?.timeChanged?.time ?: 0
-            if (newTime == saveTimeChanged.time) {
+            if (newTime>0 && newTime == saveTimeChanged.time && searchViewModel.checkIfBoundsMovedSignificantly(newBoundingBox)) {
                 searchViewModel.lastMapWindow = searchViewModel.newMapWindow!!.copy(timeChanged = Calendar.getInstance().time)
                 searchViewModel.newMapWindow = null
 
                 activityViewModel.ourSearchProperties_update(
-                    activityViewModel.ourSearchPropertiesValue().updateBoundingBox(newBoundingBox)
+                    activityViewModel.ourSearchPropertiesValue().updateBoundingBox(newBoundingBox.clone())
                 )
             }
         }
@@ -234,11 +236,11 @@ class SearchFragment : Fragment() {
     private fun observeOurSearchProperties() {
         activityViewModel.ourSearchProperties().observe(this, Observer {
             if (searchViewModel.lastMapWindow == null) {
-                searchViewModel.setLastMapWindow(it)
+                searchViewModel.InitialSetLastMapWindow(it)
                 searchViewModel.lastMapWindow?.let { lMW ->
                     map.zoomToBoundingBox(
                         lMW.mapBoundingBox,
-                        true
+                        false
                     )
                 }
             }
