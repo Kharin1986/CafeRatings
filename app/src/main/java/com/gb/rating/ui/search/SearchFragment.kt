@@ -11,11 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.gb.rating.R
 import com.gb.rating.models.*
+import com.gb.rating.models.utils.MainApplication
 import com.gb.rating.ui.ViewModelMain
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.coroutines.delay
@@ -103,6 +105,14 @@ class SearchFragment : Fragment() {
         map.onPause()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        searchViewModel.lastMapWindow?.let {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(MainApplication.applicationContext())
+            prefs.edit (false,{putFloat("INITIAL_LATITUDE", it.centerPoint.latitude.toFloat()); putFloat("INITIAL_LONGITUDE", it.centerPoint.longitude.toFloat())})
+        }
+    }
 
     //-------------------------- TECHNICAL FUNCTIONS ----------------------------------------------------
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -201,10 +211,7 @@ class SearchFragment : Fragment() {
                 searchViewModel.newMapWindow = null
 
                 activityViewModel.ourSearchProperties_update(
-                    searchViewModel.convertBoundingBoxToNewOurSearchProperties(
-                        newBoundingBox,
-                        activityViewModel.ourSearchPropertiesValue()
-                    )
+                    activityViewModel.ourSearchPropertiesValue().updateBoundingBox(newBoundingBox)
                 )
             }
         }
@@ -224,7 +231,6 @@ class SearchFragment : Fragment() {
         })
     }
 
-
     private fun observeOurSearchProperties() {
         activityViewModel.ourSearchProperties().observe(this, Observer {
             if (searchViewModel.lastMapWindow == null) {
@@ -239,7 +245,6 @@ class SearchFragment : Fragment() {
 
         })
     }
-
 
     private fun refreshOverlay(cafeItem: List<CafeItem>): Boolean {
         val items = ArrayList<OverlayItem>()
@@ -272,5 +277,6 @@ class SearchFragment : Fragment() {
         if (map.overlays.size>1) map.overlays.removeAt(map.overlays.size-1)
         return map.overlays.add(mOverlay)
     }
-
+    //-------------------------- MAIN FUNCTIONS ----------------------------------------------------
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

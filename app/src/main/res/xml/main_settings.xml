@@ -50,7 +50,7 @@
             app:key="@string/DISTANCEFILTER_KEY"
             app:title="@string/SettingsDistanceFilterTitle"
             app:summary="@string/SettingsDistanceFilterSummary"
-            app:defaultValue="false"/>
+            app:defaultValue="@string/SettingsDistanceFilter"/>
         <SeekBarPreference
             app:key="@string/DISTANCE_KEY"
             app:dependency="DistanceFilter"

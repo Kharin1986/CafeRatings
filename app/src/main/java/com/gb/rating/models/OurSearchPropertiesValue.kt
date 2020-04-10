@@ -2,9 +2,11 @@
 
 package com.gb.rating.models
 
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.gb.rating.R
 import com.gb.rating.models.utils.MainApplication
+import org.osmdroid.util.BoundingBox
 import kotlin.math.sqrt
 import kotlin.math.pow
 
@@ -30,6 +32,9 @@ const val KM_PER_DEGREE = 111.134861111
 const val EARTH_RADIUS = 6371.0
 
 
+private val INITIAL_CENTER_POINT_DEFAULT_LATITUDE = 55.753664
+private val INITIAL_CENTER_POINT_DEFAULT_LONGITUDE = 37.619891
+
 data class OurSearchPropertiesValue(
     var country: String = "",
     var city: String = "",
@@ -38,7 +43,8 @@ data class OurSearchPropertiesValue(
     var sizeOfList: Long = -1,
     var action: String = "",
     var otherFilters: MutableList<MyFilter> = ArrayList(),
-    var centerPoint: MyPoint = MyPoint()
+    var centerPoint: MyPoint = MyPoint(),
+    var boundingBox: BoundingBox? = null
 ) {
 
     fun updateAction(action: String): OurSearchPropertiesValue {
@@ -70,6 +76,12 @@ data class OurSearchPropertiesValue(
         return this
     }
 
+    fun updateBoundingBox(boundingBox: BoundingBox): OurSearchPropertiesValue {
+        this.boundingBox = boundingBox
+        updateAction("")
+        return this
+    }
+
     class MyFilter(
         val field: String = "",
         val where: String = "",
@@ -78,8 +90,8 @@ data class OurSearchPropertiesValue(
     )
 
     class MyPoint(
-        var latitude: Double = 55.753664,
-        var longityde: Double = 37.619891
+        var latitude: Double = INITIAL_CENTER_POINT_DEFAULT_LATITUDE,
+        var longityde: Double = INITIAL_CENTER_POINT_DEFAULT_LONGITUDE
     )
 
     fun addFilter_RatingMoreOrEquel(rating: Float): OurSearchPropertiesValue {
@@ -106,16 +118,31 @@ data class OurSearchPropertiesValue(
 
     fun checkLocationFilter() {
         otherFilters = otherFilters.filter { it.field != LOCATION_FIELD } as MutableList<MyFilter>
-        if (centerPoint != null && distance > 0 && centerPoint!!.latitude != 0.0 && centerPoint!!.longityde != 0.0) {
+
+        if (boundingBox != null) {
+            otherFilters.add(
+                MyFilter(
+                    LOCATION_FIELD,
+                    "$LATITUDE_FIELD BETWEEN ${boundingBox!!.actualSouth} AND ${boundingBox!!.actualNorth}" +
+                            " AND $LONGITUDE_FIELD BETWEEN ${boundingBox!!.lonWest} AND ${boundingBox!!.lonEast}"
+                )
+            )
+        } else if (distance > 0 && centerPoint.latitude != 0.0 && centerPoint.longityde != 0.0) {
             val distanceInDegrees: Double = distance / KM_PER_DEGREE
             otherFilters.add(
                 MyFilter(
                     LOCATION_FIELD,
-                    "$LATITUDE_FIELD BETWEEN ${(centerPoint!!.latitude - distanceInDegrees)} AND ${(centerPoint!!.latitude + distanceInDegrees)}" +
-                            " AND $LONGITUDE_FIELD BETWEEN ${(centerPoint!!.longityde - distanceInDegrees)} AND ${(centerPoint!!.longityde + distanceInDegrees)}"
+                    "$LATITUDE_FIELD BETWEEN ${(centerPoint.latitude - distanceInDegrees)} AND ${(centerPoint.latitude + distanceInDegrees)}" +
+                            " AND $LONGITUDE_FIELD BETWEEN ${(centerPoint.longityde - distanceInDegrees)} AND ${(centerPoint.longityde + distanceInDegrees)}"
                 )
             )
         }
+    }
+
+    fun deleteAllFilters(): OurSearchPropertiesValue {
+        otherFilters.clear()
+        this.type = ""
+        return this
     }
 
 }
@@ -126,16 +153,18 @@ fun initialSearchProperties(): OurSearchPropertiesValue {
     // Get the preferences
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-    val settingsCity: String =
-        prefs.getString(context.resources.getString(R.string.CITY_KEY), "").toString()
-    val settingsCountry =
-        prefs.getString(context.resources.getString(R.string.COUNTRY_KEY), "").toString()
+    val settingsCity: String = prefs.getString(context.resources.getString(R.string.CITY_KEY), "").toString()
+    val settingsCountry = prefs.getString(context.resources.getString(R.string.COUNTRY_KEY), "").toString()
+
+    val initial_latitude = prefs.getFloat("INITIAL_LATITUDE", INITIAL_CENTER_POINT_DEFAULT_LATITUDE.toFloat()).toDouble()
+    val initial_langitude = prefs.getFloat("INITIAL_LONGITUDE", INITIAL_CENTER_POINT_DEFAULT_LONGITUDE.toFloat()).toDouble()
 
     return OurSearchPropertiesValue(
         settingsCountry,
         settingsCity,
         "",
-        countDistance()
+        countDistance(),
+        centerPoint = OurSearchPropertiesValue.MyPoint(initial_latitude, initial_langitude)
     )
 }
 
@@ -169,6 +198,10 @@ fun countDistanceToAnotherPoint(
     require(!(anotherPoint.latitude.equals(0) || anotherPoint.longityde.equals(0))) { "countDistanceToAnotherPoint" }
     require(!(centerPoint.latitude.equals(0) || centerPoint.longityde.equals(0))) { "countDistanceToAnotherPoint" }
 
-    return EARTH_RADIUS *sqrt(((anotherPoint.latitude - centerPoint.latitude)*Math.PI/180).pow(2.0) + ((anotherPoint.longityde - centerPoint.longityde)*Math.PI/180).pow(2.0))
+    return EARTH_RADIUS * sqrt(
+        ((anotherPoint.latitude - centerPoint.latitude) * Math.PI / 180).pow(
+            2.0
+        ) + ((anotherPoint.longityde - centerPoint.longityde) * Math.PI / 180).pow(2.0)
+    )
 }
 

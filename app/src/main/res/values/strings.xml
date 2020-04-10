@@ -65,5 +65,6 @@
     <string name="user_rating">+200</string>
 
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBgQhfZPKjhli7XJonmQdUmLtkRnGpUKnU</string>
+    <string name="SettingsDistanceFilter">false</string>
 
 </resources>

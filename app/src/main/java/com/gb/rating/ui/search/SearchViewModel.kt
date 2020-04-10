@@ -1,15 +1,10 @@
 package com.gb.rating.ui.search
 
-import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.gb.rating.models.KM_PER_DEGREE
 import com.gb.rating.models.OurSearchPropertiesValue
-import kotlinx.android.synthetic.main.fragment_search.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import java.util.*
@@ -47,6 +42,7 @@ class SearchViewModel : ViewModel() {
 
     }
 
+    //temptable
     fun convertBoundingBoxToNewOurSearchProperties(
         newBoundingBox: BoundingBox,
         ourSearchPropertiesValue: OurSearchPropertiesValue
@@ -62,7 +58,7 @@ class SearchViewModel : ViewModel() {
     }
 
 
-    fun setLastMapWindow(it: OurSearchPropertiesValue) {
+    fun setLastMapWindow(it: OurSearchPropertiesValue?) {
         it?.let { spv ->
             if (spv.distance > 0 && spv.centerPoint.latitude != 0.0 && spv.centerPoint.longityde != 0.0) {
                 if (lastMapWindow == null) {
