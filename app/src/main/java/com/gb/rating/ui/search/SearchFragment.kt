@@ -209,12 +209,17 @@ class SearchFragment : Fragment() {
             delay(1000)
             val newTime = searchViewModel.newMapWindow?.timeChanged?.time ?: 0
             if (newTime>0 && newTime == saveTimeChanged.time && searchViewModel.checkIfBoundsMovedSignificantly(newBoundingBox)) {
-                searchViewModel.lastMapWindow = searchViewModel.newMapWindow!!.copy(timeChanged = Calendar.getInstance().time)
+                //cleaning
+                searchViewModel.newMapWindow?.let {nMW->
+                    searchViewModel.lastMapWindow = nMW.copy(timeChanged = Calendar.getInstance().time)
+                }
                 searchViewModel.newMapWindow = null
-
+                //load from local database
                 activityViewModel.ourSearchProperties_update(
                     activityViewModel.ourSearchPropertiesValue().updateBoundingBox(newBoundingBox.clone())
                 )
+                //load from google API
+                searchViewModel.checkAndLoadFromGoogleAPI(newBoundingBox, activityViewModel.ourSearchPropertiesValue())
             }
         }
 

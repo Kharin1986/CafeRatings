@@ -42,24 +42,28 @@ public class UpdateDatabase {
 
 
     public static boolean doIt() {
+        OurSearchPropertiesValue ourSearchPropertiesValue = SearchUtils.initialSearchProperties();
+        OurSearchPropertiesValue.MyPoint point = ourSearchPropertiesValue.getCenterPoint();
+
+        return LoadGoogleCafeForPoint(ourSearchPropertiesValue, point);
+    }
+
+    public static boolean LoadGoogleCafeForPoint(OurSearchPropertiesValue ourSearchPropertiesValue, OurSearchPropertiesValue.MyPoint point) {
         Api api = RetrofitInit.newApiInstance();
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         CafeRepository repository = new Cafe_FB_Impl(db, null);
 
-        OurSearchPropertiesValue ourSearchPropertiesValue = SearchUtils.initialSearchProperties();
-        OurSearchPropertiesValue.MyPoint point = ourSearchPropertiesValue.getCenterPoint();
-
         String[] cafeGoogleTypeArray = {SearchUtils.RESTAURANT_GOOGLE, SearchUtils.BAR_GOOGLE, SearchUtils.CAFE_GOOGLE};
-        for (String cafeGoogleType: cafeGoogleTypeArray
-             ) {
-            getNearbySearch(api, repository, ourSearchPropertiesValue, point, null, cafeGoogleType);
+        for (String cafeGoogleType : cafeGoogleTypeArray
+        ) {
+            double PointMaxDistance = getNearbySearch(api, repository, ourSearchPropertiesValue, point, null, cafeGoogleType);
         }
 
         return true;
     }
 
     private static void getNearbySearch(Api api, CafeRepository repository, OurSearchPropertiesValue ourSearchPropertiesValue, OurSearchPropertiesValue.MyPoint point, String pageToken, String cafeGoogleType) {
-        (pageToken == null ? api.getNearbySearch(point.getLatitude() + "," + point.getLongityde(),cafeGoogleType, GOOGLE_API_KEY, RANC_BY) : api.getNearbySearch(pageToken, GOOGLE_API_KEY)) //TYPE_BAR
+        (pageToken == null ? api.getNearbySearch(point.getLatitude() + "," + point.getLongityde(), cafeGoogleType, GOOGLE_API_KEY, RANC_BY) : api.getNearbySearch(pageToken, GOOGLE_API_KEY)) //TYPE_BAR
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe(new Consumer<NearbySearch>() {
@@ -67,7 +71,7 @@ public class UpdateDatabase {
                                public void accept(NearbySearch nearbySearch) throws Exception {
                                    Log.d(TAG, "getNearbySearch() SUCCESS: " + nearbySearch);
                                    if (nearbySearch.getStatus().equals("OK")) {
-                                       writeToDatabase(nearbySearch, repository, ourSearchPropertiesValue);
+                                       writeToDatabase(nearbySearch, repository, ourSearchPropertiesValue, point);
                                        if (nearbySearch.getNextPageToken() != null) {
                                            Thread.sleep(61000);
                                            getNearbySearch(api, repository, ourSearchPropertiesValue, point, nearbySearch.getNextPageToken(), cafeGoogleType);
@@ -85,8 +89,12 @@ public class UpdateDatabase {
                 );
     }
 
-    private static void writeToDatabase(NearbySearch nearbySearch, CafeRepository repository, OurSearchPropertiesValue ourSearchPropertiesValue) {
+    private static void writeToDatabase(NearbySearch nearbySearch, CafeRepository repository, OurSearchPropertiesValue ourSearchPropertiesValue, OurSearchPropertiesValue.MyPoint point) {
+        double maxCafeDistance = 0;
         for (Result curCafe : nearbySearch.getResults()) {
+            maxCafeDistance = Math.max(
+                    maxCafeDistance, geoDistance(point, curCafe));
+
             repository.writeCafe(Mapper.convert(curCafe, ourSearchPropertiesValue))
                     .subscribe(new DisposableCompletableObserver() {
                         @Override
@@ -104,6 +112,12 @@ public class UpdateDatabase {
                         }
                     });
         }
+    }
+
+    public static double geoDistance(OurSearchPropertiesValue.MyPoint point, Result curCafe) {
+        return Math.sqrt(
+                Math.pow(curCafe.getGeometry().getLocation().getLat() - point.getLatitude(),2) + Math.pow(curCafe.getGeometry().getLocation().getLng() - point.getLongityde(),2)
+        );
     }
 
 }

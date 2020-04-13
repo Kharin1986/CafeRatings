@@ -3,6 +3,7 @@ package com.gb.rating.ui.search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gb.rating.googleMapsAPI.UpdateDatabase
 import com.gb.rating.models.KM_PER_DEGREE
 import com.gb.rating.models.OurSearchPropertiesValue
 import org.osmdroid.util.BoundingBox
@@ -73,14 +74,26 @@ class SearchViewModel : ViewModel() {
             abs(newBoundingBox.lonEast - newBoundingBox.lonWest) / 2 * KM_PER_DEGREE
         )
 
-        val centerPointGeo = newBoundingBox.getCenterWithDateLine()
         return ourSearchPropertiesValue.copy(
             distance = newDistance,
-            centerPoint = OurSearchPropertiesValue.MyPoint(
-                centerPointGeo.latitude,
-                centerPointGeo.longitude
-            )
+            centerPoint = boundingBoxToMyPoint(newBoundingBox)
         )
+    }
+
+    private fun boundingBoxToMyPoint(newBoundingBox: BoundingBox): OurSearchPropertiesValue.MyPoint {
+        val centerPointGeo = newBoundingBox.getCenterWithDateLine()
+        return OurSearchPropertiesValue.MyPoint(
+            centerPointGeo.latitude,
+            centerPointGeo.longitude
+        )
+    }
+
+    fun checkAndLoadFromGoogleAPI(boundingBox: BoundingBox, ourSearchPropertiesValue: OurSearchPropertiesValue){
+
+        //TODO
+
+        //toDO - не совсем правильно - не нужно грузить базу каждый раз
+        UpdateDatabase.LoadGoogleCafeForPoint(ourSearchPropertiesValue, boundingBoxToMyPoint(boundingBox))
     }
 
 
