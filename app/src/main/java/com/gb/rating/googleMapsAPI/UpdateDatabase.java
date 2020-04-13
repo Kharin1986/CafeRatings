@@ -56,7 +56,7 @@ public class UpdateDatabase {
         String[] cafeGoogleTypeArray = {SearchUtils.RESTAURANT_GOOGLE, SearchUtils.BAR_GOOGLE, SearchUtils.CAFE_GOOGLE};
         for (String cafeGoogleType : cafeGoogleTypeArray
         ) {
-            double PointMaxDistance = getNearbySearch(api, repository, ourSearchPropertiesValue, point, null, cafeGoogleType);
+            getNearbySearch(api, repository, ourSearchPropertiesValue, point, null, cafeGoogleType);
         }
 
         return true;
