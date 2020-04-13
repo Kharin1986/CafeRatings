@@ -14,6 +14,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -45,12 +48,18 @@ public class UpdateDatabase {
 
         OurSearchPropertiesValue ourSearchPropertiesValue = SearchUtils.initialSearchProperties();
         OurSearchPropertiesValue.MyPoint point = ourSearchPropertiesValue.getCenterPoint();
-        getNearbySearch(api, repository, ourSearchPropertiesValue, point, null);
+
+        String[] cafeGoogleTypeArray = {SearchUtils.RESTAURANT_GOOGLE, SearchUtils.BAR_GOOGLE, SearchUtils.CAFE_GOOGLE};
+        for (String cafeGoogleType: cafeGoogleTypeArray
+             ) {
+            getNearbySearch(api, repository, ourSearchPropertiesValue, point, null, cafeGoogleType);
+        }
+
         return true;
     }
 
-    private static void getNearbySearch(Api api, CafeRepository repository, OurSearchPropertiesValue ourSearchPropertiesValue, OurSearchPropertiesValue.MyPoint point, String pageToken) {
-        (pageToken == null ? api.getNearbySearch(point.getLatitude() + "," + point.getLongityde(), TYPE_BAR, GOOGLE_API_KEY, RANC_BY) : api.getNearbySearch(pageToken, GOOGLE_API_KEY))
+    private static void getNearbySearch(Api api, CafeRepository repository, OurSearchPropertiesValue ourSearchPropertiesValue, OurSearchPropertiesValue.MyPoint point, String pageToken, String cafeGoogleType) {
+        (pageToken == null ? api.getNearbySearch(point.getLatitude() + "," + point.getLongityde(),cafeGoogleType, GOOGLE_API_KEY, RANC_BY) : api.getNearbySearch(pageToken, GOOGLE_API_KEY)) //TYPE_BAR
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe(new Consumer<NearbySearch>() {
@@ -61,7 +70,7 @@ public class UpdateDatabase {
                                        writeToDatabase(nearbySearch, repository, ourSearchPropertiesValue);
                                        if (nearbySearch.getNextPageToken() != null) {
                                            Thread.sleep(61000);
-                                           getNearbySearch(api, repository, ourSearchPropertiesValue, point, nearbySearch.getNextPageToken());
+                                           getNearbySearch(api, repository, ourSearchPropertiesValue, point, nearbySearch.getNextPageToken(), cafeGoogleType);
                                        }
                                    } else {
                                        Log.d(TAG, "getNearbySearch() UNSUCCESSFUL: " + nearbySearch.getStatus());
