@@ -54,8 +54,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_settings
             )
         )
-        setupActionBarWithNavController(navController!!, appBarConfiguration)
-        navView.setupWithNavController(navController!!)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
+    }
+
+    override fun onBackPressed() {
+        finishAndRemoveTask()
     }
 
     // Кнопки домашней страницы)
@@ -77,14 +81,14 @@ class MainActivity : AppCompatActivity() {
 
     fun onTopClick(view: View) {
         viewModelMain.ourSearchProperties_update(
-            initialSearchProperties().addFilter_RatingMoreOrEquel(4.5f)
+            viewModelMain.ourSearchPropertiesValue().deleteAllFilters().addFilter_Favorites(true).addFilter_RatingMoreOrEquel(4.5f)
         )
         navigateToList()
     }
 
     fun onFavClick(view: View) {
         viewModelMain.ourSearchProperties_update(
-            initialSearchProperties().addFilter_Favorites(true)
+            viewModelMain.ourSearchPropertiesValue().deleteAllFilters().addFilter_Favorites(true)
         )
         navigateToList()
     }
@@ -92,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateType_and_navigateToList(cafeType: String) {
         viewModelMain.ourSearchProperties_update(
-            initialSearchProperties().updateType(cafeType)
+            viewModelMain.ourSearchPropertiesValue().deleteAllFilters().updateType(cafeType)
         )
         navigateToList()
     }
