@@ -29,16 +29,30 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class UpdateDatabase {
-    private static final String TAG = "UdateDatabase";
-    private static final String RADIUS_1000 = "1000";
-    private static final String TYPE_BAR = "bar";
-    private static final String GOOGLE_API_KEY = "AIzaSyBgQhfZPKjhli7XJonmQdUmLtkRnGpUKnU";
-    private static final String RANC_BY = "distance";
-    private static final long WAIT_FOR_NEW_REQUEST_TO_API = 61000;
+    private static volatile UpdateDatabase instance;
 
-    private static long timeOfLastRequest = 0;
+    private  final String TAG = "UdateDatabase";
+    private  final String RADIUS_1000 = "1000";
+    private  final String TYPE_BAR = "bar";
+    private  final String GOOGLE_API_KEY = "AIzaSyBgQhfZPKjhli7XJonmQdUmLtkRnGpUKnU";
+    private  final String RANC_BY = "distance";
+    private  final long WAIT_FOR_NEW_REQUEST_TO_API = 61000;
 
-    private static boolean CheckGooglePlayServices() {
+    private  long timeOfLastRequest = 0;
+    public static UpdateDatabase getInstance() {
+        UpdateDatabase localInstance = instance;
+        if (localInstance == null) {
+            synchronized (UpdateDatabase.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new UpdateDatabase();
+                }
+            }
+        }
+        return localInstance;
+    }
+
+    private  boolean CheckGooglePlayServices() {
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
         int result = googleAPI.isGooglePlayServicesAvailable(MainApplication.Companion.applicationContext());
         if (result != ConnectionResult.SUCCESS) {
@@ -62,13 +76,13 @@ public class UpdateDatabase {
             }
         };
         try {
-            return LoadGoogleCafeForPoint(ourSearchPropertiesValue, point, callback);
+            return UpdateDatabase.getInstance().LoadGoogleCafeForPoint(ourSearchPropertiesValue, point, callback);
         } catch (Throwable t) {
             return false;
         }
     }
 
-    public static boolean LoadGoogleCafeForPoint(OurSearchPropertiesValue ourSearchPropertiesValue, OurSearchPropertiesValue.MyPoint point, Handler.Callback callable) throws InterruptedException {
+    public  boolean LoadGoogleCafeForPoint(OurSearchPropertiesValue ourSearchPropertiesValue, OurSearchPropertiesValue.MyPoint point, Handler.Callback callable) throws InterruptedException {
         Api api = RetrofitInit.newApiInstance();
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         CafeRepository repository = new Cafe_FB_Impl(db, null);
@@ -83,12 +97,11 @@ public class UpdateDatabase {
                 e.printStackTrace();
             }
         }
-        ;
 
         return true;
     }
 
-    private static void getNearbySearch(Api api, CafeRepository repository, OurSearchPropertiesValue ourSearchPropertiesValue, OurSearchPropertiesValue.MyPoint point, String pageToken, String cafeGoogleType, Handler h) throws InterruptedException {
+    private  void getNearbySearch(Api api, CafeRepository repository, OurSearchPropertiesValue ourSearchPropertiesValue, OurSearchPropertiesValue.MyPoint point, String pageToken, String cafeGoogleType, Handler h) throws InterruptedException {
 
         Runnable r = new Runnable() {
             @Override
@@ -132,7 +145,7 @@ public class UpdateDatabase {
 
     }
 
-    private static void writeToDatabase(NearbySearch nearbySearch, CafeRepository repository, OurSearchPropertiesValue ourSearchPropertiesValue, OurSearchPropertiesValue.MyPoint point, String cafeGoogleType) {
+    private  void writeToDatabase(NearbySearch nearbySearch, CafeRepository repository, OurSearchPropertiesValue ourSearchPropertiesValue, OurSearchPropertiesValue.MyPoint point, String cafeGoogleType) {
         double[] maxCafeDistance = {0.0};
         for (Result curCafe : nearbySearch.getResults()) {
             maxCafeDistance[0] = Math.max(
@@ -158,7 +171,7 @@ public class UpdateDatabase {
         writePoint(point, maxCafeDistance[0], ourSearchPropertiesValue, cafeGoogleType);
     }
 
-    private static void writePoint(OurSearchPropertiesValue.MyPoint point, double radius, OurSearchPropertiesValue ourSearchPropertiesValue, String cafeGoogleType) {
+    private  void writePoint(OurSearchPropertiesValue.MyPoint point, double radius, OurSearchPropertiesValue ourSearchPropertiesValue, String cafeGoogleType) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Point_FB point_FB = Mapper.convert(point, radius, ourSearchPropertiesValue, cafeGoogleType);
         db.collection("Countries").document(point_FB.country).collection("Cities").document(point_FB.city)
@@ -179,7 +192,7 @@ public class UpdateDatabase {
     }
 
 
-    public static double geoDistance(OurSearchPropertiesValue.MyPoint point, Result curCafe) {
+    public  double geoDistance(OurSearchPropertiesValue.MyPoint point, Result curCafe) {
         return Math.sqrt(
                 Math.pow(curCafe.getGeometry().getLocation().getLat() - point.getLatitude(), 2) + Math.pow(curCafe.getGeometry().getLocation().getLng() - point.getLongityde(), 2)
         );

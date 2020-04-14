@@ -95,8 +95,8 @@ class SearchViewModel : ViewModel() {
         //TODO
 
         //toDO - не совсем правильно - не нужно грузить базу каждый раз
-        val callback = Handler.Callback { true }
-        UpdateDatabase.LoadGoogleCafeForPoint(ourSearchPropertiesValue, boundingBoxToMyPoint(boundingBox), callback)
+//        val callback = Handler.Callback { true }
+//        UpdateDatabase.getInstance().LoadGoogleCafeForPoint(ourSearchPropertiesValue, boundingBoxToMyPoint(boundingBox), callback)
     }
 
 
