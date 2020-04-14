@@ -110,4 +110,6 @@ dependencies {
     implementation "org.koin:koin-androidx-ext:2.0.1"
     testImplementation 'org.koin:koin-test:2.0.1'
 
+    implementation 'com.google.firebase:firebase-firestore:21.4.2'
+
 }

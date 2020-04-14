@@ -1,5 +1,7 @@
 package com.gb.rating.ui.search
 
+import android.os.Handler
+import android.os.Message
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -93,7 +95,8 @@ class SearchViewModel : ViewModel() {
         //TODO
 
         //toDO - не совсем правильно - не нужно грузить базу каждый раз
-        UpdateDatabase.LoadGoogleCafeForPoint(ourSearchPropertiesValue, boundingBoxToMyPoint(boundingBox))
+        val callback = Handler.Callback { true }
+        UpdateDatabase.LoadGoogleCafeForPoint(ourSearchPropertiesValue, boundingBoxToMyPoint(boundingBox), callback)
     }
 
 
