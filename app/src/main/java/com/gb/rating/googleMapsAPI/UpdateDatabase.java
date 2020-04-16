@@ -335,10 +335,10 @@ public class UpdateDatabase {
                         @Override
                         public void onComplete() {
                             System.out.println("Cafe written!");
-                            writePoint(point, maxCafeDistance[0], ourSearchPropertiesValue, cafeGoogleType);
                         }
                     });
         }
+        writePoint(point, maxCafeDistance[0], ourSearchPropertiesValue, cafeGoogleType);
     }
 
     private void writePoint(OurSearchPropertiesValue.MyPoint point, double radius, OurSearchPropertiesValue ourSearchPropertiesValue, String cafeGoogleType) {
