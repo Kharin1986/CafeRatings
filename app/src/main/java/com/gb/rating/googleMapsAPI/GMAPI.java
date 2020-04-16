@@ -6,7 +6,7 @@ import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public interface Api {
+public interface GMAPI {
 
     @GET("place/nearbysearch/json")
     Single<NearbySearch> getNearbySearch(

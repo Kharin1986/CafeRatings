@@ -9,6 +9,7 @@ import com.google.firebase.database.FirebaseDatabase
 import org.koin.android.ext.android.inject
 import org.koin.core.context.startKoin
 
+const val STARTING_LOAD_FROM_GOOGLE_MAP_API = true
 
 class MainApplication : Application() {
 
@@ -37,6 +38,6 @@ class MainApplication : Application() {
         db.setPersistenceEnabled(true)
         CommonAuthFunctions.checkAuth()
 
-        UpdateDatabase.doIt()
+        if (STARTING_LOAD_FROM_GOOGLE_MAP_API) UpdateDatabase.doIt()
     }
 }

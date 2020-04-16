@@ -205,3 +205,10 @@ fun countDistanceToAnotherPoint(
     )
 }
 
+fun boundingBoxToMyPoint(newBoundingBox: BoundingBox): OurSearchPropertiesValue.MyPoint {
+    val centerPointGeo = newBoundingBox.getCenterWithDateLine()
+    return OurSearchPropertiesValue.MyPoint(
+        centerPointGeo.latitude,
+        centerPointGeo.longitude
+    )
+}
