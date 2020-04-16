@@ -1,21 +1,21 @@
 package com.gb.rating.ui.search
 
 import android.os.Handler
-import android.os.Message
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gb.rating.googleMapsAPI.UpdateDatabase
 import com.gb.rating.models.KM_PER_DEGREE
 import com.gb.rating.models.OurSearchPropertiesValue
+import com.gb.rating.models.boundingBoxToMyPoint
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import java.util.*
 import kotlin.math.abs
 
 const val MAP_PRECISION_RATE = 0.1
-
 const val DEFAULT_SCREEN_DISTANCE = 2.0
+const val ADDITIONAL_LOAD_FROM_GOOGLE_MAP_API = false
 
 class SearchViewModel : ViewModel() {
 
@@ -82,21 +82,16 @@ class SearchViewModel : ViewModel() {
         )
     }
 
-    private fun boundingBoxToMyPoint(newBoundingBox: BoundingBox): OurSearchPropertiesValue.MyPoint {
-        val centerPointGeo = newBoundingBox.getCenterWithDateLine()
-        return OurSearchPropertiesValue.MyPoint(
-            centerPointGeo.latitude,
-            centerPointGeo.longitude
-        )
-    }
+
 
     fun checkAndLoadFromGoogleAPI(boundingBox: BoundingBox, ourSearchPropertiesValue: OurSearchPropertiesValue){
 
         //TODO
 
         //toDO - не совсем правильно - не нужно грузить базу каждый раз
-//        val callback = Handler.Callback { true }
-//        UpdateDatabase.getInstance().LoadGoogleCafeForPoint(ourSearchPropertiesValue, boundingBoxToMyPoint(boundingBox), callback)
+        if (!ADDITIONAL_LOAD_FROM_GOOGLE_MAP_API) return
+        val callback = Handler.Callback { true }
+        UpdateDatabase.getInstance().LoadGoogleCafeForPoint(ourSearchPropertiesValue, boundingBox, boundingBoxToMyPoint(boundingBox), callback)
     }
 
 

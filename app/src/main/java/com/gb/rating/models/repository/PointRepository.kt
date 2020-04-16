@@ -11,7 +11,7 @@ interface PointRepository {
     fun writePoint(@NonNull value: Point_FB): io.reactivex.Completable
 
     @NonNull
-    fun retrievePoints(@NonNull country: String, @NonNull city: String, googleType: String, latitude: Boolean): Maybe<List<CafeItem>>
+    fun retrievePoints(@NonNull country: String, @NonNull city: String, googleType: String, latitudeFrom: Double, latitudeTo: Double, longitudeFrom: Double, longitudeTo: Double): Maybe<List<Point_FB>>
 
 }
 

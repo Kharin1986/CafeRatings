@@ -9,17 +9,17 @@ public class RetrofitInit {
 
     private static final String BASE_URL = "https://maps.googleapis.com/maps/api/";
 
-    private static com.gb.rating.googleMapsAPI.Api api;
+    private static GMAPI GMAPI;
 
-    public static synchronized com.gb.rating.googleMapsAPI.Api newApiInstance() {
-        if (api == null) {
-            api = new Retrofit.Builder()
+    public static synchronized GMAPI newApiInstance() {
+        if (GMAPI == null) {
+            GMAPI = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build()
-                    .create(com.gb.rating.googleMapsAPI.Api.class);
+                    .create(GMAPI.class);
         }
-        return api;
+        return GMAPI;
     }
 }

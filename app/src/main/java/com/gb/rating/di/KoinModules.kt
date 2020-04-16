@@ -27,7 +27,7 @@ val appModule = module {
     single { FirebaseDatabase.getInstance()} bind FirebaseDatabase::class
     single { FirebaseAuth.getInstance()}
 
-    single {Cafe_FB_Impl(get(), null)} bind CafeRepository::class
+    single { Cafe_FB_Impl(get(), null) } bind CafeRepository::class
     single {CafeInteractor(get())}
 
     single {UnverifiedRating_FB_Impl(get(), null)} bind UnverifiedRatingRepository::class
