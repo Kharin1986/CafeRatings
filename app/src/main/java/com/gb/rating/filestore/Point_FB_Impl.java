@@ -3,7 +3,7 @@ package com.gb.rating.filestore;
 import android.util.Log;
 import androidx.annotation.NonNull;
 
-import com.gb.rating.models.repository.PointRepository;
+import com.gb.rating.models.utils.PointRepository;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,7 +24,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class Point_FB_Impl implements PointRepository {
+public class Point_FB_Impl implements PointRepository<Point_FB> {
     private FirebaseFirestore db;
 
     //----------------------------------------------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ public class Point_FB_Impl implements PointRepository {
      * @param ref The given Collection reference.
      */
     @NonNull
-    private static Maybe<List<Point_FB>> getCollection(@NonNull final Query ref, double latitudeFrom, double latitudeTo, double longitudeFrom, double longitudeTo) {
+    private static Maybe<List<Point_FB>> getCollection(@NonNull final Query ref, double latitudeFrom, double latitudeTo, double longitudeFrom, double longitudeTo, String deleted) {
         return Maybe.create(new MaybeOnSubscribe<List<Point_FB>>() {
 
             @Override
@@ -54,8 +54,14 @@ public class Point_FB_Impl implements PointRepository {
                             for (QueryDocumentSnapshot document : documentSnapshots) {
                                 try {
                                     Point_FB curPoint = document.toObject(Point_FB.class);
-                                    if (curPoint.longitude+curPoint.radius >= longitudeFrom && curPoint.longitude-curPoint.radius <= longitudeTo
-                                            && curPoint.latitude+curPoint.radius >= latitudeFrom && curPoint.latitude-curPoint.radius <= latitudeTo)
+                                    if (!(deleted.equals("") || String.valueOf(curPoint.deleted).equals(deleted))) continue;
+                                    if (longitudeFrom != 0 && longitudeTo != 0 && latitudeFrom != 0 && latitudeTo == 0){
+                                        if (!(curPoint.longitude+curPoint.radius >= longitudeFrom && curPoint.longitude-curPoint.radius <= longitudeTo
+                                                && curPoint.latitude+curPoint.radius >= latitudeFrom && curPoint.latitude-curPoint.radius <= latitudeTo && (deleted.equals("")))) {
+                                            continue;
+                                        }
+                                    }
+
                                     points.add(curPoint);
                                 } catch (Exception e) {
                                     Log.d("retrievePoints", "Converting to Point_FB failed: " + document);
@@ -82,13 +88,30 @@ public class Point_FB_Impl implements PointRepository {
         return null;
     }
 
+
     @NotNull
     @Override
-    public Maybe<List<Point_FB>> retrievePoints(@NotNull String country, @NotNull String city, @NotNull String googleType, double latitudeFrom, double latitudeTo, double longitudeFrom, double longitudeTo) {
+    public Maybe<List<Point_FB>> retrievePoints(@NotNull String country, @NotNull String city, @NotNull String googleType, double latitudeFrom, double latitudeTo, double longitudeFrom, double longitudeTo, String deleted) {
         Query query = db.collection("Countries").document(country).collection("Cities").document(city)
                 .collection("Types").document(googleType.equals("") ? "no_type" : googleType)
                 .collection("Points").whereGreaterThanOrEqualTo("latitude", latitudeFrom-0.01).whereLessThanOrEqualTo("latitude", latitudeTo+0.01);
-        return getCollection(query, latitudeFrom, latitudeTo, longitudeFrom, longitudeTo);
+        return getCollection(query, latitudeFrom, latitudeTo, longitudeFrom, longitudeTo, deleted);
 
+    }
+
+    @NotNull
+    @Override
+    public Maybe<List<Point_FB>> retrieveNewPoints(@NotNull String country, @NotNull String city, @NotNull String googleType, long changeTime) {
+        Query query = db.collection("Countries").document(country).collection("Cities").document(city)
+                .collection("Types").document(googleType.equals("") ? "no_type" : googleType)
+                .collection("Points").whereGreaterThan("changeTime", changeTime);
+
+        return getCollection(query, 0, 0, 0, 0, "");
+    }
+
+    @NotNull
+    @Override
+    public long[] writePoints(@NotNull List<Point_FB> point_fbs) {
+        return null;
     }
 }

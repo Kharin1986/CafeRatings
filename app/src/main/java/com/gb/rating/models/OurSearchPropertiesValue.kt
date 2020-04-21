@@ -212,3 +212,8 @@ fun boundingBoxToMyPoint(newBoundingBox: BoundingBox): OurSearchPropertiesValue.
         centerPointGeo.longitude
     )
 }
+
+fun getGoogleTypes(): Array<String> {
+    return arrayOf(RESTAURANT_GOOGLE, BAR_GOOGLE, CAFE_GOOGLE)
+}
+

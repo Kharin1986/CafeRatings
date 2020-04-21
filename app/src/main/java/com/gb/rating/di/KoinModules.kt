@@ -35,6 +35,8 @@ val appModule = module {
 
     single {VerifiedRating_FB_Impl(get(), null)} bind VerifiedRatingRepository::class
     single {VerifiedRatingInteractor(get())}
+
+
 }
 
 val main = module {

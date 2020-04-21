@@ -2,14 +2,15 @@ package com.gb.rating.filestore;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.firestore.Exclude;
 
 import java.util.Date;
 
 @IgnoreExtraProperties
 public class Point_FB {
 
+    public String name = "no_name";
     public String country = "Россия";
     public String city = "";
     public String type = "";
@@ -17,12 +18,13 @@ public class Point_FB {
     public double longitude = 0;
     public double radius = 0;
     public long changeTime = new Date().getTime();
+    public boolean deleted = false;
 
-    //CONSTRUCTOR FOR getValue()
     public Point_FB() {
+        this.name = name(this);
     }
 
-    public Point_FB(String country, String city, String type, double latitude, double longitude, double radius, long changeTime) {
+    public Point_FB(String country, String city, String type, double latitude, double longitude, double radius, long changeTime, boolean deleted) {
         this.country = country;
         this.city = city;
         this.type = type;
@@ -30,6 +32,7 @@ public class Point_FB {
         this.longitude = longitude;
         this.radius = radius;
         this.changeTime = changeTime;
+        this.name = name(this);
     }
 
     public Point_FB(String country, String city, String type, double latitude, double longitude, double radius) {
@@ -39,11 +42,12 @@ public class Point_FB {
         this.latitude = latitude;
         this.longitude = longitude;
         this.radius = radius;
+        this.name = name(this);
     }
 
-    @Exclude
-    @Override
+
     @NonNull
+    @Exclude
     public String toString() {
         return "Point_FB{" +
                 "country='" + country + '\'' +
@@ -56,12 +60,16 @@ public class Point_FB {
                 '}';
     }
 
-    public String name() {
+    @NonNull
+    @Exclude
+    public String name(Point_FB point_room) {
         java.text.DecimalFormat fmt = new java.text.DecimalFormat();
         fmt.setMaximumFractionDigits(10);
         fmt.setMinimumFractionDigits(10);
         fmt.setGroupingUsed(false);
 
-        return ""+type+" " + fmt.format(latitude) + " " + fmt.format(latitude);
+        String curName =  (""+type+" " + fmt.format(latitude) + " " + fmt.format(latitude)).trim();
+        return curName.equals("")? "no_name" : curName;
     }
 }
+

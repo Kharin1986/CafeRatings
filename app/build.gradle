@@ -1,9 +1,9 @@
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
-apply plugin: 'kotlin-kapt'
 
 androidExtensions {
     experimental = true
@@ -112,4 +112,12 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-firestore:21.4.2'
 
+    //Room
+    implementation "androidx.room:room-runtime:2.2.5"
+    annotationProcessor "androidx.room:room-compiler:2.2.5"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    implementation "android.arch.persistence.room:rxjava2:1.1.1"
+    implementation "androidx.room:room-rxjava2:2.2.5"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
+    kapt "android.arch.persistence.room:rxjava2:1.1.1"
 }

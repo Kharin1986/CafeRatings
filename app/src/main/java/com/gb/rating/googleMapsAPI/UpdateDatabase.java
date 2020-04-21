@@ -1,5 +1,6 @@
 package com.gb.rating.googleMapsAPI;
 
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -15,8 +16,8 @@ import com.gb.rating.googleMapsAPI.Nearby.Result;
 import com.gb.rating.models.OurSearchPropertiesValue;
 import com.gb.rating.models.SearchUtils;
 import com.gb.rating.models.repository.CafeRepository;
-import com.gb.rating.models.repository.PointRepository;
 import com.gb.rating.models.utils.MainApplication;
+import com.gb.rating.models.utils.PointRepository;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,6 +25,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.jetbrains.annotations.NotNull;
 import org.osmdroid.util.BoundingBox;
 
 import java.util.ArrayList;
@@ -101,7 +103,7 @@ public class UpdateDatabase {
     }
 
     public boolean LoadGoogleCafeForPoint(OurSearchPropertiesValue ourSearchPropertiesValue, BoundingBox boundingBox, OurSearchPropertiesValue.MyPoint point, Handler.Callback callable) throws InterruptedException {
-        String[] cafeGoogleTypeArray = {SearchUtils.RESTAURANT_GOOGLE, SearchUtils.BAR_GOOGLE, SearchUtils.CAFE_GOOGLE};
+        String[] cafeGoogleTypeArray = SearchUtils.getGoogleTypes();
         Handler h = new Handler(callable);
         for (String cafeGoogleType : cafeGoogleTypeArray
         ) {
@@ -119,8 +121,9 @@ public class UpdateDatabase {
         return true;
     }
 
+
     private void findEmptySpaceAndLoad(OurSearchPropertiesValue ourSearchPropertiesValue, BoundingBox boundingBox, String cafeGoogleType, Handler h) {
-        pointRepository.retrievePoints(ourSearchPropertiesValue.getCountry(), ourSearchPropertiesValue.getCity(), cafeGoogleType, boundingBox.getActualSouth(), boundingBox.getActualNorth(), boundingBox.getLonWest(), boundingBox.getLonEast())
+        pointRepository.retrievePoints(ourSearchPropertiesValue.getCountry(), ourSearchPropertiesValue.getCity(), cafeGoogleType, boundingBox.getActualSouth(), boundingBox.getActualNorth(), boundingBox.getLonWest(), boundingBox.getLonEast(), String.valueOf(false))
                 .subscribe(new MaybeObserver<List<Point_FB>>() {
                                @Override
                                public void onSubscribe(Disposable d) {
@@ -274,7 +277,9 @@ public class UpdateDatabase {
 
 
         Runnable r = new Runnable() {
+            @SuppressLint("CheckResult")
             @Override
+            @io.reactivex.annotations.NonNull
             public void run() {
                 (pageToken == null ? gmAPI.getNearbySearch(point.getLatitude() + "," + point.getLongityde(), cafeGoogleType, GOOGLE_API_KEY, RANC_BY) : gmAPI.getNearbySearch(pageToken, GOOGLE_API_KEY)) //TYPE_BAR
                         .subscribeOn(Schedulers.io())
@@ -346,7 +351,7 @@ public class UpdateDatabase {
         Point_FB point_FB = Mapper.convert(point, radius, ourSearchPropertiesValue, cafeGoogleType);
         db.collection("Countries").document(point_FB.country).collection("Cities").document(point_FB.city)
                 .collection("Types").document(point_FB.type.equals("") ? "no_type" : point_FB.type)
-                .collection("Points").document(point_FB.name()).set(point_FB) //, SetOptions.merge()
+                .collection("Points").document(point_FB.name).set(point_FB) //, SetOptions.merge()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

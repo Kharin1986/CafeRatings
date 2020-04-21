@@ -9,7 +9,7 @@ import com.google.firebase.database.FirebaseDatabase
 import org.koin.android.ext.android.inject
 import org.koin.core.context.startKoin
 
-const val STARTING_LOAD_FROM_GOOGLE_MAP_API = true
+const val STARTING_LOAD_FROM_GOOGLE_MAP_API = false
 
 class MainApplication : Application() {
 
@@ -27,17 +27,31 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        val context: Context = MainApplication.applicationContext()
 
         startKoin {
             // declare modules
-            modules(listOf(appModule, main, listFragment, cafeInfo, home, review, search, settings ))
+            modules(listOf(appModule, main, listFragment, cafeInfo, home, review, search, settings))
         }
 
-        val db : FirebaseDatabase by inject()
+        //авторизация
+        val db: FirebaseDatabase by inject()
         db.setPersistenceEnabled(true)
         CommonAuthFunctions.checkAuth()
 
+        //обновление базы точек (с загруженными списками кафе)
+        UpdatePoints.getInstance().initialUpdating()
+
+        //обновление базы кафе по сохраненной точке
         if (STARTING_LOAD_FROM_GOOGLE_MAP_API) UpdateDatabase.doIt()
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+
+//        val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext())
+//        prefs.edit(
+//            false,
+//            {putLong("PointsLastTimeUpdate", UpdatePoints.getInstance().getPointsLastTimeUpdate())}
+//        )
     }
 }
