@@ -3,7 +3,6 @@ package com.gb.rating.models.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
@@ -23,7 +22,6 @@ import java.util.List;
 import io.reactivex.MaybeObserver;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 
 public class UpdatePoints {
@@ -96,7 +94,7 @@ public class UpdatePoints {
                     pointsLastTimeUpdate = Math.max(pointsLastTimeUpdate, point_room.changeTime);
                 }
                 point_room_impl.writePoints(points_room);
-
+                setprefs();
             }
 
             @Override
@@ -106,10 +104,18 @@ public class UpdatePoints {
 
             @Override
             public void onComplete() {
-
+                //новых точек нет, все хорошо, ничего делать не нужно
             }
         });
     }
+
+    public void setprefs(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainApplication.Companion.applicationContext());
+        SharedPreferences.Editor editor= prefs.edit();
+        editor.putLong("PointsLastTimeUpdate", pointsLastTimeUpdate);
+        editor.apply();
+    }
+
 
 //    private Disposable newPointsRequest(OurSearchPropertiesValue ourSearchPropertiesValue, String cafeGoogleType) {
 //        return point_fb_impl.retrieveNewPoints(ourSearchPropertiesValue.getCountry(), ourSearchPropertiesValue.getCity(), cafeGoogleType, pointsLastTimeUpdate).subscribe(new Consumer<List<Point_FB>>() {

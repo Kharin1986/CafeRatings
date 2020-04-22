@@ -1,3 +1,4 @@
+
 package com.gb.rating.models.utils
 
 import android.app.Application
@@ -45,13 +46,10 @@ class MainApplication : Application() {
         if (STARTING_LOAD_FROM_GOOGLE_MAP_API) UpdateDatabase.doIt()
     }
 
+
+
     override fun onTerminate() {
         super.onTerminate()
-
-//        val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext())
-//        prefs.edit(
-//            false,
-//            {putLong("PointsLastTimeUpdate", UpdatePoints.getInstance().getPointsLastTimeUpdate())}
-//        )
     }
 }
+
