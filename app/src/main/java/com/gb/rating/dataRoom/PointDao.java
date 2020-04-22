@@ -8,18 +8,14 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.gb.rating.filestore.Point_FB;
-
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 import io.reactivex.Maybe;
 
 @Dao
 abstract class PointDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract long insertArticle(Point_Room point);
+    abstract long insertPoint(Point_Room point);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract long[] insertPoints(List<Point_Room> points);
@@ -39,12 +35,12 @@ abstract class PointDao {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // ПОЛУЧЕНИЕ СПИСКА ТОЧЕК
 
-    @Query("SELECT * FROM points WHERE deleted = 'false'")
-    abstract List<Point_Room> getPoints();
+    @Query("SELECT * FROM points WHERE not deleted")
+    abstract Maybe<List<Point_Room>> getPoints();
 
-    @Query("SELECT * FROM points WHERE (:deleted = '' OR deleted = :deleted) AND country = :country AND city = :city  AND (:type = '' OR type=:type) AND latitudeSouth <= :latitudeNorth AND latitudeNorth >= :latitudeSouth AND longitudeWest >= :longitudeEast AND longitudeEast <= :longitudeWest")
-    abstract List<Point_Room> getPoints(@NonNull String country, @NonNull String city, @NonNull String type, double latitudeSouth, double latitudeNorth, double longitudeWest, double longitudeEast, @NonNull String deleted);
+    @Query("SELECT * FROM points WHERE  country = :country AND city = :city  AND (:type = '' OR type=:type) AND latitudeSouth <= :latitudeNorth AND latitudeNorth >= :latitudeSouth AND longitudeWest <= :longitudeEast AND longitudeEast >= :longitudeWest AND (:deleted ='' OR :deleted ='true' AND deleted OR :deleted ='false' AND not deleted)")
+    abstract Maybe<List<Point_Room>> getPoints(@NonNull String country, @NonNull String city, @NonNull String type, double latitudeSouth, double latitudeNorth, double longitudeWest, double longitudeEast, @NonNull String deleted);
 
-
+//    (:deleted ='' OR deleted = :deleted) AND
 
 }

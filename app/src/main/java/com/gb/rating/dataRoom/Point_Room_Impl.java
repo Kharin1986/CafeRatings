@@ -8,7 +8,7 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 
-public class Point_Room_Impl implements PointRepository<Point_Room> {
+public class Point_Room_Impl implements PointRepository<Point_Room, RoomApp> {
     private RoomApp db;
     private PointDao pointDao;
 
@@ -19,6 +19,10 @@ public class Point_Room_Impl implements PointRepository<Point_Room> {
         this.pointDao = this.db.pointDao();
     }
 
+    @Override
+    public RoomApp getDB() {
+        return db;
+    }
 
     @NotNull
     @Override
@@ -26,10 +30,15 @@ public class Point_Room_Impl implements PointRepository<Point_Room> {
         return null;
     }
 
+    @Override
+    public Maybe<List<Point_Room>> retrieveAllPoints() {
+        return pointDao.getPoints();
+    }
+
     @NotNull
     @Override
     public Maybe<List<Point_Room>> retrievePoints(@NotNull String country, @NotNull String city, @NotNull String googleType, double latitudeFrom, double latitudeTo, double longitudeFrom, double longitudeTo, String deleted) {
-        return null;
+        return pointDao.getPoints(country, city, googleType, latitudeFrom, latitudeTo, longitudeFrom, longitudeTo, deleted);
     }
 
     @Override
@@ -41,7 +50,10 @@ public class Point_Room_Impl implements PointRepository<Point_Room> {
     @NotNull
     @Override
     public long[] writePoints(@NotNull List<Point_Room> points_rooms) {
-        return pointDao.insertPoints(points_rooms);
+        long[] result = pointDao.insertPoints(points_rooms);
+        return result;
 
     }
+
+
 }

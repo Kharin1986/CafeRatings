@@ -24,13 +24,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class Point_FB_Impl implements PointRepository<Point_FB> {
+public class Point_FB_Impl implements PointRepository<Point_FB, FirebaseFirestore> {
     private FirebaseFirestore db;
 
     //----------------------------------------------------------------------------------------------------------------------------------
     //SERVICE METHODS
     public Point_FB_Impl(FirebaseFirestore db) {
         this.db = db;
+    }
+
+    @Override
+    public FirebaseFirestore getDB() {
+        return db;
     }
 
     /**
@@ -88,6 +93,11 @@ public class Point_FB_Impl implements PointRepository<Point_FB> {
         return null;
     }
 
+    @Override
+    public Maybe<List<Point_FB>> retrieveAllPoints() {
+        return null;
+    }
+
 
     @NotNull
     @Override
@@ -114,4 +124,6 @@ public class Point_FB_Impl implements PointRepository<Point_FB> {
     public long[] writePoints(@NotNull List<Point_FB> point_fbs) {
         return null;
     }
+
+
 }

@@ -14,7 +14,7 @@ import java.util.Date;
 @Entity(tableName = "points", indices = {
         @Index(value = {"country", "city", "type"})
 })
-public class Point_Room {
+public class Point_Room implements Point<Point_Room> {
 
     @PrimaryKey
     @NonNull

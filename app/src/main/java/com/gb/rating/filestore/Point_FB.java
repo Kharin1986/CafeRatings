@@ -2,13 +2,14 @@ package com.gb.rating.filestore;
 
 import androidx.annotation.NonNull;
 
+import com.gb.rating.models.utils.Point;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.firestore.Exclude;
 
 import java.util.Date;
 
 @IgnoreExtraProperties
-public class Point_FB {
+public class Point_FB implements Point<Point_FB> {
 
     public String name = "no_name";
     public String country = "Россия";

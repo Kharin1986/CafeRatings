@@ -8,10 +8,13 @@ import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.annotations.NonNull;
 
-public interface PointRepository<GenericPoint> {
+public interface PointRepository<GenericPoint, Database> {
 
     @NonNull
     Completable writePoint(@NotNull GenericPoint value);
+
+    @NonNull
+    Maybe<List<GenericPoint>> retrieveAllPoints();
 
     @NonNull
     Maybe<List<GenericPoint>> retrievePoints(@NotNull String country, @NotNull String city, String googleType, double latitudeFrom, double latitudeTo, double longitudeFrom, double longitudeTo, String deleted);
@@ -20,4 +23,6 @@ public interface PointRepository<GenericPoint> {
     Maybe<List<GenericPoint>> retrieveNewPoints(@NotNull String country, @NotNull String city, @NotNull String cafeGoogleType, long changeTime);
 
     long[] writePoints(List<GenericPoint> points);
+
+    Database getDB();
 }
