@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        finishAndRemoveTask()
+        finishAndRemoveTask() //TODO - перестала работать, MainApplication не закрывается
     }
 
     // Кнопки домашней страницы)

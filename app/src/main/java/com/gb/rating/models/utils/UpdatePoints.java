@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.MaybeObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class UpdatePoints {
@@ -78,7 +80,8 @@ public class UpdatePoints {
     private void newPointsRequest(OurSearchPropertiesValue ourSearchPropertiesValue, String cafeGoogleType) {
         if (ourSearchPropertiesValue.getCountry() == "" || ourSearchPropertiesValue.getCity() == "") return;
 
-        point_fb_impl.retrieveNewPoints(ourSearchPropertiesValue.getCountry(), ourSearchPropertiesValue.getCity(), cafeGoogleType, pointsLastTimeUpdate).subscribe(new MaybeObserver<List<Point_FB>>() {
+        point_fb_impl.retrieveNewPoints(ourSearchPropertiesValue.getCountry(), ourSearchPropertiesValue.getCity(), cafeGoogleType, pointsLastTimeUpdate)
+                .observeOn(Schedulers.io()).subscribe(new MaybeObserver<List<Point_FB>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -104,7 +107,7 @@ public class UpdatePoints {
 
             @Override
             public void onComplete() {
-                //новых точек нет, все хорошо, ничего делать не нужно
+                //новых точек нет, все хорошо, ничего делать не нужно (работает, проверено)
             }
         });
     }

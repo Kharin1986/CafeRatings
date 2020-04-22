@@ -15,7 +15,7 @@ import kotlin.math.abs
 
 const val MAP_PRECISION_RATE = 0.1
 const val DEFAULT_SCREEN_DISTANCE = 2.0
-const val ADDITIONAL_LOAD_FROM_GOOGLE_MAP_API = false
+const val ADDITIONAL_LOAD_FROM_GOOGLE_MAP_API = true
 
 class SearchViewModel : ViewModel() {
 
