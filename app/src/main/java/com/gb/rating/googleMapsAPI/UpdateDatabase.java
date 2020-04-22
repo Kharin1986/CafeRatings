@@ -21,6 +21,7 @@ import com.gb.rating.models.SearchUtils;
 import com.gb.rating.models.repository.CafeRepository;
 import com.gb.rating.models.utils.MainApplication;
 import com.gb.rating.models.utils.Point;
+import com.gb.rating.models.utils.UpdatePoints;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -196,7 +197,7 @@ public class UpdateDatabase {
 //                );
 //    }
 
-    private <T extends Point> boolean  countCenterAndLoadCafes(OurSearchPropertiesValue ourSearchPropertiesValue, BoundingBox boundingBox, String cafeGoogleType, Handler h, List<T> points) {
+    private  boolean  countCenterAndLoadCafes(OurSearchPropertiesValue ourSearchPropertiesValue, BoundingBox boundingBox, String cafeGoogleType, Handler h, List<Point_Room> points) {
 
         OurSearchPropertiesValue.MyPoint centerPoint;
 
@@ -206,13 +207,15 @@ public class UpdateDatabase {
         } else {
             //first, middle radius
             double middleRadius = 0;
-            for (T point : points
+            for (Point_Room point : points
             ) {
                 middleRadius += point.radius;
             }
             middleRadius = middleRadius / points.size();
-            double delta = Math.min(middleRadius / 20, boundingBox.getLatitudeSpan()/30);
-            if (delta < boundingBox.getLatitudeSpan()/100) {return false;} // ограничение в количестве переборов
+            double delta = Math.min(middleRadius / 10, boundingBox.getLatitudeSpan()/30);
+            try {
+                if (Math.pow(boundingBox.getLatitudeSpan()/delta,2)*points.size()>3000000) return false; // ограничение в количестве переборов, тормозить будет
+            } catch (Exception e){return false;}
 
             //обнаруживаем точки без кафе
             double middleX = 0;
@@ -223,7 +226,7 @@ public class UpdateDatabase {
             for (double x = boundingBox.getActualSouth(); x <= boundingBox.getActualNorth(); x += delta) {
                 for (double y = boundingBox.getLonWest(); y <= boundingBox.getLonEast(); y += delta) {
                     boolean curCovered = false;
-                    for (T point : points) {
+                    for (Point_Room point : points) {
                         if (geoDistance(point, x, y) <= point.radius && geoDistance(point, x, y + delta) <= point.radius && geoDistance(point, x + delta, y) <= point.radius
                                 && geoDistance(point, x + delta, y + delta) <= point.radius) {
                             curCovered = true;
@@ -387,6 +390,7 @@ public class UpdateDatabase {
                     });
         }
         writePoint(point, maxCafeDistance[0], ourSearchPropertiesValue, cafeGoogleType);
+        UpdatePoints.getInstance().checkNewPointsAndSave(ourSearchPropertiesValue);
     }
 
     private void writePoint(OurSearchPropertiesValue.MyPoint point, double radius, OurSearchPropertiesValue ourSearchPropertiesValue, String cafeGoogleType) {

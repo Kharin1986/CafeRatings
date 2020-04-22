@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.MaybeObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
