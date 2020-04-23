@@ -28,6 +28,7 @@ public class Mapper {
         curCafe.latitude = cafe.getLatitude();
         curCafe.longitude = cafe.getLongitude();
         curCafe.deleted = cafe.getDeleted();
+        curCafe.changeTime = cafe.getChangeTime();
         //cafeId, fav  не нужнs
 
 
@@ -35,7 +36,7 @@ public class Mapper {
     }
 
     public static CafeItem convert(Cafe_FB cafe){
-        return  new CafeItem(0, cafe.name, cafe.type, cafe.descr, (int) -cafe.rating, cafe.country, cafe.city, cafe.addressMain, "", "", "", 0, cafe.cafeId, cafe.latitude, cafe.longitude, cafe.deleted, false );
+        return  new CafeItem(0, cafe.name, cafe.type, cafe.descr, (int) -cafe.rating, cafe.country, cafe.city, cafe.addressMain, "", "", "", 0, cafe.cafeId, cafe.latitude, cafe.longitude, cafe.deleted, false, cafe.changeTime );
 
     }
 

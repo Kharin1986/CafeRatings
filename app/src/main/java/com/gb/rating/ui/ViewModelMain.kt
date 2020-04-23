@@ -1,32 +1,30 @@
 package com.gb.rating.ui
 
 import androidx.lifecycle.*
+import androidx.lifecycle.Observer
 import com.gb.rating.dataBase.CafeDataSource
 import com.gb.rating.models.*
 import com.gb.rating.models.usercase.CafeInteractor
 import com.gb.rating.models.utils.MainApplication
+import com.gb.rating.models.utils.UpdateLocalCafeList
 import io.reactivex.MaybeObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.ArrayList
+import kotlinx.coroutines.withContext
+import java.util.*
 
 
 class ViewModelMain (private val cafeInteractor : CafeInteractor) : ViewModel() {
     private val cafeList: MutableLiveData<List<CafeItem>> = MutableLiveData()
     //Kharin 22.02.2020
     private val currentCafeItem: MutableLiveData<List<CafeReviewItem>> = MutableLiveData() //Kharin 22.02.2020
-
-
     private val ourSearchProperties: MutableLiveData<OurSearchPropertiesValue> = MutableLiveData()
     // CafeInteractor - нужен сразу
     lateinit var ourSearchPropertiesObserver : Observer<OurSearchPropertiesValue>
-
     fun cafelist() : LiveData<List<CafeItem>> = cafeList
-
     //Kharin 22.02.2020
     fun cafeReviewList() : LiveData<List<CafeReviewItem>> = currentCafeItem //Kharin 22.02.2020
 
@@ -61,30 +59,14 @@ class ViewModelMain (private val cafeInteractor : CafeInteractor) : ViewModel() 
     }
 
     private fun initDatabaseUpdater(country: String, city: String, removeAll : Boolean = false) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                updateInternalDatabase(country, city, removeAll)
-            }
-        }
-    }
-
-    private fun updateInternalDatabase(country: String = "", city: String = "", removeAll : Boolean = false) {
-        cafeInteractor.retrieveCafeList(country, city)
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .doOnSuccess {
-                    cafeItems -> writeRetrievedCafeListToLocalDatabase(cafeItems, removeAll) }
-            .doOnComplete {
-                writeRetrievedCafeListToLocalDatabase(ArrayList(), removeAll) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : MaybeObserver<List<CafeItem>> {
+        UpdateLocalCafeList.updateInternalDatabase(country, city, removeAll)
+            .subscribe(object : MaybeObserver<String> {
                 override fun onSubscribe(d: Disposable) {}
-                override fun onSuccess(cafeItems: List<CafeItem>) {
+                override fun onSuccess(s: String) {
                     ourSearchProperties.value = ourSearchProperties.value?.updateAction(
                         BASE_UPDATED_ACTION
                     )
                 }
-
                 override fun onError(e: Throwable) {}
                 override fun onComplete() {
                     ourSearchProperties.value = ourSearchProperties.value?.updateAction(
@@ -92,13 +74,6 @@ class ViewModelMain (private val cafeInteractor : CafeInteractor) : ViewModel() 
                     )
                 }
             })
-    }
-
-    private fun writeRetrievedCafeListToLocalDatabase(cafeItems: List<CafeItem>, removeAll : Boolean = false) {
-        val dbHelperW = CafeDataSource(MainApplication.applicationContext())
-        dbHelperW.openW()
-        if (removeAll) {dbHelperW.removeAll()}
-        dbHelperW.writeCafeList(cafeItems)
     }
 
     fun refreshCafeList() {
@@ -115,7 +90,7 @@ class ViewModelMain (private val cafeInteractor : CafeInteractor) : ViewModel() 
 
             if (cafeList.value?.size!! > 0) {
                 //временно
-                val dbHelperW = CafeDataSource(MainApplication.applicationContext())
+                val dbHelperW = CafeDataSource.getInstance(MainApplication.applicationContext())
                 dbHelperW.openW()
                 dbHelperW.setCafeFav(cafeList.value?.get(0), true)
             }
@@ -123,9 +98,9 @@ class ViewModelMain (private val cafeInteractor : CafeInteractor) : ViewModel() 
     }
 
     fun readAllCafeWithContext(ourSearchPropertiesValue: OurSearchPropertiesValue?): List<CafeItem> {
-        val dbHelperR = CafeDataSource(MainApplication.applicationContext())
+        val dbHelperR = CafeDataSource.getInstance(MainApplication.applicationContext())
         dbHelperR.openR()
-        return dbHelperR.readAllCafe(ourSearchPropertiesValue) //TODO проверить, прямая работа с SQLLite не ведется ли уже в среде IO
+        return dbHelperR.readAllCafe(ourSearchPropertiesValue)
     }
 
 }

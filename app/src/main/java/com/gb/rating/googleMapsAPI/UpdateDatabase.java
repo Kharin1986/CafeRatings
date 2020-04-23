@@ -51,7 +51,7 @@ public class UpdateDatabase {
     private final String GOOGLE_API_KEY = "AIzaSyBgQhfZPKjhli7XJonmQdUmLtkRnGpUKnU";
     private final String RANC_BY = "distance";
     private final long WAIT_FOR_NEW_REQUEST_TO_API = 61000;
-    private final boolean USE_REQUEST_CONTINUATION = false;
+    private final boolean USE_REQUEST_CONTINUATION = true;
 
 
     private long timeOfLastRequest = 0;
