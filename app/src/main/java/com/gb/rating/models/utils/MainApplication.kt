@@ -4,7 +4,6 @@ package com.gb.rating.models.utils
 import android.app.Application
 import android.content.Context
 import com.gb.rating.di.*
-import com.gb.rating.googleMapsAPI.UpdateDatabase
 import com.gb.rating.models.Firebase_Auth.CommonAuthFunctions
 import com.google.firebase.database.FirebaseDatabase
 import org.koin.android.ext.android.inject

@@ -1,4 +1,4 @@
-package com.gb.rating.googleMapsAPI;
+package com.gb.rating.models.utils;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
@@ -14,14 +14,13 @@ import com.gb.rating.filestore.Mapper;
 import com.gb.rating.filestore.Point_FB;
 import com.gb.rating.filestore.Point_FB_Impl;
 import com.gb.rating.fireBase_RealTime.repository.Cafe_FB_Impl;
+import com.gb.rating.googleMapsAPI.GMAPI;
 import com.gb.rating.googleMapsAPI.Nearby.NearbySearch;
 import com.gb.rating.googleMapsAPI.Nearby.Result;
+import com.gb.rating.googleMapsAPI.RetrofitInit;
 import com.gb.rating.models.OurSearchPropertiesValue;
 import com.gb.rating.models.SearchUtils;
 import com.gb.rating.models.repository.CafeRepository;
-import com.gb.rating.models.utils.MainApplication;
-import com.gb.rating.models.utils.Point;
-import com.gb.rating.models.utils.UpdatePoints;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnFailureListener;
