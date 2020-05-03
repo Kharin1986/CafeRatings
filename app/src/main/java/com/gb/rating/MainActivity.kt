@@ -24,10 +24,10 @@ import java.security.AccessController
 class MainActivity : AppCompatActivity() {
     var navController: NavController? = null
     val viewModelMain: ViewModelMain by viewModel()
-    val mKeepStateNavigator by lazy { KeepStateNavigator(this, supportFragmentManager, R.id.nav_view) }
+    val mKeepStateNavigator by lazy { KeepStateNavigator(this, supportFragmentManager, R.id.nav_host_fragment) }
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {item ->
-        mKeepStateNavigator.navigate(item.itemId)
-        true}
+        val result = mKeepStateNavigator.navigate(item.itemId)
+        return@OnNavigationItemSelectedListener true}
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +68,10 @@ class MainActivity : AppCompatActivity() {
 //        navView.setupWithNavController(navController)
 
 //        setSupportActionBar(toolbar)
+
+
         nav_view.setOnNavigationItemSelectedListener (mOnNavigationItemSelectedListener)
+        mKeepStateNavigator.navigate(R.id.navigation_home);
 
 
     }
