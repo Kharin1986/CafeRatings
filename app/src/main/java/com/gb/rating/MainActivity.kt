@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     val mKeepStateNavigator by lazy { KeepStateNavigator(this, supportFragmentManager, R.id.nav_host_fragment) }
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {item ->
         val result = mKeepStateNavigator.navigate(item.itemId)
-        return@OnNavigationItemSelectedListener true}
+        return@OnNavigationItemSelectedListener false}
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -145,6 +145,12 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         mKeepStateNavigator.navigate(R.id.navigation_home)
     }
+
+    fun navigateToTtem(intItem :Int) {
+        val navController = findNavController(R.id.nav_host_fragment)
+        mKeepStateNavigator.navigate(intItem)
+    }
+
 
     override fun onStart() {
         super.onStart()

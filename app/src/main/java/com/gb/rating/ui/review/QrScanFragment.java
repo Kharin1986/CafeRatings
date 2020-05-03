@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.gb.rating.MainActivity;
 import com.gb.rating.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -126,24 +127,26 @@ public class QrScanFragment extends Fragment {
         requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length != 0 &&
-                    (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                refreshFragment();
-            } else {
-                refreshFragment();
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    private void refreshFragment() {
-        getFragmentManager()
-                .beginTransaction()
-                .detach(QrScanFragment.this)
-                .attach(QrScanFragment.this)
-                .commit();
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+//            if (grantResults.length != 0 &&
+//                    (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+//                refreshFragment();
+//            } else {
+//                refreshFragment();
+//            }
+//        }
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//    }
+//
+//    private void refreshFragment() {
+////        getFragmentManager()
+////                .beginTransaction()
+////                .detach(QrScanFragment.this)
+////                .attach(QrScanFragment.this)
+////                .commit();
+//
+//        ((MainActivity) getActivity()).navigateToHome();
+//    }
 }
