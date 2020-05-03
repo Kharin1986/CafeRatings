@@ -1,6 +1,8 @@
 package com.gb.rating
 
+import android.content.Context
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -14,11 +16,19 @@ import androidx.preference.PreferenceManager
 import com.gb.rating.models.*
 import com.gb.rating.ui.KeepStateNavigator
 import com.gb.rating.ui.ViewModelMain
+import com.gb.rating.ui.home.HomeFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.security.AccessController
 
 class MainActivity : AppCompatActivity() {
     var navController: NavController? = null
     val viewModelMain: ViewModelMain by viewModel()
+    val mKeepStateNavigator by lazy { KeepStateNavigator(this, supportFragmentManager, R.id.nav_view) }
+    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {item ->
+        mKeepStateNavigator.navigate(item.itemId)
+        true}
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,26 +47,48 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initNavControllerAndActionBar() {
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!
-//        // setup custom navigator
-        val navigator = KeepStateNavigator(this, navHostFragment.childFragmentManager, R.id.nav_host_fragment)
-        val navController = findNavController(R.id.nav_host_fragment)
-        navController.navigatorProvider += navigator
-        navController.setGraph(R.navigation.mobile_navigation)
-        //appbar and navView
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home,
-                R.id.navigation_review,
-                R.id.navigation_list,
-                R.id.navigation_search,
-                R.id.navigation_settings
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+//        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+//        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!
+////        // setup custom navigator
+//        val navigator = KeepStateNavigator(this, navHostFragment.childFragmentManager, R.id.nav_host_fragment)
+//        val navController = findNavController(R.id.nav_host_fragment)
+//        navController.navigatorProvider += navigator
+//        navController.setGraph(R.navigation.mobile_navigation)
+//        //appbar and navView
+//        val appBarConfiguration = AppBarConfiguration(
+//            setOf(
+//                R.id.navigation_home,
+//                R.id.navigation_review,
+//                R.id.navigation_list,
+//                R.id.navigation_search,
+//                R.id.navigation_settings
+//            )
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+//        navView.setupWithNavController(navController)
+
+//        setSupportActionBar(toolbar)
+        nav_view.setOnNavigationItemSelectedListener (mOnNavigationItemSelectedListener)
+
+
     }
+
+//    object mOnNavigationItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {
+//        override fun onNavigationItemSelected(item: MenuItem): Boolean {
+//            when (item.itemId){
+//                R.id.navigation_home -> {
+//                    val mFragment = HomeFragment()
+//
+//
+//                }
+//
+//
+//            }
+//
+//
+//        }
+//
+//    }
 
     override fun onBackPressed() {
         finishAndRemoveTask() //TODO - перестала работать, MainApplication не закрывается
@@ -103,12 +135,12 @@ class MainActivity : AppCompatActivity() {
 
      fun navigateToList() {
         val navController = findNavController(R.id.nav_host_fragment)
-        navController.navigate(R.id.navigation_list)
+         mKeepStateNavigator.navigate(R.id.navigation_list)
     }
 
     fun navigateToHome() {
         val navController = findNavController(R.id.nav_host_fragment)
-        navController.navigate(R.id.navigation_home)
+        mKeepStateNavigator.navigate(R.id.navigation_home)
     }
 
     override fun onStart() {
