@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        finishAndRemoveTask() //TODO - перестала работать, MainApplication не закрывается
+        finishAndRemoveTask()
     }
 
     // Кнопки домашней страницы)
@@ -109,6 +109,11 @@ class MainActivity : AppCompatActivity() {
     fun navigateToHome() {
         val navController = findNavController(R.id.nav_host_fragment)
         navController.navigate(R.id.navigation_home)
+    }
+
+    fun navigateToItem(intItem : Int) {
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.navigate(intItem)
     }
 
     override fun onStart() {

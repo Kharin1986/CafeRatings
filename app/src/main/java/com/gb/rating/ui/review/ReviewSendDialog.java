@@ -31,7 +31,7 @@ public class ReviewSendDialog extends DialogFragment {
         Button okButton = dialogView.findViewById(R.id.ok_button);
         okButton.setOnClickListener(v -> {
             //TODO save rating
-            dismiss();
+            //dismiss();
             //((MainActivity) getActivity()).getNavController().navigate(R.id.navigation_home);
             ((MainActivity) getActivity()).navigateToHome();
 

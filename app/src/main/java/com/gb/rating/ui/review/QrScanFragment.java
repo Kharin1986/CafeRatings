@@ -4,7 +4,10 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -17,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.gb.rating.MainActivity;
 import com.gb.rating.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -28,17 +32,18 @@ import java.io.IOException;
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 
 public class QrScanFragment extends Fragment {
-
+    private final String TAG = "QrScanFragment";
     private SurfaceView surfaceView;
-    private View view;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private final int CAMERA_PERMISSION_REQUEST_CODE = 10;
+    private final QrScanFragment instance = this;
+    private boolean scanningFinished = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_qr_scan,
+        View view = inflater.inflate(R.layout.fragment_qr_scan,
                 container, false);
 
         if (checkForCameraPermission()) {
@@ -52,7 +57,7 @@ public class QrScanFragment extends Fragment {
         return view;
     }
 
-        private void initViews(View view) {
+    private void initViews(View view) {
         surfaceView = view.findViewById(R.id.camera_view);
         barcodeDetector = new BarcodeDetector.Builder(getContext()).setBarcodeFormats(Barcode.QR_CODE).build();
         cameraSource = new CameraSource.Builder(getContext(), barcodeDetector)
@@ -60,19 +65,18 @@ public class QrScanFragment extends Fragment {
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setAutoFocusEnabled(true)
                 .build();
-        }
+    }
 
     private void startScanQR() {
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-
             }
 
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> qrCodes = detections.getDetectedItems();
-                if (qrCodes.size() != 0) {
+                if (qrCodes.size() != 0 && !scanningFinished) {
                     Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
                     vibrator.vibrate(300);
                     //создаем фрагмент отзыва
@@ -81,11 +85,15 @@ public class QrScanFragment extends Fragment {
 //                    Bundle bundle = new Bundle();
 //                    bundle.putString("tag", qrCodes.valueAt(0).displayValue);
 //                    reviewFragment.setArguments(bundle);
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(R.id.nav_host_fragment, reviewFragment);
-                    ft.addToBackStack(null);
-                    ft.commit();
+                    scanningFinished = true;
 
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((MainActivity) getActivity()).navigateToItem(R.id.navigation_review_second_page);
+
+                        }
+                    });
                 }
             }
         });
@@ -140,10 +148,10 @@ public class QrScanFragment extends Fragment {
     }
 
     private void refreshFragment() {
-        getFragmentManager()
-                .beginTransaction()
-                .detach(QrScanFragment.this)
-                .attach(QrScanFragment.this)
-                .commit();
+//        getFragmentManager()
+//                .beginTransaction()
+//                .detach(QrScanFragment.this)
+//                .attach(QrScanFragment.this)
+//                .commit();
     }
 }

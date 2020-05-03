@@ -11,6 +11,7 @@ import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 
+import com.gb.rating.MainActivity;
 import com.gb.rating.R;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -62,7 +63,8 @@ public class ReviewFragment extends Fragment {
             if (chosenCafeType != null & kitchenRat != 0 & serviceRat != 0 & ambianceRat != 0) {
                 ReviewSendDialog reviewSendDialog = new ReviewSendDialog();
                 if (getActivity() != null)
-                    reviewSendDialog.show(getActivity().getSupportFragmentManager(), "TAG");
+                    //reviewSendDialog.show(getActivity().getSupportFragmentManager(), "TAG");
+                    ((MainActivity) getActivity()).navigateToHome();
 
                 //проверка
                 System.out.println(kitchenRat + "\n" + serviceRat + "\n" + ambianceRat + "\n" + reviewTextStr + "\n" + chosenCafeType);
