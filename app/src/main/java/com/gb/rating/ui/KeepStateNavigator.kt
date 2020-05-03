@@ -28,11 +28,16 @@ class KeepStateNavigator(
 
         val tag = destination.id.toString()
         val transaction = manager.beginTransaction()
+        var removed = false
         var initialNavigate = false
         val currentFragment = manager.primaryNavigationFragment
 
         if (currentFragment != null) {
-            transaction.hide(currentFragment)
+            if (currentFragment is HomeFragment || currentFragment is com.gb.rating.ui.list.ListFragment || currentFragment is SearchFragment)
+                transaction.hide(currentFragment)
+            else {
+                transaction.remove(currentFragment)
+                removed = true}
 //            transaction.detach(currentFragment)
         } else {
             initialNavigate = true
@@ -50,12 +55,13 @@ class KeepStateNavigator(
 
         transaction.setPrimaryNavigationFragment(fragment)
         transaction.setReorderingAllowed(true)
-        transaction.commitNow()
+        if (removed) transaction.commitAllowingStateLoss()
+        else transaction.commitNow()
 
-        if (currentFragment != null) {
-            if (!(currentFragment is HomeFragment || currentFragment is com.gb.rating.ui.list.ListFragment || currentFragment is SearchFragment))
-                manager.beginTransaction().remove(currentFragment).commitAllowingStateLoss()
-        }
+//        if (currentFragment != null) {
+//            if (!(currentFragment is HomeFragment || currentFragment is com.gb.rating.ui.list.ListFragment || currentFragment is SearchFragment))
+//                manager.beginTransaction().remove(currentFragment).commitAllowingStateLoss()
+//        }
 
 
         return if (initialNavigate) {
