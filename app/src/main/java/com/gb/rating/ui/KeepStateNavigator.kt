@@ -11,6 +11,7 @@ import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigator
 import com.gb.rating.R
 import com.gb.rating.ui.home.HomeFragment
+import com.gb.rating.ui.review.QrScanFragment
 import com.gb.rating.ui.review.ReviewFragment
 import com.gb.rating.ui.search.SearchFragment
 import com.gb.rating.ui.settings.SettingsFragment
@@ -24,7 +25,7 @@ class KeepStateNavigator(
 )  {
 
     fun navigate(
-        destination: Int
+        destination: Int, intRemove : Boolean = false
     ): Int? {
         val tag = destination.toString()
         val transaction = manager.beginTransaction()
@@ -32,8 +33,11 @@ class KeepStateNavigator(
         var initialNavigate = false
         val currentFragment = manager.primaryNavigationFragment
         if (currentFragment != null) {
-            //transaction.detach(currentFragment)
-            transaction.hide(currentFragment)
+            if (intRemove) transaction.remove(currentFragment)
+            else {
+                //transaction.detach(currentFragment)
+                transaction.hide(currentFragment)
+            }
         } else {
             initialNavigate = true
         }
@@ -43,10 +47,11 @@ class KeepStateNavigator(
 
             val curClassName : String = when(destination){
                 R.id.navigation_home -> HomeFragment::class.java.name
-                R.id.navigation_list -> ListFragment::class.java.name
-                R.id.navigation_review -> ReviewFragment::class.java.name
+                R.id.navigation_list -> com.gb.rating.ui.list.ListFragment::class.java.name
+                R.id.navigation_review -> QrScanFragment::class.java.name
                 R.id.navigation_search -> SearchFragment::class.java.name
                 R.id.navigation_settings -> SettingsFragment::class.java.name
+                R.id.navigation_review_second_page -> ReviewFragment::class.java.name
                 else -> return null
             }
 
@@ -58,8 +63,8 @@ class KeepStateNavigator(
         }
 
         transaction.setPrimaryNavigationFragment(fragment)
-        transaction.setReorderingAllowed(true)
-        transaction.commit()
+        if (intRemove) transaction.commitAllowingStateLoss()
+        else transaction.commit()
 
         return if (initialNavigate) {
             destination

@@ -33,7 +33,7 @@ public class ReviewSendDialog extends DialogFragment {
             //TODO save rating
             dismiss();
             //((MainActivity) getActivity()).getNavController().navigate(R.id.navigation_home);
-            ((MainActivity) getActivity()).navigateToHome();
+            ((MainActivity) getActivity()).navigateToHome(true);
 
 
 //            Intent parentActivityIntent = new Intent(getContext(), MainActivity.class);

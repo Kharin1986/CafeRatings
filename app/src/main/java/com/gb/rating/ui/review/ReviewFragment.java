@@ -25,7 +25,7 @@ public class ReviewFragment extends Fragment {
     private Button cancelButton;
     private Button sendButton;
     private Spinner cafeSpinner;
-    private String[] cafeTypes = { "Кафе", "Бар", "Ресторан", "ФастФуд" };
+    private String[] cafeTypes = {"Кафе", "Бар", "Ресторан", "ФастФуд"};
     private String chosenCafeType;
 
     @Override
@@ -44,6 +44,7 @@ public class ReviewFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
@@ -64,7 +65,7 @@ public class ReviewFragment extends Fragment {
                 ReviewSendDialog reviewSendDialog = new ReviewSendDialog();
                 if (getActivity() != null)
 //                    reviewSendDialog.show(getActivity().getSupportFragmentManager(), "TAG");
-                    ((MainActivity) getActivity()).navigateToHome();
+                    ((MainActivity) getActivity()).navigateToHome(true);
 
                 //проверка
                 System.out.println(kitchenRat + "\n" + serviceRat + "\n" + ambianceRat + "\n" + reviewTextStr + "\n" + chosenCafeType);

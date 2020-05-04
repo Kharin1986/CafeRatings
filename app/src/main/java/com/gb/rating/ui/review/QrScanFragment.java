@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -35,6 +37,7 @@ public class QrScanFragment extends Fragment {
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private final int CAMERA_PERMISSION_REQUEST_CODE = 10;
+    private boolean taskFinished = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +56,7 @@ public class QrScanFragment extends Fragment {
         return view;
     }
 
-        private void initViews(View view) {
+    private void initViews(View view) {
         surfaceView = view.findViewById(R.id.camera_view);
         barcodeDetector = new BarcodeDetector.Builder(getContext()).setBarcodeFormats(Barcode.QR_CODE).build();
         cameraSource = new CameraSource.Builder(getContext(), barcodeDetector)
@@ -61,7 +64,7 @@ public class QrScanFragment extends Fragment {
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setAutoFocusEnabled(true)
                 .build();
-        }
+    }
 
     private void startScanQR() {
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
@@ -73,7 +76,7 @@ public class QrScanFragment extends Fragment {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> qrCodes = detections.getDetectedItems();
-                if (qrCodes.size() != 0) {
+                if (qrCodes.size() != 0 && !taskFinished) {
                     Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
                     vibrator.vibrate(300);
                     //создаем фрагмент отзыва
@@ -82,11 +85,16 @@ public class QrScanFragment extends Fragment {
 //                    Bundle bundle = new Bundle();
 //                    bundle.putString("tag", qrCodes.valueAt(0).displayValue);
 //                    reviewFragment.setArguments(bundle);
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(R.id.nav_host_fragment, reviewFragment);
-                    ft.addToBackStack(null);
-                    ft.commit();
 
+                    taskFinished = true;
+                    new Handler(Looper.getMainLooper()).post(new Runnable() { //камера снимает не в главном потоке
+                        @Override
+                        public void run() {
+                            if (getActivity() != null) {
+                                ((MainActivity) getActivity()).getMKeepStateNavigator().navigate(R.id.navigation_review_second_page, true);
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -127,26 +135,22 @@ public class QrScanFragment extends Fragment {
         requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-//            if (grantResults.length != 0 &&
-//                    (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-//                refreshFragment();
-//            } else {
-//                refreshFragment();
-//            }
-//        }
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//    }
-//
-//    private void refreshFragment() {
-////        getFragmentManager()
-////                .beginTransaction()
-////                .detach(QrScanFragment.this)
-////                .attach(QrScanFragment.this)
-////                .commit();
-//
-//        ((MainActivity) getActivity()).navigateToHome();
-//    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length != 0 &&
+                    (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                refreshFragment();
+            } else {
+                refreshFragment();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void refreshFragment() {
+        if (getActivity() != null) {
+            ((MainActivity) getActivity()).getMKeepStateNavigator().navigate(R.id.navigation_review, true);
+        }
+    }
 }

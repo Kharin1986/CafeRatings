@@ -36,11 +36,11 @@ class ListFragment : Fragment() {
             // при нажатии на карточку переходим на ссответствующие отзывы, доступ
             // получить можно здесь, например, it.cafeId
             //TODO Использовать фильтр it.cafeId
-            val cafeInfoFragment = CafeInfoFragment()
-            val ft = activity!!.supportFragmentManager.beginTransaction()
-            ft.replace(com.gb.rating.R.id.nav_host_fragment, cafeInfoFragment)
-            ft.addToBackStack(null)
-            ft.commit()
+//            val cafeInfoFragment = CafeInfoFragment()
+//            val ft = activity!!.supportFragmentManager.beginTransaction()
+//            ft.replace(com.gb.rating.R.id.nav_host_fragment, cafeInfoFragment)
+//            ft.addToBackStack(null)
+//            ft.commit()
         }
         cafeListRecycler_FragmentList?.layoutManager = LinearLayoutManager(activity)
         cafeListRecycler_FragmentList?.adapter = adapter
