@@ -2,7 +2,6 @@ package com.gb.rating.ui.review;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,7 @@ import com.gb.rating.R;
 
 public class ReviewSendDialog extends DialogFragment {
 
-    private ReviewSendViewModel model;
+    private ReviewSharedViewModel model;
 
     @NonNull
     @Override
@@ -26,14 +25,14 @@ public class ReviewSendDialog extends DialogFragment {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.review_send_dialog, null);
 
-        model = new ViewModelProvider(this).get(ReviewSendViewModel.class);
+        model = new ViewModelProvider(getActivity()).get(ReviewSharedViewModel.class);
 
         Button okButton = dialogView.findViewById(R.id.ok_button);
         okButton.setOnClickListener(v -> {
             //TODO save rating
             dismiss();
             //((MainActivity) getActivity()).getNavController().navigate(R.id.navigation_home);
-            ((MainActivity) getActivity()).navigateToHome();
+            ((MainActivity) getActivity()).navigateToHome(true);
 
 
 //            Intent parentActivityIntent = new Intent(getContext(), MainActivity.class);

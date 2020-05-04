@@ -17,16 +17,48 @@ import java.util.List;
 import static com.gb.rating.dataBase.CafeDbScheme.CafeTable;
 import static com.gb.rating.dataBase.CafeDbScheme.FavCafeTable;
 
-
+//пусть будет сингл
 public class CafeDataSource implements Closeable {
 
+    //SINGLE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    private static volatile CafeDataSource instance;
+    private static volatile CafeDataSource instanceForServices;
+
+    public static CafeDataSource getInstance(Context context) {
+        CafeDataSource localInstance = instance;
+        if (localInstance == null) {
+            synchronized (CafeDataSource.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new CafeDataSource(context);
+                }
+            }
+        }
+        return localInstance;
+    }
+
+    public static CafeDataSource getinstanceForServices(Context context) {
+        CafeDataSource localInstance = instanceForServices;
+        if (localInstance == null) {
+            synchronized (CafeDataSource.class) {
+                localInstance = instanceForServices;
+                if (localInstance == null) {
+                    instanceForServices = localInstance = new CafeDataSource(context);
+                }
+            }
+        }
+        return localInstance;
+    }
+    //SINGLE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+    //ADDITIONAL FUNCTIONS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     private DataBaseHelper dbHelper;
     private SQLiteDatabase database;
 
-    //ADDITIONAL FUNCTIONS
-    public CafeDataSource(Context context) {
+    private CafeDataSource(Context context) {
         dbHelper = new DataBaseHelper(context);
     }
+
 
     public void openW() throws SQLException {
         database = dbHelper.getWritableDatabase();
@@ -37,8 +69,7 @@ public class CafeDataSource implements Closeable {
     }
 
 
-    //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //READ FUNCTIONS
+    //READ FUNCTIONS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //основная выборка - список кафе из базы, ограниченных с помощью OurSearchPropertiesValue
     public List<CafeItem> readAllCafe(OurSearchPropertiesValue ourSearchPropertiesValue) {
         List<CafeItem> listCafe = new ArrayList<>();
@@ -102,9 +133,9 @@ public class CafeDataSource implements Closeable {
             return this;
         }
     }
+    //READ FUNCTIONS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //WRITE (UPDATE, INSERT, DELETE) FUNCTIONS
+    //WRITE (UPDATE, INSERT, DELETE) FUNCTIONS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     private void updateCafeByCafeId(ContentValues cv, String cafeId) {
 
         int res = database.update(CafeTable.NAME, cv,

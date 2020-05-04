@@ -1,42 +1,56 @@
 package com.gb.rating.ui
 
 import android.content.Context
-import android.os.Bundle
 import androidx.fragment.app.FragmentManager
-import androidx.navigation.NavDestination
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
-import androidx.navigation.fragment.FragmentNavigator
+import com.gb.rating.R
+import com.gb.rating.ui.cafeInfo.CafeInfoFragment
+import com.gb.rating.ui.home.HomeFragment
+import com.gb.rating.ui.review.QrScanFragment
+import com.gb.rating.ui.review.ReviewFragment
+import com.gb.rating.ui.search.SearchFragment
+import com.gb.rating.ui.settings.SettingsFragment
 
 @Navigator.Name("keep_state_fragment") // `keep_state_fragment` is used in navigation xml
 class KeepStateNavigator(
     private val context: Context,
     private val manager: FragmentManager, // Should pass childFragmentManager.
     private val containerId: Int
-) : FragmentNavigator(context, manager, containerId) {
+)  {
 
-    override fun navigate(
-        destination: Destination,
-        args: Bundle?,
-        navOptions: NavOptions?,
-        navigatorExtras: Navigator.Extras?
-    ): NavDestination? {
-        val tag = destination.id.toString()
+    fun navigate(
+        destination: Int, intRemove : Boolean = false
+    ): Int? {
+        val tag = destination.toString()
         val transaction = manager.beginTransaction()
 
         var initialNavigate = false
         val currentFragment = manager.primaryNavigationFragment
         if (currentFragment != null) {
-            //transaction.detach(currentFragment)
-            transaction.hide(currentFragment)
+            if (intRemove) transaction.remove(currentFragment)
+            else {
+                //transaction.detach(currentFragment)
+                transaction.hide(currentFragment)
+            }
         } else {
             initialNavigate = true
         }
 
         var fragment = manager.findFragmentByTag(tag)
         if (fragment == null) {
-            val className = destination.className
-            fragment = manager.fragmentFactory.instantiate(context.classLoader, className)
+
+            val curClassName : String = when(destination){
+                R.id.navigation_home -> HomeFragment::class.java.name
+                R.id.navigation_list -> com.gb.rating.ui.list.ListFragment::class.java.name
+                R.id.navigation_review -> QrScanFragment::class.java.name
+                R.id.navigation_search -> SearchFragment::class.java.name
+                R.id.navigation_settings -> SettingsFragment::class.java.name
+                R.id.navigation_review_second_page -> ReviewFragment::class.java.name
+                R.id.navigation_cafe_info -> CafeInfoFragment::class.java.name
+                else -> return null
+            }
+
+            fragment = manager.fragmentFactory.instantiate(context.classLoader, curClassName)
             transaction.add(containerId, fragment, tag)
         } else {
             //transaction.attach(fragment)
@@ -44,8 +58,8 @@ class KeepStateNavigator(
         }
 
         transaction.setPrimaryNavigationFragment(fragment)
-        transaction.setReorderingAllowed(true)
-        transaction.commitNow()
+        if (intRemove) transaction.commitAllowingStateLoss()
+        else transaction.commit()
 
         return if (initialNavigate) {
             destination

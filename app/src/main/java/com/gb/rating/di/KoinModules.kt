@@ -13,7 +13,7 @@ import com.gb.rating.ui.ViewModelMain
 import com.gb.rating.ui.cafeInfo.CafeInfoViewModel
 import com.gb.rating.ui.home.HomeViewModel
 import com.gb.rating.ui.list.ListViewModel
-import com.gb.rating.ui.review.ReviewSendViewModel
+import com.gb.rating.ui.review.ReviewSharedViewModel
 import com.gb.rating.ui.search.SearchViewModel
 import com.gb.rating.ui.settings.SettingsViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +35,8 @@ val appModule = module {
 
     single {VerifiedRating_FB_Impl(get(), null)} bind VerifiedRatingRepository::class
     single {VerifiedRatingInteractor(get())}
+
+
 }
 
 val main = module {
@@ -54,9 +56,9 @@ val home = module {
     viewModel {HomeViewModel()}
 }
 
-val review = module {
-    viewModel {ReviewSendViewModel(get())}
-}
+//val review = module {
+//    viewModel {ReviewSharedViewModel(get())} bind ReviewSharedViewModel::class
+//}
 
 
 val search = module {

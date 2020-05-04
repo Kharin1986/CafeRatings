@@ -1,22 +1,26 @@
-package com.gb.rating.googleMapsAPI;
+package com.gb.rating.models.utils;
 
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.gb.rating.dataRoom.Point_Room;
+import com.gb.rating.dataRoom.Point_Room_Impl;
+import com.gb.rating.dataRoom.RoomApp;
 import com.gb.rating.filestore.Mapper;
 import com.gb.rating.filestore.Point_FB;
 import com.gb.rating.filestore.Point_FB_Impl;
 import com.gb.rating.fireBase_RealTime.repository.Cafe_FB_Impl;
+import com.gb.rating.googleMapsAPI.GMAPI;
 import com.gb.rating.googleMapsAPI.Nearby.NearbySearch;
 import com.gb.rating.googleMapsAPI.Nearby.Result;
+import com.gb.rating.googleMapsAPI.RetrofitInit;
 import com.gb.rating.models.OurSearchPropertiesValue;
 import com.gb.rating.models.SearchUtils;
 import com.gb.rating.models.repository.CafeRepository;
-import com.gb.rating.models.repository.PointRepository;
-import com.gb.rating.models.utils.MainApplication;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,6 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.reactivex.MaybeObserver;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableCompletableObserver;
@@ -51,7 +56,18 @@ public class UpdateDatabase {
     private long timeOfLastRequest = 0;
     private GMAPI gmAPI;
     private CafeRepository repository;
-    private PointRepository pointRepository;
+    private Point_FB_Impl point_fb_impl;
+    private Point_Room_Impl point_room_impl;
+    private CompositeDisposable compositeDisposable;
+
+    public UpdateDatabase() {
+        gmAPI = RetrofitInit.newApiInstance();
+        repository = new Cafe_FB_Impl(FirebaseDatabase.getInstance(), null);
+        point_fb_impl = new Point_FB_Impl(FirebaseFirestore.getInstance());
+
+        point_room_impl = new Point_Room_Impl(RoomApp.getInstance(MainApplication.Companion.applicationContext()));
+        compositeDisposable = new CompositeDisposable();
+    }
 
     public static UpdateDatabase getInstance() {
         UpdateDatabase localInstance = instance;
@@ -60,10 +76,6 @@ public class UpdateDatabase {
                 localInstance = instance;
                 if (localInstance == null) {
                     instance = localInstance = new UpdateDatabase();
-
-                    instance.gmAPI = RetrofitInit.newApiInstance();
-                    instance.repository = new Cafe_FB_Impl(FirebaseDatabase.getInstance(), null);
-                    instance.pointRepository = new Point_FB_Impl(FirebaseFirestore.getInstance());
                 }
             }
         }
@@ -101,7 +113,7 @@ public class UpdateDatabase {
     }
 
     public boolean LoadGoogleCafeForPoint(OurSearchPropertiesValue ourSearchPropertiesValue, BoundingBox boundingBox, OurSearchPropertiesValue.MyPoint point, Handler.Callback callable) throws InterruptedException {
-        String[] cafeGoogleTypeArray = {SearchUtils.RESTAURANT_GOOGLE, SearchUtils.BAR_GOOGLE, SearchUtils.CAFE_GOOGLE};
+        String[] cafeGoogleTypeArray = SearchUtils.getGoogleTypes();
         Handler h = new Handler(callable);
         for (String cafeGoogleType : cafeGoogleTypeArray
         ) {
@@ -119,15 +131,18 @@ public class UpdateDatabase {
         return true;
     }
 
+
     private void findEmptySpaceAndLoad(OurSearchPropertiesValue ourSearchPropertiesValue, BoundingBox boundingBox, String cafeGoogleType, Handler h) {
-        pointRepository.retrievePoints(ourSearchPropertiesValue.getCountry(), ourSearchPropertiesValue.getCity(), cafeGoogleType, boundingBox.getActualSouth(), boundingBox.getActualNorth(), boundingBox.getLonWest(), boundingBox.getLonEast())
-                .subscribe(new MaybeObserver<List<Point_FB>>() {
+        point_room_impl.retrievePoints(ourSearchPropertiesValue.getCountry(), ourSearchPropertiesValue.getCity(), cafeGoogleType, boundingBox.getActualSouth(), boundingBox.getActualNorth(), boundingBox.getLonWest(), boundingBox.getLonEast(), String.valueOf(false))
+//        point_room_impl.retrievePoints(ourSearchPropertiesValue.getCountry(), ourSearchPropertiesValue.getCity(), cafeGoogleType, 0, 100, 0, 100, String.valueOf(false))
+//        point_room_impl.retrieveAllPoints()
+                .subscribe(new MaybeObserver<List<Point_Room>>() {
                                @Override
                                public void onSubscribe(Disposable d) {
                                }
 
                                @Override
-                               public void onSuccess(List<Point_FB> points) {
+                               public void onSuccess(List<Point_Room> points) {
                                    //TODO - работа с точками
 
                                    boolean result = countCenterAndLoadCafes(ourSearchPropertiesValue, boundingBox, cafeGoogleType, h, points);
@@ -150,7 +165,38 @@ public class UpdateDatabase {
                 );
     }
 
-    private boolean countCenterAndLoadCafes(OurSearchPropertiesValue ourSearchPropertiesValue, BoundingBox boundingBox, String cafeGoogleType, Handler h, List<Point_FB> points) {
+//    private void findEmptySpaceAndLoad(OurSearchPropertiesValue ourSearchPropertiesValue, BoundingBox boundingBox, String cafeGoogleType, Handler h) {
+//        point_fb_impl.retrievePoints(ourSearchPropertiesValue.getCountry(), ourSearchPropertiesValue.getCity(), cafeGoogleType, boundingBox.getActualSouth(), boundingBox.getActualNorth(), boundingBox.getLonWest(), boundingBox.getLonEast(), String.valueOf(false))
+//                .subscribe(new MaybeObserver<List<Point_FB>>() {
+//                               @Override
+//                               public void onSubscribe(Disposable d) {
+//                               }
+//
+//                               @Override
+//                               public void onSuccess(List<Point_FB> points) {
+//                                   //TODO - работа с точками
+//
+//                                   boolean result = countCenterAndLoadCafes(ourSearchPropertiesValue, boundingBox, cafeGoogleType, h, points);
+//                               }
+//
+//                               @Override
+//                               public void onError(Throwable e) {
+//                               }
+//
+//                               @Override
+//                               public void onComplete() {
+//                                   try {
+//                                       getNearbySearch(ourSearchPropertiesValue, SearchUtils.boundingBoxToMyPoint(boundingBox), null, cafeGoogleType, h);
+//                                   } catch (InterruptedException e) {
+//                                       e.printStackTrace();
+//                                   }
+//                               }
+//                           }
+//
+//                );
+//    }
+
+    private  boolean  countCenterAndLoadCafes(OurSearchPropertiesValue ourSearchPropertiesValue, BoundingBox boundingBox, String cafeGoogleType, Handler h, List<Point_Room> points) {
 
         OurSearchPropertiesValue.MyPoint centerPoint;
 
@@ -160,13 +206,15 @@ public class UpdateDatabase {
         } else {
             //first, middle radius
             double middleRadius = 0;
-            for (Point_FB point : points
+            for (Point_Room point : points
             ) {
                 middleRadius += point.radius;
             }
             middleRadius = middleRadius / points.size();
-            double delta = Math.min(middleRadius / 20, boundingBox.getLatitudeSpan()/30);
-            if (delta < boundingBox.getLatitudeSpan()/100) {return false;} // ограничение в количестве переборов
+            double delta = Math.min(middleRadius / 10, boundingBox.getLatitudeSpan()/30);
+            try {
+                if (Math.pow(boundingBox.getLatitudeSpan()/delta,2)*points.size()>3000000) return false; // ограничение в количестве переборов, тормозить будет
+            } catch (Exception e){return false;}
 
             //обнаруживаем точки без кафе
             double middleX = 0;
@@ -177,9 +225,9 @@ public class UpdateDatabase {
             for (double x = boundingBox.getActualSouth(); x <= boundingBox.getActualNorth(); x += delta) {
                 for (double y = boundingBox.getLonWest(); y <= boundingBox.getLonEast(); y += delta) {
                     boolean curCovered = false;
-                    for (Point_FB point_fb : points) {
-                        if (geoDistance(point_fb, x, y) <= point_fb.radius && geoDistance(point_fb, x, y + delta) <= point_fb.radius && geoDistance(point_fb, x + delta, y) <= point_fb.radius
-                                && geoDistance(point_fb, x + delta, y + delta) <= point_fb.radius) {
+                    for (Point_Room point : points) {
+                        if (geoDistance(point, x, y) <= point.radius && geoDistance(point, x, y + delta) <= point.radius && geoDistance(point, x + delta, y) <= point.radius
+                                && geoDistance(point, x + delta, y + delta) <= point.radius) {
                             curCovered = true;
                         }
                     }
@@ -274,7 +322,9 @@ public class UpdateDatabase {
 
 
         Runnable r = new Runnable() {
+            @SuppressLint("CheckResult")
             @Override
+            @io.reactivex.annotations.NonNull
             public void run() {
                 (pageToken == null ? gmAPI.getNearbySearch(point.getLatitude() + "," + point.getLongityde(), cafeGoogleType, GOOGLE_API_KEY, RANC_BY) : gmAPI.getNearbySearch(pageToken, GOOGLE_API_KEY)) //TYPE_BAR
                         .subscribeOn(Schedulers.io())
@@ -339,14 +389,14 @@ public class UpdateDatabase {
                     });
         }
         writePoint(point, maxCafeDistance[0], ourSearchPropertiesValue, cafeGoogleType);
+        UpdatePoints.getInstance().checkNewPointsAndSave(ourSearchPropertiesValue);
     }
 
     private void writePoint(OurSearchPropertiesValue.MyPoint point, double radius, OurSearchPropertiesValue ourSearchPropertiesValue, String cafeGoogleType) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         Point_FB point_FB = Mapper.convert(point, radius, ourSearchPropertiesValue, cafeGoogleType);
-        db.collection("Countries").document(point_FB.country).collection("Cities").document(point_FB.city)
+        point_fb_impl.getDB().collection("Countries").document(point_FB.country).collection("Cities").document(point_FB.city)
                 .collection("Types").document(point_FB.type.equals("") ? "no_type" : point_FB.type)
-                .collection("Points").document(point_FB.name()).set(point_FB) //, SetOptions.merge()
+                .collection("Points").document(point_FB.name).set(point_FB) //, SetOptions.merge()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -374,7 +424,7 @@ public class UpdateDatabase {
         );
     }
 
-    public double geoDistance(Point_FB point, double x, double y) {
+    public double geoDistance(Point point, double x, double y) {
         return Math.sqrt(
                 Math.pow(x - point.latitude, 2) + Math.pow(y - point.longitude, 2)
         );

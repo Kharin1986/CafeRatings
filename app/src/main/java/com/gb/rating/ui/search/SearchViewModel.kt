@@ -4,7 +4,7 @@ import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gb.rating.googleMapsAPI.UpdateDatabase
+import com.gb.rating.models.utils.UpdateDatabase
 import com.gb.rating.models.KM_PER_DEGREE
 import com.gb.rating.models.OurSearchPropertiesValue
 import com.gb.rating.models.boundingBoxToMyPoint
@@ -15,7 +15,7 @@ import kotlin.math.abs
 
 const val MAP_PRECISION_RATE = 0.1
 const val DEFAULT_SCREEN_DISTANCE = 2.0
-const val ADDITIONAL_LOAD_FROM_GOOGLE_MAP_API = false
+const val ADDITIONAL_LOAD_FROM_GOOGLE_MAP_API = true
 
 class SearchViewModel : ViewModel() {
 

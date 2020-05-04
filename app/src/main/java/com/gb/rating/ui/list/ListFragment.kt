@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gb.rating.MainActivity
+import com.gb.rating.R
 import kotlinx.android.synthetic.main.fragment_list.*
 import com.gb.rating.ui.ViewModelMain
-import com.gb.rating.ui.cafeInfo.CafeInfoFragment
+import com.gb.rating.ui.review.ReviewSharedViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -36,11 +38,18 @@ class ListFragment : Fragment() {
             // при нажатии на карточку переходим на ссответствующие отзывы, доступ
             // получить можно здесь, например, it.cafeId
             //TODO Использовать фильтр it.cafeId
-            val cafeInfoFragment = CafeInfoFragment()
-            val ft = activity!!.supportFragmentManager.beginTransaction()
-            ft.replace(com.gb.rating.R.id.nav_host_fragment, cafeInfoFragment)
-            ft.addToBackStack(null)
-            ft.commit()
+//            val cafeInfoFragment = CafeInfoFragment()
+//            val ft = activity!!.supportFragmentManager.beginTransaction()
+//            ft.replace(com.gb.rating.R.id.nav_host_fragment, cafeInfoFragment)
+//            ft.addToBackStack(null)
+//            ft.commit()
+
+            activity?.let {
+                (it as MainActivity).mKeepStateNavigator.navigate(
+                    R.id.navigation_cafe_info,
+                    false
+                )
+            }
         }
         cafeListRecycler_FragmentList?.layoutManager = LinearLayoutManager(activity)
         cafeListRecycler_FragmentList?.adapter = adapter

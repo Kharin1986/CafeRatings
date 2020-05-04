@@ -1,6 +1,8 @@
 
 package com.gb.rating.models
 
+import java.util.*
+
 data class CafeItem(
     var img: Int=0,
     var name: String = "",
@@ -19,5 +21,6 @@ data class CafeItem(
     var latitude: Float = 0f,
     var longitude: Float = 0f,
     var deleted: Boolean = false, //для обратного преобразования из Firebase и прочих в cv SQLlite - предполагаются, что они не знают друг друга
-    var fav: Boolean = false
+    var fav: Boolean = false,
+    var changeTime: Long = Date().time
 )

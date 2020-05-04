@@ -14,25 +14,23 @@ class CafeInteractor(private val repository: CafeRepository) {
         return repository.writeCafe(cafe)
     }
 
-
     fun retrieveCafeList(country: String, city: String): Maybe<List<CafeItem>> {
         return repository.retrieveCafeList(country, city)
+    }
+
+    fun retrieveNewCafeList(country: String, city: String, changeTime: Long): Maybe<List<CafeItem>> {
+        return repository.retrieveNewCafeList(country, city, changeTime )
     }
 
     fun retrieveCafeListByType(country: String, city: String, type: String): Maybe<List<CafeItem>> {
         return repository.retrieveCafeListByType(country, city, type)
     }
 
-
-    fun updateInternalDatabase(country: String, city: String): Maybe<List<CafeItem>> {
-        return repository.retrieveCafeList(country, city)
-            .doOnSuccess { cafeItems -> writeRetrievedCafeListToLocalDatabase(cafeItems) }
-    }
-
-    private fun writeRetrievedCafeListToLocalDatabase(cafeItems: List<CafeItem>) {
+    fun writeRetrievedCafeListToLocalDatabase(cafeItems: List<CafeItem>, removeAll : Boolean = false) {
         val dbHelperW =
-            CafeDataSource(MainApplication.applicationContext()) //getApplicationContext()
+            CafeDataSource.getinstanceForServices(MainApplication.applicationContext()) //getApplicationContext()
         dbHelperW.openW()
+        if (removeAll) {dbHelperW.removeAll()}
         dbHelperW.writeCafeList(cafeItems)
     }
 

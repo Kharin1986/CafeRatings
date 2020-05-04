@@ -68,7 +68,6 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
 
     private void initInteractors() {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-
         CafeRepository repository = new Cafe_FB_Impl(db, null);
         cafeInteractor = new CafeInteractor(repository);
 

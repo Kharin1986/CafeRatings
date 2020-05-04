@@ -27,6 +27,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.storage.UploadTask;
 
 //rxJava 2.0
+import org.jetbrains.annotations.NotNull;
+
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -36,10 +38,11 @@ import io.reactivex.schedulers.Schedulers;
 
 public class Cafe_FB_Impl implements CafeRepository {
     private static final String RATING_PROPERTY = "rating";
+    private static final String CHANGE_TIME_PROPERTY = "changeTime";
     private static final String CAFE_PROPERTIES_FILE_NAME = "cafeProperties.txt";
     private static final String CAFELIST_CATALOG = "CafeList";
     private static final String TYPE_PROPERTY = "type";
-    private Object anyapi = null;
+    private Object anyapi;
     private FirebaseDatabase db;
 
     //----------------------------------------------------------------------------------------------------------------------------------
@@ -124,8 +127,22 @@ public class Cafe_FB_Impl implements CafeRepository {
         return observeSingleValueEvent_CafeItemList(query);
     }
 
+    @NotNull
+    @Override
+    public Maybe<List<CafeItem>> retrieveNewCafeList(@NotNull String country, @NotNull String city, long changeTime) {
+        Query query = db.getReference().child(CAFELIST_CATALOG).child(country).child(city)
+                .orderByChild(CHANGE_TIME_PROPERTY).startAt(changeTime);
+        return observeSingleValueEvent_CafeItemList(query).subscribeOn(Schedulers.io())
+                .map(new Function<List<CafeItem>, List<CafeItem>>() {
+                    @Override
+                    public List<CafeItem> apply(List<CafeItem> cafeItems) throws Exception {
+                        Collections.sort(cafeItems, comparatorByRatingDescending);
+                        return cafeItems;
+                    }
+                }).observeOn(AndroidSchedulers.mainThread()); //в UI можно переопределить subscribeOn, observeOn;
+    }
 
-    public static Comparator<CafeItem> comparatorByRatingDescending = new Comparator<CafeItem>() {
+    private static Comparator<CafeItem> comparatorByRatingDescending = new Comparator<CafeItem>() {
         @Override
         public int compare(CafeItem o1, CafeItem o2) {
 
@@ -145,14 +162,14 @@ public class Cafe_FB_Impl implements CafeRepository {
 
         Query query = db.getReference().child(CAFELIST_CATALOG).child(country).child(city).orderByChild(TYPE_PROPERTY).equalTo(type);
 
-        return observeSingleValueEvent_CafeItemList(query).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) //в UI можно переопределить subscribeOn, observeOn
+        return observeSingleValueEvent_CafeItemList(query).subscribeOn(Schedulers.io())
                 .map(new Function<List<CafeItem>, List<CafeItem>>() {
                     @Override
                     public List<CafeItem> apply(List<CafeItem> cafeItems) throws Exception {
                         Collections.sort(cafeItems, comparatorByRatingDescending);
                         return cafeItems;
                     }
-                })
+                }).observeOn(AndroidSchedulers.mainThread()) //в UI можно переопределить subscribeOn, observeOn
                 ;
 
     }
