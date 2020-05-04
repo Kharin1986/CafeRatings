@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.gb.rating.MainActivity;
 import com.gb.rating.R;
@@ -32,6 +32,18 @@ import static androidx.core.content.ContextCompat.checkSelfPermission;
 
 public class QrScanFragment extends Fragment {
 
+    //by lazy :)
+    private ReviewSharedViewModel model;
+
+    private ReviewSharedViewModel getSharedViewModel() {
+        if (model == null) {
+            if (getActivity() != null) {
+                model = new ViewModelProvider(getActivity()).get(ReviewSharedViewModel.class);
+                return model;
+            } else return null;
+        } else return model;
+    }
+
     private SurfaceView surfaceView;
     private View view;
     private BarcodeDetector barcodeDetector;
@@ -39,9 +51,13 @@ public class QrScanFragment extends Fragment {
     private final int CAMERA_PERMISSION_REQUEST_CODE = 10;
     private boolean taskFinished = false;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        getSharedViewModel();
+
         view = inflater.inflate(R.layout.fragment_qr_scan,
                 container, false);
 
@@ -81,20 +97,18 @@ public class QrScanFragment extends Fragment {
                     vibrator.vibrate(300);
                     //создаем фрагмент отзыва
                     ReviewFragment reviewFragment = new ReviewFragment();
-                    //сохраняем строку с QR кода
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString("tag", qrCodes.valueAt(0).displayValue);
-//                    reviewFragment.setArguments(bundle);
 
-                    taskFinished = true;
-                    new Handler(Looper.getMainLooper()).post(new Runnable() { //камера снимает не в главном потоке
-                        @Override
-                        public void run() {
-                            if (getActivity() != null) {
-                                ((MainActivity) getActivity()).getMKeepStateNavigator().navigate(R.id.navigation_review_second_page, true);
+                    if (model.firstPageInfo(qrCodes.valueAt(0).displayValue)) { //проверяем правильность определенного кода
+                        taskFinished = true;
+                        new Handler(Looper.getMainLooper()).post(new Runnable() { //камера снимает не в главном потоке
+                            @Override
+                            public void run() {
+                                if (getActivity() != null) {
+                                    ((MainActivity) getActivity()).getMKeepStateNavigator().navigate(R.id.navigation_review_second_page, true);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         });
@@ -116,7 +130,6 @@ public class QrScanFragment extends Fragment {
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
             }
 
             @Override

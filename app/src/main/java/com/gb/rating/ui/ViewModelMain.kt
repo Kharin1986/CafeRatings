@@ -1,7 +1,9 @@
 package com.gb.rating.ui
 
+import android.view.MenuItem
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
+import com.gb.rating.R
 import com.gb.rating.dataBase.CafeDataSource
 import com.gb.rating.models.*
 import com.gb.rating.models.usercase.CafeInteractor
@@ -102,6 +104,13 @@ class ViewModelMain (private val cafeInteractor : CafeInteractor) : ViewModel() 
         dbHelperR.openR()
         return dbHelperR.readAllCafe(ourSearchPropertiesValue)
     }
+
+    fun processFragmentSelection(item: MenuItem) {
+        if (item.itemId == R.id.nav_host_fragment) {
+            ourSearchProperties.value = ourSearchProperties.value!!.updateType("");
+        }
+    }
+
 
 }
 

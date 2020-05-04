@@ -10,12 +10,24 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.gb.rating.MainActivity;
 import com.gb.rating.R;
+import com.gb.rating.models.SearchUtils;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class ReviewFragment extends Fragment {
+    //by lazy :)
+    private ReviewSharedViewModel model;
+    private ReviewSharedViewModel getSharedViewModel(){
+        if (model == null) {
+            if (getActivity() != null) {
+                model = new ViewModelProvider(getActivity()).get(ReviewSharedViewModel.class);
+                return model;
+            } else return null;
+        } else return model;
+    }
 
     private View view;
     private RatingBar kitchenRating;
@@ -25,12 +37,13 @@ public class ReviewFragment extends Fragment {
     private Button cancelButton;
     private Button sendButton;
     private Spinner cafeSpinner;
-    private String[] cafeTypes = {"Кафе", "Бар", "Ресторан", "ФастФуд"};
+    private String[] cafeTypes = {SearchUtils.CAFE_TYPE, SearchUtils.BAR_TYPE, SearchUtils.RESTAURANT_TYPE, SearchUtils.FASTFOOD_TYPE};
     private String chosenCafeType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getSharedViewModel();
         view = inflater.inflate(R.layout.fragment_review,
                 container, false);
 
@@ -64,11 +77,11 @@ public class ReviewFragment extends Fragment {
             if (chosenCafeType != null & kitchenRat != 0 & serviceRat != 0 & ambianceRat != 0) {
                 ReviewSendDialog reviewSendDialog = new ReviewSendDialog();
                 if (getActivity() != null)
-//                    reviewSendDialog.show(getActivity().getSupportFragmentManager(), "TAG");
+                    model.secondPageInfo(kitchenRat, serviceRat, ambianceRat, reviewTextStr, chosenCafeType);
                     ((MainActivity) getActivity()).navigateToHome(true);
 
                 //проверка
-                System.out.println(kitchenRat + "\n" + serviceRat + "\n" + ambianceRat + "\n" + reviewTextStr + "\n" + chosenCafeType);
+                //System.out.println(kitchenRat + "\n" + serviceRat + "\n" + ambianceRat + "\n" + reviewTextStr + "\n" + chosenCafeType);
             }
         });
 

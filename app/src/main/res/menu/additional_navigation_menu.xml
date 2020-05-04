@@ -4,4 +4,9 @@
         android:id="@+id/navigation_review_second_page"
         android:icon="@drawable/ic_review"
         android:title="@string/title_review" />
+    <item
+        android:id="@+id/navigation_cafe_info"
+        android:icon="@drawable/ic_lists"
+        android:title="@string/title_list" />
+
 </menu>
