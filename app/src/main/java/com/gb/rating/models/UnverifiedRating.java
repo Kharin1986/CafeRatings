@@ -3,6 +3,7 @@ package com.gb.rating.models;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ public class UnverifiedRating {
     public String cafeKey = ""; // ID, ref Key to Cafe_FB
     public String fiscalId = ""; //ID to Unverified, fiscalDriveNumber (ФН) + "_" + fiscalDocumentNumber (ФД)
     public String uid = ""; //if authorized, as well as unonymously
+    public long timeRateDone = new Date().getTime();
 
     //SERVICE ATTRIBUTES
     public boolean verified = false;
